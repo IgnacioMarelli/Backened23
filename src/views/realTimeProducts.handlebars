@@ -1,0 +1,21 @@
+<main class="container p-3">
+  <section class="row justify-content-around">
+    <table class="table table-dark">
+        <thead>
+            Nombre del producto
+        </thead>
+        <thead>Precio del producto</thead>
+        <thead> imagen</thead>
+        <tbody>
+        {{#each producto}}
+          <tr class="table-active container">
+            <td style="    width: 33%;"><span>{{title}}</span></td>
+            <td style="    width: 33%;"><span>$ {{price}}</span></td>
+            <td ><img style="    width: 33%;" src="{{thumbnail}}" alt=""></td>
+          </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    <a href="/api/"> <button>Volver</button></a>
+  </section>
+</main>

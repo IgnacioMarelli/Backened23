@@ -1,5 +1,4 @@
-const { log } = require('console');
-const fs = require('fs');
+import * as fs from 'fs';
 class ProductManage{
     constructor(path){
         this.path =path; 
@@ -10,6 +9,7 @@ class ProductManage{
             await fs.promises.writeFile(this.path, '[]');
             return this.path;
          }       
+         console.log(this.path);
          const resolve = await fs.promises.readFile(this.path, (err, data) => { if (err) throw err;});
          const products = JSON.parse(resolve);
          return products
@@ -112,5 +112,5 @@ class ProductManage{
  }
  
  
- module.exports = {ProductManage};
+export default ProductManage;
  
