@@ -3,7 +3,7 @@ import { Router } from 'express';
 import fileDirName from '../utils/fileDirName.js';
 const { __dirname } = fileDirName(import.meta);
 import ProductManage from '../../clases.js';
-const instanceProd = new ProductManage('../../productos.json');
+const instanceProd = new ProductManage('./products.json');
 const instance = new ProductManage('./carts.json');
 const router = Router();
 router.use(express.json());

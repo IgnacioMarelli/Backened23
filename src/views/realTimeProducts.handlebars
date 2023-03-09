@@ -1,21 +1,56 @@
 <main class="container p-3">
+    <div class="container">
+        <section>
+            <article>
+                <h2 class="title">Agregar producto</h2>
+                <form action="" class="crud-form" id="crud-form">
+                <input type="text" name="name" id="name" placeholder="Nombre"> 
+                <br>
+                <input type="text" name="description" id="description" placeholder="Descripción"> 
+                <br>
+                <input type="text" name="price" id="price" placeholder="Precio"> 
+                <br>
+                <input type="text" name="stock" id="stock" placeholder="Stock"> 
+                <br>
+                <input type="text" name="category" id="category" placeholder="Categoria"> 
+                <br>
+                <input type="text" name="code" id="code" placeholder="Código"> 
+                <br>
+                <input id="form-file" type="file" name="file" placeholder="Imagen"/>
+                <br>
+                <input type="submit" value="Agregar Producto">
+            </form>
+                <p id="producto-id"></p>
+            </article>
+        </section>
   <section class="row justify-content-around">
     <table class="table table-dark">
         <thead>
-            Nombre del producto
+          <tr>
+            <th scope="col">Nombre del producto</th>
+            <th scope="col">Precio del producto</th>
+            <th scope="col">Stock</th>
+            <th scope="col">Categoría</th>
+            <th scope="col">Código</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Imagen</th>
+          </tr>
         </thead>
-        <thead>Precio del producto</thead>
-        <thead> imagen</thead>
         <tbody>
         {{#each producto}}
           <tr class="table-active container">
             <td style="    width: 33%;"><span>{{title}}</span></td>
             <td style="    width: 33%;"><span>$ {{price}}</span></td>
+            <td style="    width: 33%;"><span>$ {{stock}}</span></td>
+            <td style="    width: 33%;"><span>$ {{category}}</span></td>
+            <td style="    width: 33%;"><span>$ {{code}}</span></td>
+            <td style="    width: 33%;"><span>$ {{description}}</span></td>
             <td ><img style="    width: 33%;" src="{{thumbnail}}" alt=""></td>
           </tr>
         {{/each}}
         </tbody>
       </table>
-    <a href="/api/"> <button>Volver</button></a>
   </section>
 </main>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="../../public/js/index.js"></script>
