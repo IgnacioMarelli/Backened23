@@ -2,8 +2,9 @@ import express from 'express';
 import { Router } from 'express';
 import fileDirName from '../utils/fileDirName.js';
 const { __dirname } = fileDirName(import.meta);
-import ProductManage from '../../clases.js';
-const instanceProd = new ProductManage('./products.json');
+import ProductManage from '../clases.js';
+import { uploader } from '../utils/multer.js';
+const instanceProd = new ProductManage('../products.json');
 const instance = new ProductManage('./carts.json');
 const router = Router();
 router.use(express.json());
@@ -11,7 +12,9 @@ router.use(express.urlencoded({extended:true}));
 const routerCart = Router();
 routerCart.use(express.json());
 routerCart.use(express.urlencoded({extended:true}));
-
+const routerSocket = Router();
+routerSocket.use(express.json());
+routerSocket.use(express.urlencoded({extended:true}));
 
 
 router.get('/', async (req, res)=>{
@@ -56,6 +59,27 @@ router.post('/', async(req, res)=>{
     }
 
 })
+
+
+router.post('/realTimeProducts', async(req, res)=>{
+    const { title, price, thumbnail, description, code, stock, status, category } = req.body
+    if ( title && price && description && code && stock && category) {
+        if (status === undefined) {
+            status = true;
+       }
+        if (title === "" || price === "" || description ===""|| code === "" || stock ==="" || status ==="" || category ==="") {
+            res.status(405).send("Falta completar alguno de los datos");
+        }else{
+            await instanceProd.addProduct({ title, price, thumbnail, description, code, stock, status, category });
+            const response = await instanceProd.getProducts();
+            res.status(200).render( response);
+        }
+    }else{
+        res.status(405).render('No ingreso alguna de las características del objeto')
+    }
+
+})
+
 router.put('/:pid', async(req, res)=>{
     const params = req.params;
     const pid = params.pid;
@@ -74,7 +98,7 @@ router.delete('/:pid', async (req, res)=>{
     const params = req.params;
     const pid = Number(params.pid);
     const eliminado = await instanceProd.deleteById(pid);
-    res.status(200).render(eliminado);
+    res.status(200).send(eliminado);
 })
 
 routerCart.post('/',async (req, res)=>{
@@ -101,7 +125,36 @@ routerCart.post('/:cid/product/:pid', async (req, res)=>{
     const cart = await instance.addProductToCart(paramsCidParse,prod);
     res.status(200).render(cart);
 })
+routerSocket.get('/', async (req, res)=>{
+    res.render('realTimeProducts');
+ })
+routerSocket.post('/',uploader.array('file', undefined), async (req, res)=>{
+    const product = req.body;
+    const img = req.files;
+    const filenames = [];
+    for(const key in img){
+        if(img.hasOwnProperty(key)){
+            const files = img[key];
+            
+            if(Array.isArray(files)){
+                files.forEach(file =>{
+                    filenames.push(file.filename)
+                })
+            }else{
+                filenames.push(files.filename)
+            }
+            
+        }
+    }
+    const status = product.status;
+    if(!status){
+        product.status = 'true'
+    }
+    
+    product.price = Number(product.price)
+    product.stock = Number(product.stock)
+    const id = await instanceProd.addProduct({...product, thumbnail: filenames});
+    res.status(201).send({id});
+})
 
-
-
-export  { router, routerCart };
+export  { router, routerCart, routerSocket };

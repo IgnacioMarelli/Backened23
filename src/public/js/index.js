@@ -24,6 +24,7 @@ function mostrarHtml(){
             <td data-label="Stock">${e.stock}</td>
             <td data-label="Categoria">${e.category}</td>
             <td data-label="Code">${e.code}</td>
+            <td ><img style="    width: 33%;" src="../img/${e.thumbnail}" alt=""></td>
             <td data-label="Opciones">
                 <button class="delete">Eliminar</button>
                 <button>Editar</button>
@@ -50,7 +51,7 @@ document.addEventListener('submit', async e=>{
             formData.append('file', e.target.file.files[0])
 
             try {
-                const response = await fetch('/api/products', {
+                const response = await fetch('/realTimeProducts', {
                     method: 'POST',
                     headers: {},
                     body: formData
@@ -83,7 +84,7 @@ document.addEventListener('click', async e =>{
 
         if(isDelete){
             try {
-                const response = await fetch(`/api/products/${id}`, {
+                const response = await fetch(`/products/${id}`, {
                     method: 'DELETE',
                     headers: {},
                 })

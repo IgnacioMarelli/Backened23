@@ -2,12 +2,13 @@ import express from 'express';
 const app = express();
 import fileDirName from './utils/fileDirName.js';
 const { __dirname } = fileDirName(import.meta);
-import { router, routerCart } from './Routes/views.router.js'
+import { router, routerCart, routerSocket } from './Routes/views.router.js'
 import handlebars from 'express-handlebars';
 import configureSocket from './Server/configure-socket.js';
 app.use(express.urlencoded({extended:true}));
 app.use('/products', router);
 app.use('/carts', routerCart);
+app.use('/realTimeProducts', routerSocket);
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname+'/views');
 app.set('view engine', 'handlebars');
