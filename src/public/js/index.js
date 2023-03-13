@@ -27,7 +27,6 @@ function mostrarHtml(){
             <td ><img style="    width: 33%;" src="../img/${e.thumbnail}" alt=""></td>
             <td data-label="Opciones">
                 <button class="delete">Eliminar</button>
-                <button>Editar</button>
             </td>
         `;
         fragment.appendChild(tr);
