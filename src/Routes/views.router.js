@@ -2,9 +2,9 @@ import express from 'express';
 import { Router } from 'express';
 import fileDirName from '../utils/fileDirName.js';
 const { __dirname } = fileDirName(import.meta);
-import ProductManage from '../clases.js';
+import instancia from '../dao/clases.js';
 import { uploader } from '../utils/multer.js';
-const instanceProd = new ProductManage('../products.json');
+import ProductManage from '../dao/fileSistem.js'
 const instance = new ProductManage('./carts.json');
 const router = Router();
 router.use(express.json());
@@ -15,10 +15,14 @@ routerCart.use(express.urlencoded({extended:true}));
 const routerSocket = Router();
 routerSocket.use(express.json());
 routerSocket.use(express.urlencoded({extended:true}));
+const routerHome = Router();
+routerHome.use(express.json());
+routerHome.use(express.urlencoded({extended:true}));
+
 
 
 router.get('/', async (req, res)=>{
-    const productos = await instanceProd.getProducts();  
+    const productos = await instancia.getAll();  
     const query= req.query;
     if (query === {}) {
         const limit = Object.keys(query);
@@ -32,40 +36,35 @@ router.get('/', async (req, res)=>{
             return 
         }
     }
-    res.render('home',{productos: productos});
+    res.send({productos});
  })
 router.get('/:pid',  async (req, res)=>{  
     const params = req.params;
     const pid = params.pid;
     const paramsParse = JSON.parse(pid);
     const prodId =  await instanceProd.getProductsById(paramsParse);
-    res.render(prodId); 
+    res.send(prodId); 
 })
 router.post('/', async(req, res)=>{
-    const { title, price, thumbnail, description, code, stock, status, category } = req.body
-    if ( title && price && description && code && stock && category) {
-        if (status === undefined) {
-            status = true;
-       }
-        if (title === "" || price === "" || description ===""|| code === "" || stock ==="" || status ==="" || category ==="") {
-            res.status(405).send("Falta completar alguno de los datos");
-        }else{
-            await instanceProd.addProduct({ title, price, thumbnail, description, code, stock, status, category });
-            const response = await instanceProd.getProducts();
-            res.status(200).render( response);
-        }
-    }else{
-        res.status(405).render('No ingreso alguna de las características del objeto')
+    try {
+        const { title, price, thumbnail, description, code, stock, status, category } = req.body
+        await instancia.save({ title, price, thumbnail, description, code, stock, status, category });
+        const response = await instancia.getAll();
+        res.status(200).send( response);
+    }catch (error) {
+        console.error(error);
+        res.status(405).render('No ingreso alguna de las características del objeto');
     }
 
 })
 
-
+/*
 router.post('/realTimeProducts', async(req, res)=>{
+    const data = req.body;
     const { title, price, thumbnail, description, code, stock, status, category } = req.body
     if ( title && price && description && code && stock && category) {
         if (status === undefined) {
-            status = true;
+          status = true;
        }
         if (title === "" || price === "" || description ===""|| code === "" || stock ==="" || status ==="" || category ==="") {
             res.status(405).send("Falta completar alguno de los datos");
@@ -78,7 +77,7 @@ router.post('/realTimeProducts', async(req, res)=>{
         res.status(405).render('No ingreso alguna de las características del objeto')
     }
 
-})
+})*/
 
 router.put('/:pid', async(req, res)=>{
     const params = req.params;
@@ -94,6 +93,7 @@ router.put('/:pid', async(req, res)=>{
     res.status(200).render(response);
 
 })
+
 router.delete('/:pid', async (req, res)=>{
     const params = req.params;
     const pid = Number(params.pid);
@@ -156,5 +156,8 @@ routerSocket.post('/',uploader.array('file', undefined), async (req, res)=>{
     const id = await instanceProd.addProduct({...product, thumbnail: filenames});
     res.status(201).send({id});
 })
+routerHome.get('/', async (req,res)=>{
+    res.render('home');
+})
 
-export  { router, routerCart, routerSocket };
+export  { router, routerCart, routerSocket, routerHome };
