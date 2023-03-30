@@ -12,7 +12,8 @@ const prodsSchema = new mongoose.Schema({
         required: true
     },
     thumbnail:{
-        type:String
+        type:Array,
+        required: true
     },
     description:{
         type:String,

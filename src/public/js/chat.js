@@ -22,7 +22,7 @@ chatBox.addEventListener('keyup', e=>{
     if(e.key === 'Enter'){
         if(chatBox.value.trim().length > 0){
             socket.emit('message',{
-                user: user, message: chatBox.value
+                name: user, message: chatBox.value
             });
             chatBox.value = '';
         }
@@ -31,7 +31,7 @@ chatBox.addEventListener('keyup', e=>{
 socket.on('messageLogs', data=>{
     let log= document.getElementById('message');
     let messages = data.map((message) =>
-        `${message.user} : ${message.message}`
+        `${message.name} : ${message.message}`
     ).join('<br />');
     log.innerHTML= messages;
 })

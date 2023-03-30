@@ -2,7 +2,7 @@ import express from 'express';
 import { Router } from 'express';
 import fileDirName from '../utils/fileDirName.js';
 const { __dirname } = fileDirName(import.meta);
-import instancia from '../dao/clases.js';
+import {instanciaProduct, instanceMessage} from '../dao/clases.js';
 import { uploader } from '../utils/multer.js';
 import ProductManage from '../dao/fileSistem.js'
 const instance = new ProductManage('./carts.json');
@@ -15,14 +15,14 @@ routerCart.use(express.urlencoded({extended:true}));
 const routerSocket = Router();
 routerSocket.use(express.json());
 routerSocket.use(express.urlencoded({extended:true}));
-const routerHome = Router();
-routerHome.use(express.json());
-routerHome.use(express.urlencoded({extended:true}));
+const routerChat = Router();
+routerChat.use(express.json());
+routerChat.use(express.urlencoded({extended:true}));
 
 
 
 router.get('/', async (req, res)=>{
-    const productos = await instancia.getAll();  
+    const productos = await instanciaProduct.getAll();  
     const query= req.query;
     if (query === {}) {
         const limit = Object.keys(query);
@@ -47,9 +47,13 @@ router.get('/:pid',  async (req, res)=>{
 })
 router.post('/', async(req, res)=>{
     try {
-        const { title, price, thumbnail, description, code, stock, status, category } = req.body
-        await instancia.save({ title, price, thumbnail, description, code, stock, status, category });
-        const response = await instancia.getAll();
+        const newProduct = req.body;
+        if (!total.includes(newProduct)) {
+            await instanciaProduct.save(newProduct);
+        }else{
+            res.status(405).send('Error, producto ya agregado');
+        }
+        const response = await instanciaProduct.getAll();
         res.status(200).send( response);
     }catch (error) {
         console.error(error);
@@ -96,8 +100,8 @@ router.put('/:pid', async(req, res)=>{
 
 router.delete('/:pid', async (req, res)=>{
     const params = req.params;
-    const pid = Number(params.pid);
-    const eliminado = await instanceProd.deleteById(pid);
+    const pid = params.pid;
+    const eliminado = await instanciaProduct.delete(pid);
     res.status(200).send(eliminado);
 })
 
@@ -129,35 +133,46 @@ routerSocket.get('/', async (req, res)=>{
     res.render('realTimeProducts');
  })
 routerSocket.post('/',uploader.array('file', undefined), async (req, res)=>{
-    const product = req.body;
-    const img = req.files;
-    const filenames = [];
-    for(const key in img){
-        if(img.hasOwnProperty(key)){
-            const files = img[key];
-            
-            if(Array.isArray(files)){
-                files.forEach(file =>{
-                    filenames.push(file.filename)
-                })
-            }else{
-                filenames.push(files.filename)
+    try {
+        const product = req.body;
+        const img = req.files;
+        const filenames = [];
+        for(const key in img){
+            if(img.hasOwnProperty(key)){
+                const files = img[key];
+                
+                if(Array.isArray(files)){
+                    files.forEach(file =>{
+                        filenames.push(file.filename)
+                    })
+                }else{
+                    filenames.push(files.filename)
+                }
+                
             }
-            
         }
+        const status = product.status;
+        if(!status){
+            product.status = 'true'
+        }
+        
+        product.price = Number(product.price);
+        product.stock = Number(product.stock);
+        const total = await instanciaProduct.getAll();
+        if (!total.includes(product)) {
+            await instanciaProduct.save({...product, thumbnail: filenames});
+        }else{
+            res.status(405).send('Error, producto ya agregado');
+        }
+        const response = await instanciaProduct.getAll();
+        res.status(200).send(response);
+    }catch (error) {
+        console.error(error);
+        res.status(405).render('No ingreso alguna de las características del objeto');
     }
-    const status = product.status;
-    if(!status){
-        product.status = 'true'
-    }
-    
-    product.price = Number(product.price)
-    product.stock = Number(product.stock)
-    const id = await instanceProd.addProduct({...product, thumbnail: filenames});
-    res.status(201).send({id});
 })
-routerHome.get('/', async (req,res)=>{
-    res.render('home');
+routerChat.get('/', async (req,res)=>{
+    res.render('chat');
 })
 
-export  { router, routerCart, routerSocket, routerHome };
+export  { router, routerCart, routerSocket, routerChat as routerHome };

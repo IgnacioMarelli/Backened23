@@ -3,14 +3,6 @@ class MongoManager{
     constructor(model){
         this.model =model;    
     }
-    readFile(){
-        try {
-            const data = JSON.parse(fs.readFileSync(this.path));
-            return data;
-        } catch (error) {
-            return []
-        }
-    }
     async getAll(){
         try{
             const products = await this.model.find();
@@ -22,19 +14,15 @@ class MongoManager{
      }
 
      async create(product){
-         const total = await this.getAll();
-         if (!total.includes(product)) {
-             total.push(product);
-             let id = 0;
-             total.forEach(e => {
-                 id++;
-                 e.id= id;
-             });
-             await this.model.create(total);
-             return product.id
-         }else{
-             console.log('Error, producto ya agregado');
-         }
+        const total = await this.getAll();
+        total.push(product);
+        let id = 0;
+        total.forEach(e => {
+            id++;
+            e.id= id;
+        });
+        await this.model.create(total);
+        return product
      }
      async getProductsById(id){
          const total = await this.getProducts();
@@ -42,23 +30,10 @@ class MongoManager{
          return prodPorId
      }
      async updateProduct(id, prod){
-        const data = await this.getProducts();
-        if (id <= 0 || id > data.length) {
-			return {
-				error: "El producto con el id especificado no ha sido encontrado.",
-			};
-		}
-        prod.id = id;
-        const previousProduct = data.splice(id - 1, 1, prod);
-        await fs.promises.writeFile(this.path, JSON.stringify(data));
-        return previousProduct
+        return await this.model.findByIdAndUpdate(id, prod, { new: true })
      }
      async deleteById(id){
-        const resolve =  await fs.promises.readFile(this.path, (err, data) => { if (err) throw err;});
-        const products = JSON.parse(resolve);
-        const prods = products.filter(prod=> prod.id!== id);
-        await fs.promises.writeFile(this.path, JSON.stringify(prods));
-        return `Has eliminado el producto con id: ${id} de la lista`
+        return await this.model.findByIdAndDelete(id);
     }
 
 

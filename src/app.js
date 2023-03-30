@@ -21,8 +21,8 @@ app.use((error, req, res, next)=>{
 const {PORT, MONGO_URL} = config;
 configureHandlebars(app)
 const httpServer = app.listen(PORT, ()=>console.log(`Servidor escuchando en el puerto ${PORT}`));
-//configureSocket(httpServer);
+configureSocket(httpServer);
 const connection = mongoose.connect(MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-  });
+});

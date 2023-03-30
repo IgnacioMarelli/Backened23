@@ -1,15 +1,15 @@
 import mongoose from "mongoose";
 
-const messagesCollection = 'products'
+const messagesCollection = 'messages'
 
 const messagesSchema = new mongoose.Schema({
     name:{
         type: String,
         required:true
     },
-   messages:{
+   message:{
     type: String,
-    required:true
+    default:''
     }
 })
 export const messageModel = mongoose.model(messagesCollection, messagesSchema);
