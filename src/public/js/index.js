@@ -49,7 +49,7 @@ document.addEventListener('submit', async e=>{
 
                 if(!response.ok) {
                     const p = document.getElementById('producto-id')
-                    p.innerText = `Error ${response.status}: ${response.statusText}xd`
+                    p.innerText = `Error ${response.status}: ${response.statusText}`
                 }else{
                     const p = document.getElementById('producto-id');
                     p.innerText = `Producto agregado correctamente`;
