@@ -6,7 +6,7 @@ class MongoManager{
     async getAll(){
         try{
             const products = await this.model.find();
-            return products
+            return products.map((e)=>e.toObject())
         }catch(e){
             console.error(e);
             throw e

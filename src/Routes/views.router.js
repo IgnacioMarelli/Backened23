@@ -54,7 +54,7 @@ router.post('/', async(req, res)=>{
             res.status(405).send('Error, producto ya agregado');
         }
         const response = await instanciaProduct.getAll();
-        res.status(200).send( response);
+        res.status(200).send(response);
     }catch (error) {
         console.error(error);
         res.status(405).render('No ingreso alguna de las características del objeto');
@@ -102,6 +102,7 @@ router.delete('/:pid', async (req, res)=>{
     const params = req.params;
     const pid = params.pid;
     const eliminado = await instanciaProduct.delete(pid);
+    console.log(eliminado);
     res.status(200).send(eliminado);
 })
 
@@ -130,7 +131,8 @@ routerCart.post('/:cid/product/:pid', async (req, res)=>{
     res.status(200).render(cart);
 })
 routerSocket.get('/', async (req, res)=>{
-    res.render('realTimeProducts');
+    const response = await instanciaProduct.getAll();
+    res.render('realTimeProducts',{products:response});
  })
 routerSocket.post('/',uploader.array('file', undefined), async (req, res)=>{
     try {
@@ -153,19 +155,15 @@ routerSocket.post('/',uploader.array('file', undefined), async (req, res)=>{
         }
         const status = product.status;
         if(!status){
-            product.status = 'true'
+            product.status = 'true';
         }
-        
-        product.price = Number(product.price);
-        product.stock = Number(product.stock);
         const total = await instanciaProduct.getAll();
         if (!total.includes(product)) {
             await instanciaProduct.save({...product, thumbnail: filenames});
         }else{
             res.status(405).send('Error, producto ya agregado');
         }
-        const response = await instanciaProduct.getAll();
-        res.status(200).send(response);
+        res.status(200)
     }catch (error) {
         console.error(error);
         res.status(405).render('No ingreso alguna de las características del objeto');

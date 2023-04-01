@@ -4,15 +4,7 @@ const fragment = document.createDocumentFragment();
 const article = document.getElementById('article');
 const form = document.getElementById('crud-form');
 
-let products;
-
-socket.on('products', data => {
-    console.log('socket conectado desde el front');
-    products = data;
-    limpiarHtml()
-    mostrarHtml()
-})
-
+/*
 function mostrarHtml(){
     products.forEach(e =>{
         const tr = document.createElement('tr');
@@ -33,7 +25,7 @@ function mostrarHtml(){
     })
     
     tbody.appendChild(fragment)
-}
+}*/
 document.addEventListener('submit', async e=>{
     if(e.target === form){
         e.preventDefault()
@@ -52,13 +44,12 @@ document.addEventListener('submit', async e=>{
             try {
                 const response = await fetch('/realTimeProducts', {
                     method: 'POST',
-                    headers: {},
                     body: formData
                 })
 
                 if(!response.ok) {
                     const p = document.getElementById('producto-id')
-                    p.innerText = `Error ${response.status}: ${response.statusText}`
+                    p.innerText = `Error ${response.status}: ${response.statusText}xd`
                 }else{
                     const p = document.getElementById('producto-id');
                     p.innerText = `Producto agregado correctamente`;
@@ -78,7 +69,7 @@ document.addEventListener('submit', async e=>{
 
 document.addEventListener('click', async e =>{
     if(e.target.matches('.delete')){
-        const id = Number(e.target.parentElement.parentElement.dataset.id)
+        const id = e.target.parentElement.parentElement.firstElementChild.innerText;
         let isDelete = confirm(`Estas seguro de eliminar el id ${id}?`)
 
         if(isDelete){

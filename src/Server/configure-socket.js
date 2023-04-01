@@ -1,11 +1,9 @@
 import { Server } from 'socket.io';
-import {instanciaProduct, instanceMessage} from '../dao/clases.js';
+import {instanceMessage} from '../dao/clases.js';
 
 export default async function configureSocket(httpServer){
     const io = new Server(httpServer)
     io.on('connection', async (socket) =>{
-        const productos = await instanciaProduct.getAll(); 
-        socket.emit('products', productos);
         console.log(`socket conectado `);
         socket.on('message', async data=>{
             await instanceMessage.save(data);
