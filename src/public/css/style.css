@@ -10,7 +10,27 @@ body{
 .cada{
     border: solid;
 }
-section{
+.sectionProds{
     box-shadow: 1rem 2rem 5rem;
-    
+    display: flex;
+}
+.but{
+    height: 3rem;
+    align-self: center;
+}
+a {
+    text-decoration: none;
+    color: white; }
+  
+li {
+color: white;
+background-color: black; }
+li:hover{
+    color: crimson;
+}
+ul{
+    list-style: none;   
+}
+.titles{
+    background-color: whitesmoke;
 }

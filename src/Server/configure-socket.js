@@ -1,5 +1,5 @@
 import { Server } from 'socket.io';
-import {instanceMessage} from '../dao/clases.js';
+import {instanceMessage} from '../dao/mongo.manager.js';
 
 export default async function configureSocket(httpServer){
     const io = new Server(httpServer)

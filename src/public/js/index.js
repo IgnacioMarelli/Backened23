@@ -1,31 +1,60 @@
 const socket = io();
-const tbody = document.getElementById('tbody');
-const fragment = document.createDocumentFragment();
-const article = document.getElementById('article');
 const form = document.getElementById('crud-form');
+const query = new URLSearchParams(window.location.search);
 
-/*
-function mostrarHtml(){
-    products.forEach(e =>{
-        const tr = document.createElement('tr');
-        tr.setAttribute('data-id', e.id);
-        tr.innerHTML = `
-            <td data-label="Producto">${e.title}</td>
-            <td data-label="Descripcion">${e.description}</td>
-            <td data-label="Precio">${e.price}</td>
-            <td data-label="Stock">${e.stock}</td>
-            <td data-label="Categoria">${e.category}</td>
-            <td data-label="Code">${e.code}</td>
-            <td ><img style="    width: 33%;" src="../img/${e.thumbnail}" alt=""></td>
-            <td data-label="Opciones">
-            <button class="delete">Eliminar</button>
-            </td>
-        `;
-        fragment.appendChild(tr);
-    })
-    
-    tbody.appendChild(fragment)
-}*/
+async function addProd(id) {
+    const cid=undefined;
+    const quantity = {"quantity":32};
+    try {
+        const response = await fetch(`/carts/${cid}/products/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify({quantity:32})
+        })
+        if(!response.ok) {
+            const p = document.getElementById('producto-id')
+            p.innerText = `Error ${response.status}: ${response.statusText}`
+        }else{
+            const p = document.getElementById('producto-id');
+            p.innerText = `Producto agregado correctamente`;
+            setTimeout(() =>{
+                p.innerText = ``;
+                location.reload();
+            }, 2000)
+        }
+    }catch(e){
+        let message = error.statusText || 'Ocurrio un error';
+        const p = document.getElementById('producto-id');
+        p.insertAdjacentHTML("afterend", `<p><b>Error: ${message} intenta mas tarde</b></p>`);
+    }
+
+};
+console.log(query.get()); 
+
+let nextPage;
+function setPrev() {
+    const previusPage= Number(query.get('page'))-1;
+    query.set('page', previusPage);
+    window.location.search = query.toString();
+}
+function setNext() {
+    if (query.get('page')) {
+        nextPage= Number(query.get('page'))+1;
+    }else{
+        nextPage= Number(query.get('page'))+2;
+    }
+    query.set('page', nextPage);
+    window.location.search = query.toString();
+}
+function sortMayor() {
+    const sorts = -1;
+    query.set('sort', sorts);
+    window.location.search = query.toString();
+}
+function sortMenor() {
+    const sorts = 1;
+    query.set('sort', sorts);
+    window.location.search = query.toString();
+}
 document.addEventListener('submit', async e=>{
     if(e.target === form){
         e.preventDefault()
@@ -42,7 +71,7 @@ document.addEventListener('submit', async e=>{
             formData.append('file', e.target.file.files[0])
 
             try {
-                const response = await fetch('/realTimeProducts', {
+                const response = await fetch('/products', {
                     method: 'POST',
                     body: formData
                 })
@@ -90,11 +119,27 @@ document.addEventListener('click', async e =>{
             }
         }
     }
-
-    if(e.target.matches('.add-btn')){
-        article.classList.toggle('dnone');
-    }
 })
+async function removeFromCart(cid, pid){
+    let isDelete = confirm(`Estas seguro de eliminar el producto con id: ${id} del carrito?`)
+    if(isDelete){
+        try {
+            const response = await fetch(`/carts/${cid}/products/${pid}`, {
+                method: 'DELETE',
+                headers: {},
+            })
+
+            if(!response.ok){
+                const p = document.getElementById('producto-id');
+                p.innerText = `Ocurrio un error al eliminar el producto`;
+            }
+            location.reload();
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
 function limpiarHtml(){
     tbody.innerHTML = ``;
 }

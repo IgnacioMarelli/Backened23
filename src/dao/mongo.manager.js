@@ -1,4 +1,6 @@
-
+import {messageModel} from './models/messages.model.js';
+import {productModel} from './models/products.model.js';
+import { cartModel } from './models/carts.model.js';
 class MongoManager{
     constructor(model){
         this.model =model;    
@@ -11,23 +13,47 @@ class MongoManager{
             console.error(e);
             throw e
         }           
+    }
+    async getAllPaginate({limit=10, page=1, sort, category, status}){
+        const sortValidValues = [-1, 1, '-1', '1'];
+        try{
+            let query = {};
+            if(category){
+                query = {category};
+            }
+            if(status){
+                query ={status};
+            }
+            if(isNaN(limit) || limit <= 0){
+                throw 'El limite debe ser mayor a 0'
+            }
+
+            if(isNaN(page)){
+                throw 'Page no es un número';
+            }
+            
+            if(sortValidValues.includes(sort)){
+                return await productModel.paginate(query, {limit: limit, page: page, sort: { price: sort}, lean: true})
+            }else{
+                if(sort){
+                    throw 'El valor del sort debe ser 1 o -1'
+                }
+            }
+            return await this.model.paginate(query, {limit: limit || 10, page: page || 1, lean: true})
+        }catch(e){
+            console.error(e);
+            throw e
+        }           
      }
 
      async create(product){
-        const total = await this.getAll();
-        total.push(product);
-        let id = 0;
-        total.forEach(e => {
-            id++;
-            e.id= id;
-        });
-        await this.model.create(total);
+        await this.model.create(product);
         return product
      }
      async getProductsById(id){
-         const total = await this.getProducts();
-         const prodPorId= total.find( e => e.id === id);
-         return prodPorId
+         const prodPorId= await this.model.find({_id: id});
+         const prodObj= prodPorId.map((e)=> e.toObject())
+         return prodObj
      }
      async updateProduct(id, prod){
         return await this.model.findByIdAndUpdate(id, prod, { new: true })
@@ -36,64 +62,59 @@ class MongoManager{
         return await this.model.findByIdAndDelete(id);
     }
 
-
+/////////////////////////////////////////////////CART////////////////////////////////////////////////////////////////////////////////////////
     
-    async getCart(){
-        const isPath= fs.existsSync(this.path);
-        if(!isPath){
-            await fs.promises.writeFile(this.path, '[]');
-         }            
-         const resolve = await fs.promises.readFile(this.path, (err, data) => { if (err) throw err;});
-         const cart = JSON.parse(resolve);
-         const carts = await this.createCart(cart);
-         return carts
-    }
-    async createCart(cart){
-
-        if (cart.length===0){
-            cart.push({id:1, products:[]});
-            await fs.promises.writeFile(this.path, JSON.stringify(cart));
-            return cart
+    async addProductToCart(cart, quantity, prod){
+        try{
+        const carts = await this.getAll();
+        if (cart=== 'undefined') {
+            let newCart;
+            if (carts.length===0) {
+                newCart= await this.model.create({products:{product:prod, quantity: quantity}});
+            }else{
+                newCart= await this.model.findOne({})
+            }
+            const newId = newCart._id;
+            cart= newId.toString();
         }
-        const cartWId = await this.cartID(cart);
-        await fs.promises.writeFile(this.path, JSON.stringify(cartWId));
-        return cartWId
+        if (quantity=== undefined) {
+            quantity=1;
+        }
+        if (quantity===0) {
+            await deleteProduct(cart,prod);
+        }else{
+            const isInCart = await this.model.findOne({_id: cart,"products.product": prod});
+
+            if(!isInCart){
+                await this.model.findOneAndUpdate({_id: cart}, {$push: {products: {product: prod, quantity:  quantity }}});
+            }else{
+                await this.model.findOneAndUpdate({_id: cart, "products.product": prod}, {"products.$.quantity": quantity});
+            }
+        }
+        return await this.model.findOne({_id: cart})     }catch(e){
+            console.error(e);
+            throw e;
+        }   
     }
 
-    async cartID(cartRandom){
-        cartRandom.push({id:1, products:[]});
-        for (let id = 0; id < cartRandom.length; id++) {
-            cartRandom[id].id=id+1;
-        }
-        return cartRandom
+    async addQuantity(cid, pid, qty){
+        return await this.model.findOneAndUpdate({_id: cid, "products.product": pid}, {$inc: {"products.$.quantity": qty}});
+    }
+    async deleteProduct(cid, pid){
+        return await this.model.findOneAndUpdate({_id: cid}, {$pull: {products: {product: pid}}})
     }
 
-    async getProductsCartsById(id){
-        const total = await this.getCart();
-        const prodPorId= total.find( e => e.id === id);
-        return prodPorId.products
+    async deleteAllProducts(cid){
+        return await this.model.findOneAndReplace({_id: cid}, {products: []});
     }
-    async addProductToCart(cart, prod){
-        const resolve = await fs.promises.readFile(this.path, (err, data) => { if (err) throw err;});
-        const carts = JSON.parse(resolve);
-        const cartId= carts.find( e => e.id === cart);
-        const newProduct = {
-            quantity: 1,
-            product: prod.id,
-        };
-        const ssd= cartId.products;
-        const xd = ssd.find(e=>e.product===newProduct.product)
-        if (xd) {
-            xd.quantity++;
-            await fs.promises.writeFile(this.path, JSON.stringify(carts));
-            return cartId
-        }
-        cartId.products.push(newProduct);
-        await fs.promises.writeFile(this.path, JSON.stringify(carts));
-        return cartId
+    async getCartsById(cid){
+        const prodPorId= await this.model.find({_id:cid});
+        return prodPorId
     }
  }
- 
- 
-export default MongoManager;
+const instanceMessage = new MongoManager(messageModel);
+const instanciaProduct = new MongoManager(productModel);
+const instanceCarts= new MongoManager(cartModel);
+export {instanciaProduct, instanceMessage, instanceCarts};
+
  
