@@ -4,31 +4,18 @@ const query = new URLSearchParams(window.location.search);
 
 async function addProd(id) {
     const cid=undefined;
-    const quantity = {"quantity":32};
-    try {
-        const response = await fetch(`/carts/${cid}/products/${id}`, {
-            method: 'PUT',
-            body: JSON.stringify({quantity:32})
-        })
-        if(!response.ok) {
-            const p = document.getElementById('producto-id')
-            p.innerText = `Error ${response.status}: ${response.statusText}`
-        }else{
-            const p = document.getElementById('producto-id');
-            p.innerText = `Producto agregado correctamente`;
-            setTimeout(() =>{
-                p.innerText = ``;
-                location.reload();
-            }, 2000)
-        }
+    const quantity = 32;
+    try{
+        api.put(`/carts/${cid}/products/${id}`, {
+            quantity,
+            })
+            .then((d) => alert('Agregado al carrito'));
     }catch(e){
         let message = error.statusText || 'Ocurrio un error';
         const p = document.getElementById('producto-id');
         p.insertAdjacentHTML("afterend", `<p><b>Error: ${message} intenta mas tarde</b></p>`);
     }
-
 };
-console.log(query.get()); 
 
 let nextPage;
 function setPrev() {
@@ -71,22 +58,10 @@ document.addEventListener('submit', async e=>{
             formData.append('file', e.target.file.files[0])
 
             try {
-                const response = await fetch('/products', {
-                    method: 'POST',
-                    body: formData
-                })
-
-                if(!response.ok) {
-                    const p = document.getElementById('producto-id')
-                    p.innerText = `Error ${response.status}: ${response.statusText}`
-                }else{
-                    const p = document.getElementById('producto-id');
-                    p.innerText = `Producto agregado correctamente`;
-                    setTimeout(() =>{
-                        p.innerText = ``;
-                        location.reload();
-                    }, 2000)
-                }
+                api.post('/products', {
+                    formData,
+                    })
+                    .then((d) => alert('Producto agregado correctamente'));
             } catch (error) {
                 let message = error.statusText || 'Ocurrio un error';
                 const p = document.getElementById('producto-id');
@@ -121,7 +96,7 @@ document.addEventListener('click', async e =>{
     }
 })
 async function removeFromCart(cid, pid){
-    let isDelete = confirm(`Estas seguro de eliminar el producto con id: ${id} del carrito?`)
+    let isDelete = confirm(`Estas seguro de eliminar el producto con id: ${pid} del carrito?`)
     if(isDelete){
         try {
             const response = await fetch(`/carts/${cid}/products/${pid}`, {

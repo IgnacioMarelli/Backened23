@@ -8,7 +8,7 @@
         <h2 className="nombre">{{products.category}}</h2>
         <h2 className="nombre">Stock:{{products.stock}}</h2>
     </div>
-    <button onclick="addProd('{{this._id}}')" >Agregar al carrito</button>
+    <button onclick="addProd({{products._id}})" >Agregar al carrito</button>
 </section>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="/socket.io/socket.io.js"></script>
