@@ -1,6 +1,7 @@
 import {messageModel} from './models/messages.model.js';
 import {productModel} from './models/products.model.js';
 import { cartModel } from './models/carts.model.js';
+import { userModel } from './models/users.js';
 class MongoManager{
     constructor(model){
         this.model =model;    
@@ -115,6 +116,7 @@ class MongoManager{
 const instanceMessage = new MongoManager(messageModel);
 const instanciaProduct = new MongoManager(productModel);
 const instanceCarts= new MongoManager(cartModel);
-export {instanciaProduct, instanceMessage, instanceCarts};
+const instanceUser = new MongoManager(userModel);
+export {instanciaProduct, instanceMessage, instanceCarts, instanceUser};
 
  

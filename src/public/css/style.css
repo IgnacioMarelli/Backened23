@@ -23,8 +23,7 @@ a {
     color: white; }
   
 li {
-color: white;
-background-color: black; }
+color: white;}
 li:hover{
     color: crimson;
 }

@@ -1,5 +1,5 @@
 
-
+{{>menu}}
 <div class='hero-image'>
   <button onclick='logout()'>
     Cerrar sesión
@@ -26,6 +26,6 @@
     </p>
   </div>
   <script>
-    function logout() { api.post("/api/auth/logout"); }
+    function logout() { api.post("/users/auth/logout"); }
   </script>
 </div>

@@ -1,30 +1,24 @@
 import { Router } from 'express';
 import { userModel } from '../dao/models/users.js';
 const routerUser = Router();
-import { authenticated } from '../utils/authentication.js';
+import { alreadyEmail, authenticated } from '../utils/authentication.js';
 
 
 
 
-routerUser.get('/register', (req, res) => {
-    const email = req.session.user;
-    if (email) {
-        return res.redirect('/perfil');
-    }
+routerUser.get('/register',alreadyEmail, (req, res) => {
     res.render('register', {
         style: 'style',
     });
 });
-routerUser.post('/register', async (req, res, next) => {
-  const email = req.session.user;
-  if (email) {
-    return res.redirect('/perfil');
-  }
+routerUser.post('/register',alreadyEmail, async (req, res, next) => {
   const usuario = req.body;
+  if (usuario.email==='adminCoder@coder.com'&& usuario.password==='adminCod3r123') {
+    usuario.role='admin';
+  }
   try {
-    const { _id } = await userModel.create(usuario);
-
-    res.status(201).send({ id: _id });
+    await userModel.create(usuario);
+    res.redirect('/users/login');
   } catch (error) {
     console.log(error);
     next(error);
@@ -46,15 +40,7 @@ routerUser.get('/users/:id', async (req, res) => {
     });
 });*/
 
-routerUser.get('/mensaje', (req, res) => {
-    res.render('mensaje');
-});
-
-routerUser.get('/login', (req, res) => {
-    const email = req.session.user;
-    if (email) {
-        return res.redirect('/users/perfil');
-    }
+routerUser.get('/login',alreadyEmail, (req, res) => {
     res.render('login');
 });
 
@@ -62,30 +48,27 @@ routerUser.get('/perfil', authenticated, async (req, res) => {
     const user = req.user;
 
     res.render('perfil', {
-        nombre: user.nombre,
-        apellido: user.apellido,
-        edad: user.edad,
+        nombre: user.name,
+        apellido: user.lastname,
+        edad: user.age,
         email: user.email,
     });
 });
   
-routerUser.post('/login', async (req, res) => {
-    const alreadyEmail = req.session.user;
-    if (alreadyEmail) {
-      return res.redirect('/users/perfil');
-    }
+routerUser.post('/login',alreadyEmail, async (req, res) => {
     const { email, password } = req.body;
   
     const user = await userModel.findOne({ email, password });
     if (!user) {
       return res.status(401).send({
         error: 'email o contraseña incorrectos',
-      });
+      }); 
     }
     req.session.user = email;
-    res.redirect('/users/perfil');
+    res.redirect('/products');
 });
-routerUser.post('/logout', authenticated, (req, res) => {
+
+routerUser.post('/auth/logout', authenticated, (req, res) => {
     req.session.destroy((err) => {
       if (err) {
         res.status(500).send({ error: err });
@@ -111,22 +94,6 @@ routerUser.get('/:idUsuario', async (req, res, next) => {
     }
 });
 
-
-routerUser.post('/', async (req, res, next) => {
-    const email = req.session.user;
-    if (email) {
-      return res.redirect('/perfil');
-    }
-    const usuario = req.body;
-  
-    try {
-      const { _id } = await userModel.create(usuario);
-  
-      res.status(201).send({ id: _id });
-    } catch (error) {
-      next(error);
-    }
-});
 routerUser.put('/:idUsuario', async (req, res, next) => {
     const idUsuario = req.params.idUsuario;
   

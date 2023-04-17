@@ -2,6 +2,9 @@ const socket = io();
 const form = document.getElementById('crud-form');
 const query = new URLSearchParams(window.location.search);
 
+
+
+
 async function addProd(id) {
     const cid=undefined;
     const quantity = 32;
@@ -146,3 +149,10 @@ function addMessage() {
 
     return false;
 }
+socket.on('usuario', data =>{
+    Swal.fire({
+        text:`Se conecto ${data}`,
+        toast:true,
+        position:"top-right"
+    })
+})

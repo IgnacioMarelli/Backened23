@@ -1,5 +1,5 @@
 import { Server } from 'socket.io';
-import {instanceMessage} from '../dao/mongo.manager.js';
+import {instanceMessage, instanceUser} from '../dao/mongo.manager.js';
 
 export default async function configureSocket(httpServer){
     const io = new Server(httpServer)
@@ -18,7 +18,9 @@ export default async function configureSocket(httpServer){
             socket.emit('messageLogs', await instanceMessage.getAll());
             socket.broadcast.emit('user', data);
         })
-        
+        socket.on('registrado', async (data)=>{
+            socket.emit('usuario', data);
+        })
     })
 
 }
