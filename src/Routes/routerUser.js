@@ -24,21 +24,6 @@ routerUser.post('/register',alreadyEmail, async (req, res, next) => {
     next(error);
   }
 });
-/*
-routerUser.get('/users/:id', async (req, res) => {
-    const user = await usuarioManager.get(req.params.id);
-    if (!user) {
-        res.render('notFound', {
-        style: 'style',
-        entidad: 'Usuario',
-        });
-        return;
-    }
-    res.render('viewUsuario', {
-        style: 'style',
-        user,
-    });
-});*/
 
 routerUser.get('/login',alreadyEmail, (req, res) => {
     res.render('login');
