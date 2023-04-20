@@ -18,21 +18,23 @@ function cookieExtractor(req) {
 export function configPassport() {
 
         passport.use('jwt',
-        new JWTStrategy({jwtFromRequest:jwt.ExtractJwt.fromExtractors([
+        new JWTStrategy({
+            jwtFromRequest:jwt.ExtractJwt.fromExtractors([
             cookieExtractor,
             jwt.ExtractJwt.fromAuthHeaderAsBearerToken(),
         ]),secretOrKey:'SECRETO',
-        }) , async(jwt_payload, done)=>{
+        }, async(jwt_payload, done)=>{
             try {
-            return done(null, jwt_payload)
+            const user =jwt_payload;
+            return done(null, user)
             } catch (error) {
-                return done(error)
+                return done(error, false, {message:'Usuario o contraseña incorrectas'})
             }
         } 
         )
-        
+        ); 
 
-    try {
+   /* try {
         passport.use('github', new GithubStrategy({
             clientID:config.github_client_id,
             clientSecret:config.github_client_secret,
@@ -57,7 +59,7 @@ export function configPassport() {
     } catch (error) {
         done(error);
     }
-    /*try {
+    try {
         passport.use('register', new LocalStrategy({
             passReqToCallback: true,/*para usar request
             usernameField:'email'

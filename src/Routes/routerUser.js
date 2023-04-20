@@ -4,7 +4,8 @@ const routerUser = Router();
 import { alreadyEmail, authenticated } from '../utils/authentication.js';
 import { createHash, isValidPassword } from '../utils/crypto.js';
 import passport from 'passport';
-
+import { generateToken } from '../utils/jwt.middlewar.js';
+import { passporCall } from '../utils/authentication.js';
 
 
 
@@ -14,7 +15,7 @@ routerUser.get('/register',alreadyEmail, (req, res) => {
     });
 });
 
-routerUser.post('/register',alreadyEmail, async (req, res, next) => {
+routerUser.post('/register',passport.authenticate('jwt', {session : false}), async (req, res, next) => {
   const usuario = req.body;
   const hashedPassword = createHash(req.body.password);
   if (usuario.email==='adminCoder@coder.com'&& usuario.password==='adminCod3r123') {
@@ -33,7 +34,7 @@ routerUser.get('/login',alreadyEmail, (req, res) => {
     res.render('login');
 });
 
-routerUser.get('/perfil', authenticated, async (req, res) => {
+routerUser.get('/perfil', passporCall('jwt'), async (req, res) => {
     const user = req.user;
 
     res.render('perfil', {
@@ -44,7 +45,7 @@ routerUser.get('/perfil', authenticated, async (req, res) => {
     });
 });
   
-routerUser.post('/login',alreadyEmail, async (req, res) => {
+routerUser.post('/login', async (req, res) => {
     const { email, password } = req.body;
     const user = await userModel.findOne({ email });
     if (!user || !isValidPassword(password, user.password)) {
@@ -52,7 +53,11 @@ routerUser.post('/login',alreadyEmail, async (req, res) => {
         error: 'email o contraseña incorrectos',
       }); 
     }
-    req.session.user = email;
+    const token = generateToken({...user, password: undefined});
+    res.cookie('AUTH',token,{
+      maxAge:60*60*1000*24,
+      httpOnly:true
+    });
     res.redirect('/products');
 });
 
