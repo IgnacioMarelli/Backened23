@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { userModel } from '../dao/models/users.js';
 const routerUser = Router();
 import { alreadyEmail, authenticated } from '../utils/authentication.js';
+import { createHash, isValidPassword } from '../utils/crypto.js';
+import passport from 'passport';
 
 
 
@@ -11,14 +13,16 @@ routerUser.get('/register',alreadyEmail, (req, res) => {
         style: 'style',
     });
 });
+
 routerUser.post('/register',alreadyEmail, async (req, res, next) => {
   const usuario = req.body;
+  const hashedPassword = createHash(req.body.password);
   if (usuario.email==='adminCoder@coder.com'&& usuario.password==='adminCod3r123') {
     usuario.role='admin';
   }
   try {
-    await userModel.create(usuario);
-    res.redirect('/users/login');
+    await userModel.create({...usuario, password: hashedPassword});
+    res.status(201).redirect('/users/login');
   } catch (error) {
     console.log(error);
     next(error);
@@ -42,9 +46,8 @@ routerUser.get('/perfil', authenticated, async (req, res) => {
   
 routerUser.post('/login',alreadyEmail, async (req, res) => {
     const { email, password } = req.body;
-  
-    const user = await userModel.findOne({ email, password });
-    if (!user) {
+    const user = await userModel.findOne({ email });
+    if (!user || !isValidPassword(password, user.password)) {
       return res.status(401).send({
         error: 'email o contraseña incorrectos',
       }); 
@@ -52,6 +55,7 @@ routerUser.post('/login',alreadyEmail, async (req, res) => {
     req.session.user = email;
     res.redirect('/products');
 });
+
 
 routerUser.post('/auth/logout', authenticated, (req, res) => {
     req.session.destroy((err) => {
@@ -62,23 +66,6 @@ routerUser.post('/auth/logout', authenticated, (req, res) => {
       }
     });
 });
-routerUser.get('/:idUsuario', async (req, res, next) => {
-    try {
-      const idUsuario = req.params.idUsuario;
-  
-      const usuario = await userModel.findOne({ _id: idUsuario });
-      if (!usuario) {
-        res
-          .status(404)
-          .send({ error: `Usuario con id ${idUsuario} no encontrado` });
-        return;
-      }
-      res.send({ usuario });
-    } catch (error) {
-      next(error);
-    }
-});
-
 routerUser.put('/:idUsuario', async (req, res, next) => {
     const idUsuario = req.params.idUsuario;
   
@@ -111,5 +98,24 @@ routerUser.delete('/:idUsuario', async (req, res, next) => {
       next(error);
     }
 });
+routerUser.post('restore-password', async (req, res)=>{
+  const {email, newPassword}=req.body;
+  const user = await userModel.findOne({email});
+  if(!user){
+    res.status(404).send({error: 'No existe el usuario'});
+    return
+  }
+  const hashedPassword = createHash(newPassword);
+  await userModel.updateOne({email}, {$set:{password:hashedPassword}});
+  res.status(200).send({message:'Contraseña modificada'})
+})
+routerUser.get('restore-password', async (req, res)=>{
+  res.render('restorePassword')
+})
 
+routerUser.get('/githubbutton', passport.authenticate('github', {scope: ['user:email']}), (req, res)=>{
+})
+routerUser.get('/github', passport.authenticate('github', {failureRedirect: '/login'}), (req, res)=>{
+  res.redirect('/users/perfil');
+})
 export  { routerUser};

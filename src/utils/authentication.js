@@ -6,7 +6,7 @@ const authenticated = async (req, res, next) => {
       req.user = user;
       next();
     } else {
-      res.redirect('/user/login');
+      res.redirect('/users/login');
     }
 };
 const alreadyEmail = async(req,res,next)=>{

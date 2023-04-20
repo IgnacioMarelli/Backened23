@@ -13,6 +13,8 @@ import { routerUser } from './Routes/routerUser.js';
 import { router, routerSocket } from './Routes/views.router.js'
 import configureHandlebars from './hb/hbs.middleware.js';
 import configureSocket from './Server/configure-socket.js';
+import passport from 'passport';
+import { configPassport } from './config/passport.config.js';
 const {PORT, MONGO_URL} = config;
 
 mongoose.connect(MONGO_URL, {
@@ -50,8 +52,9 @@ app.use((error, req, res, next)=>{
     res.status(500).json({error});
 })
 
-
-
+configPassport()
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 
