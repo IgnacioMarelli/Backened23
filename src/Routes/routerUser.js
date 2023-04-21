@@ -73,38 +73,7 @@ routerUser.post('/auth/logout', (req, res) => {
     res.clearCookie('AUTH')
     res.redirect('/users/login');
 });
-routerUser.put('/:idUsuario', async (req, res, next) => {
-    const idUsuario = req.params.idUsuario;
-  
-    try {
-      const usuario = await userModel.find({ _id: idUsuario });
-      if (!usuario) {
-        res
-          .status(404)
-          .send({ error: `Usuario con id ${idUsuario} no encontrado` });
-        return;
-      }
-      const nuevosDatos = req.body;
-  
-      await userModel.updateOne(
-        { _id: idUsuario },
-        { ...usuario, ...nuevosDatos }
-      );
-      res.send({ ok: true });
-    } catch (error) {
-      next(error);
-    }
-});
-  
-routerUser.delete('/:idUsuario', async (req, res, next) => {
-    try {
-      const idUsuario = req.params.idUsuario;
-      await userModel.deleteOne({ _id: idUsuario });
-      res.send({ ok: true });
-    } catch (error) {
-      next(error);
-    }
-});
+
 routerUser.post('restore-password', async (req, res)=>{
   const {email, newPassword}=req.body;
   const user = await userModel.findOne({email});
