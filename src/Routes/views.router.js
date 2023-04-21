@@ -2,7 +2,7 @@ import express from 'express';
 import { Router } from 'express';
 import {instanciaProduct} from '../dao/mongo.manager.js';
 import { uploader } from '../utils/multer.js';
-import { authenticated } from '../utils/authentication.js';
+import { passportCall } from '../utils/authentication.js';
 const router = Router();
 router.use(express.json());
 router.use(express.urlencoded({extended:true}));
@@ -10,7 +10,7 @@ const routerSocket = Router();
 routerSocket.use(express.json());
 routerSocket.use(express.urlencoded({extended:true}));
 
-router.get('/', authenticated, async (req, res)=>{
+router.get('/', passportCall('jwt'), async (req, res)=>{
     const user = req.user;
     const {page, limit, sort, category, status} = req.query;
     const response = await instanciaProduct.getAllPaginate({page: page, limit: limit, sort: sort,category, status, lean: true});

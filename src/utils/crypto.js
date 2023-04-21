@@ -1,7 +1,9 @@
 import bcrypt from 'bcrypt'
 
 async function createHash(password) {
-    return await bcrypt.hash(password, bcrypt.genSalt(10))
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(password, salt); 
+    return hash;
 }
 
 async function isValidPassword(password, hashedPassword) {

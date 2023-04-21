@@ -52,13 +52,11 @@ app.use((error, req, res, next)=>{
     res.status(500).json({error});
 })
 
-configPassport()
+
 app.use(passport.initialize());
 app.use(passport.session());
-
-
-
-
+configPassport()
 configureHandlebars(app)
+
 const httpServer = app.listen(PORT, ()=>console.log(`Servidor escuchando en el puerto ${PORT}`));
 configureSocket(httpServer);

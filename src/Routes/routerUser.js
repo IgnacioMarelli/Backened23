@@ -1,24 +1,27 @@
 import { Router } from 'express';
 import { userModel } from '../dao/models/users.js';
 const routerUser = Router();
-import { alreadyEmail, authenticated } from '../utils/authentication.js';
+import { authenticated } from '../utils/authentication.js';
 import { createHash, isValidPassword } from '../utils/crypto.js';
 import passport from 'passport';
 import { generateToken } from '../utils/jwt.middlewar.js';
-import { passporCall } from '../utils/authentication.js';
+import { passportCall } from '../utils/authentication.js';
 
 
 
-routerUser.get('/register',alreadyEmail, (req, res) => {
+routerUser.get('/register', (req, res) => {
+  if (req.user) {
+    res.redirect('/users/perfil')
+  }
     res.render('register', {
         style: 'style',
     });
 });
 
-routerUser.post('/register',passport.authenticate('jwt', {session : false}), async (req, res, next) => {
+routerUser.post('/register', async (req, res, next) => {
   const usuario = req.body;
-  const hashedPassword = createHash(req.body.password);
-  if (usuario.email==='adminCoder@coder.com'&& usuario.password==='adminCod3r123') {
+  const hashedPassword =await createHash(req.body.password);
+  if (usuario.email==='adminCoder@coder.com'&& usuario.password==='Cod3r123') {
     usuario.role='admin';
   }
   try {
@@ -30,18 +33,22 @@ routerUser.post('/register',passport.authenticate('jwt', {session : false}), asy
   }
 });
 
-routerUser.get('/login',alreadyEmail, (req, res) => {
+routerUser.get('/login', (req, res) => {
+  if (req.cookies['AUTH']) {
+    res.redirect('/users/perfil')
+  }
     res.render('login');
 });
 
-routerUser.get('/perfil', passporCall('jwt'), async (req, res) => {
-    const user = req.user;
+routerUser.get('/perfil', passportCall('jwt'), async (req, res) => {
+    const user = req.user._doc;
 
     res.render('perfil', {
         nombre: user.name,
         apellido: user.lastname,
         edad: user.age,
         email: user.email,
+        user:user,
     });
 });
   
@@ -58,18 +65,13 @@ routerUser.post('/login', async (req, res) => {
       maxAge:60*60*1000*24,
       httpOnly:true
     });
-    res.redirect('/products');
+    res.send(user);
 });
 
 
-routerUser.post('/auth/logout', authenticated, (req, res) => {
-    req.session.destroy((err) => {
-      if (err) {
-        res.status(500).send({ error: err });
-      } else {
-        res.redirect('/login');
-      }
-    });
+routerUser.post('/auth/logout', (req, res) => {
+    res.clearCookie('AUTH')
+    res.redirect('/users/login');
 });
 routerUser.put('/:idUsuario', async (req, res, next) => {
     const idUsuario = req.params.idUsuario;

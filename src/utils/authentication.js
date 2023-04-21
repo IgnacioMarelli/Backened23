@@ -10,28 +10,20 @@ const authenticated = async (req, res, next) => {
       res.redirect('/users/login');
     }
 };
-const alreadyEmail = async(req,res,next)=>{
-  const alreadyEmail = req.user;
-  if (alreadyEmail) {
-    return res.redirect('/users/perfil');
-  }
-  next();
-}
 
-const passporCall = (strategy) =>{
-  return async(req, res, next)=>{
-     passport.authenticate(strategy, (error, user, info)=>{
-      console.log(req.user);
+const passportCall = (strategy) => {
+  return async (req, res, next) => {
+    passport.authenticate(strategy, {session : false}, (error, user, info) => {
       if (error) return next(error);
-      if (!user){
-        return res.status(401).send({info: info.message})
+      if (!user) {
+        return res.status(401).send({ info: info.message });
       }
-      req.user = user;
+      req.user = user.user;
       next();
-    })   
-    (req, res, next);
-  }
-}
+    })(req, res, next); 
+  };
+};
+
 
 
 export const authorization = (rol)=>{
@@ -41,4 +33,4 @@ export const authorization = (rol)=>{
     next();
   }
 }
-export {authenticated, alreadyEmail, passporCall}
+export {authenticated, passportCall}
