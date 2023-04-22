@@ -52,9 +52,14 @@ class MongoManager{
         return product
      }
      async getProductsById(id){
-         const prodPorId= await this.model.find({_id: id});
-         const prodObj= prodPorId.map((e)=> e.toObject())
-         return prodObj
+        try {
+            const prodPorId= await this.model.find({_id: id});
+            const prodObj= prodPorId.map((e)=> e.toObject())
+            return prodObj
+        }catch(e){
+            console.error(e);
+            throw e
+        }      
      }
      async updateProduct(id, prod){
         return await this.model.findByIdAndUpdate(id, prod, { new: true })
