@@ -2,7 +2,6 @@ import express from 'express';
 import { Router } from 'express';
 import {instanciaProduct} from '../dao/mongo.manager.js';
 import { uploader } from '../utils/multer.js';
-import { passportCall } from '../utils/authentication.js';
 const router = Router();
 router.use(express.json());
 router.use(express.urlencoded({extended:true}));
