@@ -10,7 +10,7 @@ const { __dirname } = fileDirName(import.meta);
 import { routerChat } from './Routes/routerChat.js';
 import { routerCart } from './Routes/routerCart.js';
 import { routerUser } from './Routes/routerUser.js';
-import { router, routerSocket } from './Routes/views.router.js'
+import { router } from './Routes/views.router.js'
 import configureHandlebars from './hb/hbs.middleware.js';
 import configureSocket from './Server/configure-socket.js';
 import passport from 'passport';
@@ -41,11 +41,10 @@ app.use(
 );
 app.use(express.static(__dirname+'/public'));
 app.set('views', __dirname+'/views');
-app.use('/products', router, express.static(__dirname+'/public'));
-app.use('/carts', routerCart, express.static(__dirname+'/public'));
-app.use('/users', routerUser, express.static(__dirname+'/public'));
-app.use('/realTimeProducts', routerSocket);
-app.use('/chat', routerChat);
+app.use('/api/products', router, express.static(__dirname+'/public'));
+app.use('/api/carts', routerCart, express.static(__dirname+'/public'));
+app.use('/api/users', routerUser, express.static(__dirname+'/public'));
+app.use('/api/chat', routerChat);
 
 app.use((error, req, res, next)=>{
     console.error({error});
