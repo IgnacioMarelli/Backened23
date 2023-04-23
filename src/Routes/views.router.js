@@ -7,8 +7,7 @@ const router = Router();
 router.use(express.json());
 router.use(express.urlencoded({extended:true}));
 
-router.get('/', passportCall('jwt'), async (req, res)=>{
-    const user = req.user;
+router.get('/', async (req, res)=>{
     const {page, limit, sort, category, status} = req.query;
     const response = await instanciaProduct.getAllPaginate({page: page, limit: limit, sort: sort,category, status, lean: true});
     res.render('home',{
@@ -18,8 +17,7 @@ router.get('/', passportCall('jwt'), async (req, res)=>{
         prev: response.prevPage,
         next: response.nextPage,
         hasPrevPages: response.hasPrevPage,
-        hasNextPage: response.hasNextPage,
-        user:user._doc,
+        hasNextPage: response.hasNextPage
     });
 })
 router.get('/:pid', async (req, res)=>{

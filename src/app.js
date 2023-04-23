@@ -41,9 +41,9 @@ app.use(
 );
 app.use(express.static(__dirname+'/public'));
 app.set('views', __dirname+'/views');
-app.use('/api/products', router, express.static(__dirname+'/public'));
-app.use('/api/carts', routerCart, express.static(__dirname+'/public'));
-app.use('/api/users', routerUser, express.static(__dirname+'/public'));
+app.use('/api/products', router);
+app.use('/api/carts', routerCart);
+app.use('/api/users', routerUser);
 app.use('/api/chat', routerChat);
 
 app.use((error, req, res, next)=>{
