@@ -1,6 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import config from './data.js';
+import config from '../data.js';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import cookieParser from 'cookie-parser';
