@@ -40,20 +40,22 @@ app.use(
   })
 );
 app.use(express.static(__dirname+'/public'));
+app.use('/api/css', express.static(__dirname + '/public/css'));
+app.use('/api/js', express.static(__dirname + '/public/js'));
 app.set('views', __dirname+'/views');
-app.use('/api/products', router);
-app.use('/api/carts', routerCart);
-app.use('/api/users', routerUser);
-app.use('/api/chat', routerChat);
-
+app.use('/api/products', router, );
+app.use('/api/carts', routerCart,express.static(__dirname+'/public'));
+app.use('/api/users', routerUser,express.static(__dirname+'/public'));
+app.use('/api/chat', routerChat,express.static(__dirname+'/public'));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use((error, req, res, next)=>{
     console.error({error});
     res.status(500).json({error});
 })
 
 
-app.use(passport.initialize());
-app.use(passport.session());
+
 configPassport()
 configureHandlebars(app)
 

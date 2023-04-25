@@ -61,7 +61,7 @@ document.addEventListener('submit', async e=>{
             formData.append('file', e.target.file.files[0])
 
             try {
-                api.post('/products', {
+                api.post('/api/products', {
                     formData,
                     })
                     .then((d) => alert('Producto agregado correctamente'));
