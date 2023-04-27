@@ -11,7 +11,7 @@ import { passportCall } from '../utils/authentication.js';
 
 routerUser.get('/register', (req, res) => {
   if (req.user) {
-    res.redirect('/session/perfil')
+    res.redirect('/session/current')
   }
     res.render('register', {
         style: 'style',
@@ -47,6 +47,7 @@ routerUser.get('/current', passportCall('jwt'), async (req, res) => {
         nombre: user.first_name,
         apellido: user.last_name,
         edad: user.age,
+        carrito: user.cart,
         email: user.email,
         user:user,
     });
