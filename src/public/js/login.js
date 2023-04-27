@@ -3,7 +3,7 @@ async function login(event) {
     const password = document.getElementById('form-password').value;
     const email = document.getElementById('form-email').value;
     event.preventDefault();
-    api.post('/users/login', {
+    api.post('/session/login', {
         email,
         password
         })
@@ -12,7 +12,7 @@ async function login(event) {
                 return alert('No existe el usuario.')
             }
             Swal.fire({
-                title: `Bienvenido ${data.name} ${data.lastname}.`,
+                title: `Bienvenido ${data.first_name} ${data.last_name}.`,
                 text:`Tu edad es: ${data.age}.
                 Tu mail es : ${data.email}`,
                 icon: 'success',
@@ -24,7 +24,7 @@ async function login(event) {
                 if (result.isConfirmed) {
                     location.href = 'http://localhost:8080/products';
                 }else{ 
-                api.post("/users/auth/logout")}
+                api.post("/session/auth/logout")}
                   
         })
     })}

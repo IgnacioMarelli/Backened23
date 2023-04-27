@@ -5,7 +5,7 @@ async function send(event) {
     const age = document.getElementById('form-edad').value;
     const password = document.getElementById('form-password').value;
     event.preventDefault();       
-    api.post('/users/register', {
+    api.post('/session/register', {
         name,
         lastname,
         email,

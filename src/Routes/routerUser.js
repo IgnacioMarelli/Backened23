@@ -11,7 +11,7 @@ import { passportCall } from '../utils/authentication.js';
 
 routerUser.get('/register', (req, res) => {
   if (req.user) {
-    res.redirect('/users/perfil')
+    res.redirect('/session/perfil')
   }
     res.render('register', {
         style: 'style',
@@ -26,7 +26,7 @@ routerUser.post('/register', async (req, res, next) => {
   }
   try {
     await userModel.create({...usuario, password: hashedPassword});
-    res.status(201).redirect('/users/login');
+    res.status(201).redirect('/session/login');
   } catch (error) {
     console.log(error);
     next(error);
@@ -35,17 +35,17 @@ routerUser.post('/register', async (req, res, next) => {
 
 routerUser.get('/login', (req, res) => {
   if (req.cookies['AUTH']) {
-    res.redirect('/users/perfil')
+    res.redirect('/session/current')
   }
     res.render('login');
 });
 
-routerUser.get('/perfil', passportCall('jwt'), async (req, res) => {
+routerUser.get('/current', passportCall('jwt'), async (req, res) => {
     const user = req.user._doc;
 
-    res.render('perfil', {
-        nombre: user.name,
-        apellido: user.lastname,
+    res.render('current', {
+        nombre: user.first_name,
+        apellido: user.last_name,
         edad: user.age,
         email: user.email,
         user:user,
@@ -71,7 +71,7 @@ routerUser.post('/login', async (req, res) => {
 
 routerUser.post('/auth/logout', (req, res) => {
     res.clearCookie('AUTH')
-    res.redirect('/users/login');
+    res.redirect('/session/login');
 });
 routerUser.put('/:idUsuario', async (req, res, next) => {
     const idUsuario = req.params.idUsuario;
@@ -123,6 +123,6 @@ routerUser.get('restore-password', async (req, res)=>{
 routerUser.get('/githubbutton', passport.authenticate('github', {scope: ['user:email']}), (req, res)=>{
 })
 routerUser.get('/github', passport.authenticate('github', {failureRedirect: '/login'}), (req, res)=>{
-  res.redirect('/users/perfil');
+  res.redirect('/session/current');
 })
 export  { routerUser};
