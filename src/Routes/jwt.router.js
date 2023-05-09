@@ -1,4 +1,4 @@
-import { Router } from "express";
+/*import { Router } from "express";
 import { userModel } from "../dao/models/users";
 import jwt from 'jsonwebtoken';
 
@@ -48,4 +48,4 @@ async function login(event) {
 function generateToken(user) {
     const token = jwt.sign({user}, SECRET, {expiresIn:'24h'});
     return token
-}
+}*/

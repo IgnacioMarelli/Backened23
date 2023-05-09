@@ -1,30 +1,25 @@
 import {messageModel} from './models/messages.model.js';
 import {productModel} from './models/products.model.js';
 import { cartModel } from './models/carts.model.js';
-import { userModel } from './models/users.js';
+import { userModel } from './src/dao/models/users.model.js';
 class MongoManager{
     constructor(model){
         this.model =model;    
     }
     async getAll(){
         try{
-            const products = await this.model.find();
-            return products.map((e)=>e.toObject())
+            const products = await this.model.find().lean();
+            return products
         }catch(e){
             console.error(e);
             throw e
         }           
     }
-    async getAllPaginate({limit=10, page=1, sort, category, status}){
+    async paginate({limit=10, page=1, sort, category, status}){
         const sortValidValues = [-1, 1, '-1', '1'];
         try{
-            let query = {};
-            if(category){
-                query = {category};
-            }
-            if(status){
-                query ={status};
-            }
+            const query = category ? { category } : (status ? { status } : {});
+            
             if(isNaN(limit) || limit <= 0){
                 throw 'El limite debe ser mayor a 0'
             }
@@ -49,12 +44,10 @@ class MongoManager{
 
      async create(product){
         await this.model.create(product);
-        return product
      }
      async getProductsById(id){
-         const prodPorId= await this.model.find({_id: id});
-         const prodObj= prodPorId.map((e)=> e.toObject())
-         return prodObj
+         const prodPorId= await this.model.findOne({_id: id}).lean();
+         return prodPorId
      }
      async updateProduct(id, prod){
         return await this.model.findByIdAndUpdate(id, prod, { new: true })
@@ -69,12 +62,7 @@ class MongoManager{
         try{
         const carts = await this.getAll();
         if (cart=== 'undefined') {
-            let newCart;
-            if (carts.length===0) {
-                newCart= await this.model.create({products:{product:prod, quantity: quantity}});
-            }else{
-                newCart= await this.model.findOne({})
-            }
+            const newCart = carts.length=== 0 ? await this.model.create({ products: { product: prod, quantity: quantity }}) : await this.model.findOne({});
             const newId = newCart._id;
             cart= newId.toString();
         }
@@ -92,9 +80,9 @@ class MongoManager{
                 await this.model.findOneAndUpdate({_id: cart, "products.product": prod}, {"products.$.quantity": quantity});
             }
         }
-        return await this.model.findOne({_id: cart})     }catch(e){
+        return await this.model.findOne({_id: cart}).lean();
+        }catch(e){
             console.error(e);
-            throw e;
         }   
     }
 
@@ -109,9 +97,10 @@ class MongoManager{
         return await this.model.findOneAndReplace({_id: cid}, {products: []});
     }
     async getCartsById(cid){
-        const prodPorId= await this.model.find({_id:cid});
+        const prodPorId= await this.model.findOne({_id:cid}).lean();
         return prodPorId
     }
+
  }
 const instanceMessage = new MongoManager(messageModel);
 const instanciaProduct = new MongoManager(productModel);

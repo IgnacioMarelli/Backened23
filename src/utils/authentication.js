@@ -1,4 +1,4 @@
-import { userModel } from "../dao/models/users.js";
+import { userModel } from "../dao/models/users.model.js";
 import passport from "passport";
 const authenticated = async (req, res, next) => {
     const email = req.session.user;

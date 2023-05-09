@@ -1,7 +1,7 @@
 import passport from "passport";
 import local from 'passport-local';
 import github from 'passport-github2';
-import { userModel } from "../dao/models/users.js";
+import { userModel } from "../dao/models/users.model.js";
 import { createHash, isValidPassword } from "../utils/crypto.js";
 import jwt from 'passport-jwt';
 import config from "../data.js";
