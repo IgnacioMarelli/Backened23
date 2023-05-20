@@ -24,6 +24,12 @@
       email:
       {{email}}
     </p>
+    {{#if phone}}
+    <p>
+      Teléfono:
+      {{phone}}
+    </p>
+    {{/if}}
   </div>
   <script>
     function logout() { api.post("/session/auth/logout"); }

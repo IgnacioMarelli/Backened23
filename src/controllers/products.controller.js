@@ -18,7 +18,7 @@ class ProductController {
                 next: response.nextPage,
                 hasPrevPages: response.hasPrevPage,
                 hasNextPage: response.hasNextPage,
-                user:user._doc,
+                user:user,
             });
         } catch (error) {
             next(error)

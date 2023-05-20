@@ -1,9 +1,10 @@
 import { createHash, isValidPassword } from "../utils/crypto.js";
 import { generateToken } from '../utils/jwt.middlewar.js';
 import userService from "../services/user.service.js";
+import UserRepository from "../dao/repository/user.repository.js";
 
 class UsersController {
-    #service
+    #service 
     constructor(service){
         this.#service=service;
     }
@@ -44,7 +45,7 @@ class UsersController {
     }
     async getProfile (req, res, next){
         try {
-        const user = req.user._doc;
+        const user = req.user;
 
         res.render('perfil', {
             nombre: user.first_name,
@@ -53,6 +54,7 @@ class UsersController {
             carrito: user.cart,
             email: user.email,
             user:user,
+            phone:user.phone
         });
         } catch (error) {
             next(error)
@@ -67,7 +69,8 @@ class UsersController {
                 error: 'email o contraseña incorrectos',
             }); 
             }
-            const token = generateToken({...user, password: undefined});
+            const userDTO = new UserDTO(user);
+            const token = generateToken(userDTO);
             res.cookie('AUTH',token,{
             maxAge:60*60*1000*24,
             httpOnly:true
@@ -115,28 +118,7 @@ class UsersController {
             next(error)
         }
     }
-    async restorePass (req, res, next){
-        try{
-            const {email, newPassword}=req.body;
-            const user = await this.#service.findOne({email});
-            if(!user){
-                res.status(404).send({error: 'No existe el usuario'});
-                return
-            }
-            const hashedPassword = createHash(newPassword);
-            await this.#service.updatePass({email}, {$set:{password:hashedPassword}});
-            res.status(200).send({message:'Contraseña modificada'})
-        }catch(error){
-            next(error)
-        }
-    }
-    async restoreGet (req, res, next){
-        try{
-            res.render('restorePassword')
-        }catch(error){
-            next(error)
-        }
-    }
+
     async github (req, res, next){
         try{
             res.redirect('/session/current');
@@ -145,5 +127,5 @@ class UsersController {
         }
     }
 }
-const userController = new UsersController(new userService());
+const userController = new UsersController(new UserRepository(new userService()));
 export default userController

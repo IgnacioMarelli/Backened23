@@ -1,6 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import config from './data.js';
+import config from '../data.js';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import cookieParser from 'cookie-parser';
@@ -10,7 +10,7 @@ const { __dirname } = fileDirName(import.meta);
 import { routerChat } from './Routes/routerChat.js';
 import { routerCart } from './Routes/routerCart.js';
 import { routerUser } from './Routes/routerUser.js';
-import { router } from './Routes/views.router.js'
+import { router } from './Routes/routerProds.js'
 import configureHandlebars from './hb/hbs.middleware.js';
 import configureSocket from './Server/configure-socket.js';
 import passport from 'passport';
@@ -24,21 +24,6 @@ mongoose.connect(MONGO_URL, {
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 app.use(cookieParser(config.cookie_secret));
-app.use(
-  session({
-    store: MongoStore.create({
-      mongoUrl: MONGO_URL,
-      mongoOptions: {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      },
-      ttl: 15,
-    }),
-    secret: config.cookie_secret,
-    resave: true,
-    saveUninitialized: true,
-  })
-);
 app.use(express.static(__dirname+'/public'));
 app.set('views', __dirname+'/views');
 app.use('/products', router, express.static(__dirname+'/public'));

@@ -8,7 +8,7 @@ router.use(express.json());
 router.use(express.urlencoded({extended:true}));
 
 router.get('/', passportCall('jwt'), prodController.getAllProds.bind(prodController))
-router.get('/:pid', prodController.getOneProd.bind(prodController))
+router.get('/:pid', passportCall('jwt'),prodController.getOneProd.bind(prodController))
 router.post('/', uploader.array('file', undefined), prodController.post.bind(prodController))
 router.delete('/:pid', prodController.deleteProd.bind(prodController))
 router.put('/:pid', prodController.update.bind(prodController))

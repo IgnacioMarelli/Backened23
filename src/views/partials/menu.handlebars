@@ -17,12 +17,12 @@
       <span>
       {{#if user}}
               Bienvenido {{user.first_name}} {{user.last_name}}. Su rol es: {{user.role}}
+              <li><a class="nav-link" href="/session/current">Perfil</a></li>
       {{else}}
       </span>
             <li><a class="nav-link" href="/session/register">Registrate</a> </li>
             <li><a class="nav-link" href="/session/login">Inicia Sesión</a></li>
       {{/if}}
-            <li><a class="nav-link" href="/session/current">Perfil</a></li>
     </ul>
   </div>
 </nav>

@@ -1,7 +1,7 @@
 import {messageModel} from './models/messages.model.js';
 import {productModel} from './models/products.model.js';
 import { cartModel } from './models/carts.model.js';
-import { userModel } from './src/dao/models/users.model.js';
+import { userModel } from './models/users.model.js';
 class MongoManager{
     constructor(model){
         this.model =model;    
