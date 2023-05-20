@@ -50,13 +50,6 @@ async deleteUser (req){
     await this.#dao.deleteUser({ _id: idUsuario });
 }
 
-async restoreGet (req, res, next){
-    try{
-        res.render('restorePassword')
-    }catch(error){
-        next(error)
-    }
-}
 async github (req, res, next){
     try{
         res.redirect('/session/current');
