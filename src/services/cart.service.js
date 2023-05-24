@@ -1,10 +1,12 @@
 import { cartModel } from "../dao/models/carts.model.js";
-
+import { ticket } from "../dao/models/ticket.model.js";
 
 class cartsService {
     #model
+    #ticketModel
     constructor(){
         this.#model= cartModel;
+        this.#ticketModel=ticket;
     }
     async getAll(){
         const products = await this.#model.find().lean();
@@ -13,7 +15,7 @@ class cartsService {
     async addProductToCart(cart, quantity, prod){
         const carts = await this.getAll();
         if (cart=== 'undefined') {
-            const newCart = carts.length=== 0 ? await this.#model.create({ products: { product: prod, quantity: quantity }}) : await this.model.findOne({});
+            const newCart = carts.length=== 0 ? await this.#model.create({ products: { product: prod, quantity: quantity }}) : await this.#model.findOne({});
             const newId = newCart._id;
             cart= newId.toString();
         }
@@ -46,6 +48,10 @@ class cartsService {
     async getCartsById(cid){
         const prodPorId= await this.#model.findOne({_id:cid}).lean();
         return prodPorId
+    }
+    async ticketBuy(cart){
+        const ticketBuy= await this.#ticketModel.create(cart)
+        return ticketBuy
     }
 }
 export default cartsService

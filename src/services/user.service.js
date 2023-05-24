@@ -6,19 +6,21 @@ class userService {
     constructor(){
         this.#model= userModel;
     }
-    async findById(idUser){
-        return  this.#model.findOne({ _id: idUser });
+    async findByEmail(userEmail){
+        return  this.#model.findOne({ email: userEmail }).lean();
     }
     async create(user, hashedPassword){
         return this.#model.create({...user, password: hashedPassword});
     }
     async findOne(email){
-        return this.#model.findOne({ email });
+        return this.#model.findOne({ email }).lean();
     }
     async updateUser(idUser, usuario, nuevosDatos){
         return this.#model.updateOne({ _id: idUser },{ ...usuario, ...nuevosDatos });
     }
-
+    async updateCart(email, cid){
+        return this.#model.updateOne({email},{$set:{cart:cid}});
+    }
     async deleteUser(idUsuario){
         return this.#model.findOneAndDelete({_id:idUsuario})
     }

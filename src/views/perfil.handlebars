@@ -30,6 +30,42 @@
       {{phone}}
     </p>
     {{/if}}
+    {{#if response}}
+    <h1>CARRITO DEL USUARIO:</h1>
+        <table class="table table-dark" >
+        <thead>
+            <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre del producto</th>
+            <th scope="col">Precio del producto</th>
+            <th scope="col">Stock</th>
+            <th scope="col">Categoría</th>
+            <th scope="col">Código</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Imagen</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each response}}
+            
+                <tr>
+                    <td class="id">{{this.product._id}}</td>
+                    <td data-label="Producto">{{this.product.title}}</td>
+                    <td data-label="Precio">${{this.product.price}}</td>
+                    <td data-label="Stock">{{this.product.stock}}</td>
+                    <td data-label="Categoria">{{this.product.category}}</td>
+                    <td data-label="Code">{{this.product.code}}</td>
+                    <td data-label="Descripcion">{{this.product.description}}</td>
+                    <td ><img style="    width: 33%;" src="../img/{{this.product.thumbnail}}" alt=""></td>
+                    <td>
+                    <button> <a href="/products/{{this.product._id}}">Detalles</a></button>
+                    <button onclick="removeFromCart('{{this.cid}}','{{this.product._id}}')">Eliminar</button>
+                    </td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    {{/if}}
   </div>
   <script>
     function logout() { api.post("/session/auth/logout"); }

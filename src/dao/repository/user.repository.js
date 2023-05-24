@@ -1,11 +1,17 @@
 import UserDTO from "../DTO/userDto.js";
-
+import { createHash, isValidPassword } from "../../utils/crypto.js";
+import { generateToken } from '../../utils/jwt.middlewar.js';
 export default class UserRepository {
   #dao;
   constructor(dao) {
     this.#dao = dao;
   }
-
+async getUser(req){
+    const userEmail = req.user.email;
+    const userFind = await this.#dao.findByEmail(userEmail);
+    const user= new UserDTO(userFind);
+    return user
+}
 async postRegister (req){
     const usuario = req.body;
     const hashedPassword =await createHash(req.body.password);
@@ -15,12 +21,12 @@ async postRegister (req){
     await this.#dao.create(usuario, hashedPassword);
 }
 
-async findOne (req, res){
+async postLogin (req, res){
     const { email, password } = req.body;
-    const user = await this.#dao.findOne(email);
+    const user = await this.#dao.findByEmail(email);
     if (!user || !isValidPassword(password, user.password)) {
-    return res.status(401).send({
-        error: 'email o contraseña incorrectos',
+        return res.status(401).send({
+            error: 'email o contraseña incorrectos',
     }); 
     }
     const userDTO = new UserDTO(user);
@@ -29,6 +35,7 @@ async findOne (req, res){
     maxAge:60*60*1000*24,
     httpOnly:true
     });
+    return userDTO
 }
 async updateUser (req, res){
     const idUser = req.params.idUser;
@@ -50,11 +57,4 @@ async deleteUser (req){
     await this.#dao.deleteUser({ _id: idUsuario });
 }
 
-async github (req, res, next){
-    try{
-        res.redirect('/session/current');
-    }catch(error){
-        next(error)
-    }
-}
 }

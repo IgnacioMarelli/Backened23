@@ -8,8 +8,8 @@ const messagesSchema = new mongoose.Schema({
         required:true
     },
    message:{
-    type: String,
-    default:''
+        type: String,
+        default:''
     }
 })
 export const messageModel = mongoose.model(messagesCollection, messagesSchema);

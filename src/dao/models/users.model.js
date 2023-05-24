@@ -9,16 +9,12 @@ const userSchema = new mongoose.Schema({
   phone:{type: Number},
   age: { type: Number, required: true },
   password: { type: String, required: true },
-  carts: [
-    {
-        cart: {type: mongoose.Schema.Types.ObjectId, ref: 'carts', default: []},
-    }
-  ],
+  cart: {type: mongoose.Schema.Types.ObjectId, ref: 'carts', default: []},
   role: {type: String, required: true, default: 'user'}
 });
 
 userSchema.pre('findOne', function() {
-  this.populate('carts.cart');
+  this.populate('cart');
 })
 
 export const userModel = mongoose.model(userCollection, userSchema);

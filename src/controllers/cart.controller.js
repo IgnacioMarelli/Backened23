@@ -1,19 +1,19 @@
+import CartRepository from "../dao/repository/cart.repository.js";
 import cartsService from "../services/cart.service.js";
-
+import userService from "../services/user.service.js";
+import prodService from "../services/prod.service.js";
 class cartsController {
-    #service;
+    #dao;
     constructor(service){
-        this.#service=service;
+        this.#dao=service;
     }
     async getOneCart(req, res, next){
         try {
-            const cid = req.params.cid;
-            const response = await this.#service.getCartsById(cid);
-            response.products.forEach(element => {
-                element.cid= cid;
-            });
+            const user = req.user;
+            const response = await this.#dao.getOneCart(req);
             res.status(200).render('cartId',{
-                response:response.products
+                response:response.products,
+                user:user
             });
         } catch (error) {
             next(error)
@@ -21,17 +21,15 @@ class cartsController {
     }
     async putProdOfCart(req, res,next){
         try {
-            const {quantity}=req.body;
-            const response = await this.#service.addProductToCart(req.params.cid, quantity, req.params.pid);
-            res.status(200).send(resObject);    
+            const response = await this.#dao.putProdOfCart(req);
+            res.status(200).send(response);    
         } catch (error) {
             next(error);
         }
     }
     async putCart(req, res,next){
         try {
-            const {prod, quantity}=req.body;
-            const cart = await this.#service.addProductToCart(req.params.cid,quantity,prod);
+            const cart = await this.#dao.putCart(req);
             res.status(200).send(cart);    
         } catch (error) {
             next(error);
@@ -39,16 +37,24 @@ class cartsController {
     }
     async deleteProd(req, res, next){
         try {
-            await this.#service.deleteProduct(req.params.cid,req.params.pid);
-            const response = await this.#service.getAll();
+            const response = await this.#dao.deleteProd(req);
             res.status(200).send(response);
         } catch (error) {
             next(error);
         }     
     }
     async deleteCart(req,res, next){
-        await this.#service.deleteAllProducts(req.params.cid);
+        await this.#dao.deleteCart(req);
+    }
+    async ticketBuy(req,res,next){
+        try {
+            await this.#dao.ticketBuy(req, res)
+            res.status(200)
+        }catch (error) {
+            console.error(error);
+            res.status(405).render('No puede hacer la compra');
+        }
     }
 }
-const cartController = new cartsController(new cartsService());
+const cartController = new cartsController(new CartRepository(new cartsService(), new userService(), new prodService()));
 export default cartController

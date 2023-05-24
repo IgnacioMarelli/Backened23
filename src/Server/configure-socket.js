@@ -1,21 +1,17 @@
 import { Server } from 'socket.io';
-import {instanceMessage, instanceUser} from '../dao/mongo.manager.js';
+import { chatFunctions } from '../dao/repository/chat.repository.js';
 
 export default async function configureSocket(httpServer){
     const io = new Server(httpServer)
     io.on('connection', async (socket) =>{
         console.log(`socket conectado `);
         socket.on('message', async data=>{
-            await instanceMessage.save(data);
-            const allMessage = await instanceMessage.getAll();
-            const messages = [];
-            const message = allMessage.map(e=>{
-                messages.push(e._doc);
-            })
-            io.emit('messageLogs', messages)
+            await chatFunctions.create(data);
+            const allMessage = await chatFunctions.getAll();
+            io.emit('messageLogs', allMessage)
         })
         socket.on('new_user', async data=>{
-            socket.emit('messageLogs', await instanceMessage.getAll());
+            socket.emit('messageLogs', await chatFunctions.getAll());
             socket.broadcast.emit('user', data);
         })
         socket.on('registrado', async (data)=>{

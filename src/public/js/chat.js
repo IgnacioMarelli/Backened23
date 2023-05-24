@@ -30,8 +30,8 @@ chatBox.addEventListener('keyup', e=>{
 })
 socket.on('messageLogs', data=>{
     let log= document.getElementById('message');
-    let messages = data.map((message) =>
-        `${message.name} : ${message.message}`
+    let messages = data.map((e) =>
+        `${e.name} : ${e.message}`
     ).join('<br />');
     log.innerHTML= messages;
 })

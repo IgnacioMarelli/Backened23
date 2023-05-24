@@ -1,8 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import config from '../data.js';
-import session from 'express-session';
-import MongoStore from 'connect-mongo';
 import cookieParser from 'cookie-parser';
 const app = express();
 import fileDirName from './utils/fileDirName.js';
@@ -41,6 +39,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 configPassport()
 configureHandlebars(app)
-
-const httpServer = app.listen(PORT, ()=>console.log(`Servidor escuchando en el puerto ${PORT}`));
+process.argv[2]='MONGO';
+const httpServer = app.listen(PORT, ()=>console.log(`Servidor escuchando en el puerto ${PORT }`));
 configureSocket(httpServer);

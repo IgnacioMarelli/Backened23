@@ -61,7 +61,7 @@
               <td class="id">{{this._id}}</td>
               <td data-label="Producto">{{this.title}}</td>
               <td data-label="Precio">${{this.price}}</td>
-              <td data-label="Stock">{{this.stock}}</td>
+              <td data-label="Stock" class="stock">{{this.stock}}</td>
               <td data-label="Categoria">{{this.category}}</td>
               <td data-label="Code">{{this.code}}</td>
               <td data-label="Descripcion">{{this.description}}</td>
@@ -70,7 +70,7 @@
                 <button> <a href="/products/{{this._id}}">Detalles</a></button>
                 <button class="delete">Eliminar</button>
               </td>
-              <td>
+              <td class="counterDiv">
                 <button onclick="addProd('{{this._id}}')" >Agregar al carrito</button>
               </td>
             </tr>

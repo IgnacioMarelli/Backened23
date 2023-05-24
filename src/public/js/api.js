@@ -1,15 +1,22 @@
 const api = {
-    post: async (url, body) => {
-      const response = await fetch(url, {
-          method: "POST",
-          body: JSON.stringify(body),
+    post: async (url, formData) => {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          body: JSON.stringify(formData),
           headers: { 'Content-Type': 'application/json' }
-      });
-      if(response.redirected){
+        });
+        if (response.redirected) {
           window.location.replace(response.url);
-      }
-      if(response) {
+        }
+        if (response.status === 403) {
+          throw new Error('Error de acceso: no tienes permisos para agregar productos');
+        }
+        if (response) {
           return await response.json();
+        }
+      } catch (error) {
+        throw new Error('Error en la solicitud');
       }
     },
     put: async (url, body) => {

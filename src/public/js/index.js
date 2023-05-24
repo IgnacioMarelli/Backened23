@@ -1,10 +1,36 @@
 const socket = io();
 const form = document.getElementById('crud-form');
 const query = new URLSearchParams(window.location.search);
+/*
+const counter = document.querySelector('.counterDiv');
+const stock = document.querySelector('.stock');
+const q= document.querySelector('.q');
+function decrement (q){
+    contador(q);
+    q-1;
+    contador(q);
+    if (q<0) {
+        q=0;
+        contador(q);
+    }
+}
+function increment(q,s){
+    q+1;
+    contador(q);
+    if (s<q) {
+        q=s;
+        contador(q);
+        alert('No hay más stock para agregar')
+    } 
 
-
-
-
+}
+function contador (quantity){
+    if (quantity===0) {
+        return counter.innerHTML= "<button onclick='addProd('{{this._id}}')' >Agregar al carrito</button>";
+    }
+    counter.innerHTML= 
+    `<button class="cantidadBtn mr-2" onclick="decrement(${quantity})">-</button> <span class="q">${quantity}</span> <button class="cantidadBtn ml-2" onclick="increment(${quantity}, ${stock})">+</button>`;
+}*/
 async function addProd(id) {
     const cid=undefined;
     const quantity = 32;
@@ -50,26 +76,32 @@ document.addEventListener('submit', async e=>{
         e.preventDefault()
 
         if(!e.target.id.value){
-            const formData = new FormData;
-
-            formData.append('title', e.target.name.value)
-            formData.append('description', e.target.description.value)
-            formData.append('price', e.target.price.value)
-            formData.append('stock', e.target.stock.value)
-            formData.append('category', e.target.category.value)
-            formData.append('code', e.target.code.value)
-            formData.append('file', e.target.file.files[0])
-
             try {
-                api.post('/products', {
-                    formData,
-                    })
-                    .then((d) => alert('Producto agregado correctamente'));
+                const formData = new FormData();
+
+                formData.append('title', e.target.name.value);
+                formData.append('description', e.target.description.value);
+                formData.append('price', e.target.price.value);
+                formData.append('stock', e.target.stock.value);
+                formData.append('category', e.target.category.value);
+                formData.append('code', e.target.code.value);
+                formData.append('file', e.target.file.files[0]);
+                const jsonObject = {};
+                for (const [key, value] of formData.entries()) {
+                jsonObject[key] = value;
+                }
+                api.post('/products', jsonObject)
+                .then(() => alert('Producto agregado correctamente'))
+                .catch(error => {
+                  let message = error.statusText || 'Ocurrió un error';
+                  const p = document.getElementById('producto-id');
+                  p.insertAdjacentHTML("afterend", `<p><b>Error: ${message}, intenta más tarde</b></p>`);
+                });
             } catch (error) {
-                let message = error.statusText || 'Ocurrio un error';
-                const p = document.getElementById('producto-id');
-                p.insertAdjacentHTML("afterend", `<p><b>Error: ${message} intenta mas tarde</b></p>`);
-            }
+              let message = error.statusText || 'Ocurrió un error';
+              const p = document.getElementById('producto-id');
+              p.insertAdjacentHTML("afterend", `<p><b>Error: ${message}, intenta más tarde</b></p>`);
+            }         
         }
     }
 })
