@@ -13,12 +13,12 @@ import configureHandlebars from './hb/hbs.middleware.js';
 import configureSocket from './Server/configure-socket.js';
 import passport from 'passport';
 import { configPassport } from './config/passport.config.js';
-const {PORT, MONGO_URL} = config;
-
-mongoose.connect(config.MONGO_URL, {
+const {PORT, MONGO_URL, DAO} = config;
+if(DAO==='MONGO'){
+mongoose.connect(MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
+});}
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 app.use(cookieParser(config.cookie_secret));
