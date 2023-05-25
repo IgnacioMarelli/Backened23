@@ -5,10 +5,10 @@ function generateUniqueCode() {
     return hash;
 }
 
-class TicketDTO {
-    constructor(purchase_datetime, amount, purchaser) {
+export default class TicketDTO {
+    constructor(amount, purchaser, date) {
       this.code = generateUniqueCode();
-      this.purchase_datetime = purchase_datetime;
+      this.purchase_datetime = date;
       this.amount = amount;
       this.purchaser = purchaser;
     }

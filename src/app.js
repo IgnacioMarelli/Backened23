@@ -15,7 +15,7 @@ import passport from 'passport';
 import { configPassport } from './config/passport.config.js';
 const {PORT, MONGO_URL} = config;
 
-mongoose.connect(MONGO_URL, {
+mongoose.connect(config.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -36,7 +36,7 @@ app.use((error, req, res, next)=>{
 
 
 app.use(passport.initialize());
-app.use(passport.session());
+
 configPassport()
 configureHandlebars(app)
 process.argv[2]='MONGO';

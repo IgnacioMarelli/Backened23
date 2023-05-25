@@ -2,6 +2,7 @@ import CartRepository from "../dao/repository/cart.repository.js";
 import cartsService from "../services/cart.service.js";
 import userService from "../services/user.service.js";
 import prodService from "../services/prod.service.js";
+import ticketService from "../services/ticket.service.js";
 class cartsController {
     #dao;
     constructor(service){
@@ -48,13 +49,13 @@ class cartsController {
     }
     async ticketBuy(req,res,next){
         try {
-            await this.#dao.ticketBuy(req, res)
-            res.status(200)
+            const response = await this.#dao.ticketBuy(req);
+            res.status(200).send(response);
         }catch (error) {
             console.error(error);
             res.status(405).render('No puede hacer la compra');
         }
     }
 }
-const cartController = new cartsController(new CartRepository(new cartsService(), new userService(), new prodService()));
+const cartController = new cartsController(new CartRepository(new cartsService(), new userService(), new prodService(), new ticketService()));
 export default cartController

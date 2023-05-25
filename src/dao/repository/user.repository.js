@@ -1,6 +1,8 @@
 import UserDTO from "../DTO/userDto.js";
 import { createHash, isValidPassword } from "../../utils/crypto.js";
 import { generateToken } from '../../utils/jwt.middlewar.js';
+import { emailService } from "../../external-service/email.service.js";
+import { messageService } from "../../external-service/phone.service.js";
 export default class UserRepository {
   #dao;
   constructor(dao) {
@@ -18,6 +20,8 @@ async postRegister (req){
     if (usuario.email==='adminCoder@coder.com'&& usuario.password==='Cod3r123') {
       usuario.role='admin';
     } 
+    if(usuario.phone){messageService.sendWelcomeMessage(usuario.phone)}
+    emailService.sendWelcomeEmail(usuario.email, usuario.first_name)
     await this.#dao.create(usuario, hashedPassword);
 }
 

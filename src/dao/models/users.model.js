@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   phone:{type: Number},
   age: { type: Number, required: true },
   password: { type: String, required: true },
-  cart: {type: mongoose.Schema.Types.ObjectId, ref: 'carts', default: []},
+  cart: [{ type: mongoose.Schema.Types.ObjectId, ref: 'carts' }],
   role: {type: String, required: true, default: 'user'}
 });
 

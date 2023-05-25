@@ -2,6 +2,7 @@ async function send(event) {
     const first_name = document.getElementById('form-name').value;
     const last_name = document.getElementById('form-last-name').value;
     const email = document.getElementById('form-email').value;
+    const phone = document.getElementById('form-phone').value;
     const age = document.getElementById('form-edad').value;
     const password = document.getElementById('form-password').value;
     event.preventDefault();       
@@ -10,6 +11,7 @@ async function send(event) {
         last_name,
         email,
         age,
+        phone,
         password
     })
     .then((data) => {

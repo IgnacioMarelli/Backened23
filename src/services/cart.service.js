@@ -1,40 +1,37 @@
 import { cartModel } from "../dao/models/carts.model.js";
-import { ticket } from "../dao/models/ticket.model.js";
 
 class cartsService {
     #model
-    #ticketModel
     constructor(){
         this.#model= cartModel;
-        this.#ticketModel=ticket;
     }
     async getAll(){
         const products = await this.#model.find().lean();
         return products     
     }
-    async addProductToCart(cart, quantity, prod){
-        const carts = await this.getAll();
-        if (cart=== 'undefined') {
-            const newCart = carts.length=== 0 ? await this.#model.create({ products: { product: prod, quantity: quantity }}) : await this.#model.findOne({});
-            const newId = newCart._id;
-            cart= newId.toString();
+    async create(prod, quantity){
+        try {
+            const newCart= await this.#model.create({ products: { product: prod, quantity: quantity }});
+            return newCart
+        } catch (error) {
+            console.error(error);
+            throw new Error('NO se pudo crear carrito')
         }
+        
+    }
+    async addProductToCart(cart, quantity, prod){
         if (quantity=== undefined) {
             quantity=1;
         }
-        if (quantity===0) {
-            await deleteProduct(cart,prod);
+        const isInCart = await this.#model.findOne({_id: cart,"products.product": prod});
+        if(!isInCart){
+            await this.#model.findOneAndUpdate({_id: cart}, {$push: {products: {product: prod, quantity:  quantity }}});
         }else{
-            const isInCart = await this.#model.findOne({_id: cart,"products.product": prod});
-
-            if(!isInCart){
-                await this.#model.findOneAndUpdate({_id: cart}, {$push: {products: {product: prod, quantity:  quantity }}});
-            }else{
-                await this.#model.findOneAndUpdate({_id: cart, "products.product": prod}, {"products.$.quantity": quantity});
-            }
+            await this.#model.findOneAndUpdate({_id: cart, "products.product": prod}, {"products.$.quantity": quantity});
         }
         return await this.#model.findOne({_id: cart}).lean();
     }
+
     async addQuantity(cid, pid, qty){
         return await this.#model.findOneAndUpdate({_id: cid, "products.product": pid}, {$inc: {"products.$.quantity": qty}});
     }
@@ -48,10 +45,6 @@ class cartsService {
     async getCartsById(cid){
         const prodPorId= await this.#model.findOne({_id:cid}).lean();
         return prodPorId
-    }
-    async ticketBuy(cart){
-        const ticketBuy= await this.#ticketModel.create(cart)
-        return ticketBuy
     }
 }
 export default cartsService

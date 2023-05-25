@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 const ticketCollection = 'Ticket';
 const ticketSchema = new mongoose.Schema({
   code: {
@@ -7,8 +7,8 @@ const ticketSchema = new mongoose.Schema({
     required: true,
   },
   purchase_datetime: {
-    type: Date,
-    default: Date.now,
+    type: String,
+    required:true,
   },
   amount: {
     type: Number,
