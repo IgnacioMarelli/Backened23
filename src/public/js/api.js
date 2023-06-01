@@ -12,13 +12,11 @@ const api = {
         if (response.status === 403) {
           throw new Error('Error de acceso: no tienes permisos para agregar productos');
         }
-        if (response.ok) {
+        if (response) {
           return await response.json();
-        }else{
-          throw error
         }
       } catch (error) {
-        throw error;
+        throw new Error('Error en la solicitud');
       }
     },
     put: async (url, body) => {

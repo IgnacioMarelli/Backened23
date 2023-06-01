@@ -33,10 +33,11 @@ class ProductController {
     }
     async post(req,res,next){
         try {
-            await this.#service.post(req, next)
+            await this.#service.post(req, res)
             res.status(200)
         }catch (error) {
-            next(error)
+            console.error(error);
+            res.status(405).render('No ingreso alguna de las características del objeto');
         }
     
     }

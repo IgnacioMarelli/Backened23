@@ -12,6 +12,9 @@ class userService {
     async create(user, hashedPassword){
         return this.#model.create({...user, password: hashedPassword});
     }
+    async findOne(email){
+        return this.#model.findOne({ email }).lean();
+    }
     async updateUser(idUser, usuario, nuevosDatos){
         return this.#model.updateOne({ _id: idUser },{ ...usuario, ...nuevosDatos });
     }

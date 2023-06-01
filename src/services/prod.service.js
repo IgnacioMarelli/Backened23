@@ -1,6 +1,4 @@
 import { productModel } from "../dao/models/products.model.js";
-import CustomError from "../errors/custom.error.js";
-import ErrorEnum from "../errors/error.enum.js";
 
 
 class prodService {
@@ -9,38 +7,11 @@ class prodService {
         this.#model= productModel;
     }
     async getAll(){
-        try {
-            const products = await this.#model.find().lean();
-            return products  
-        } catch (error) {
-            CustomError.createError({
-                name: 'Error en DB',
-                cause: JSON.stringify(products.error.errors.map(e => ({
-                    property: e.path.join('.'),
-                    issue: e.message,
-                }))),
-                message: 'Error al intentar obtener los productos de la base de datos',
-                code: ErrorEnum.DATABASE_ERROR,
-            })
-        }
-   
+        const products = await this.#model.find().lean();
+        return products     
     }
     async create(data){
-        try {
-            const product = this.#model.create(data);
-            return product
-        } catch (error) {
-            CustomError.createError({
-                name: 'Error en DB',
-                cause: JSON.stringify(product.error.errors.map(e => ({
-                    property: e.path.join('.'),
-                    issue: e.message,
-                }))),
-                message: 'Error al intentar crear un producto',
-                code: ErrorEnum.DATABASE_ERROR,
-            })
-        }
-        
+        return this.#model.create(data)
     }
     async paginate({limit=10, page=1, sort, category, status}){
         const sortValidValues = [-1, 1, '-1', '1'];

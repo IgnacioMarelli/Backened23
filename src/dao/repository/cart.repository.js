@@ -1,4 +1,3 @@
-import CustomError from "../../errors/custom.error.js";
 import { emailService } from "../../external-service/email.service.js";
 import { messageService } from "../../external-service/phone.service.js";
 import TicketDTO from "../DTO/ticketDto.js";
@@ -26,14 +25,6 @@ export default class CartRepository {
     async putProdOfCart(req){
         const {quantity}=req.body;
         const user = await this.#userService.findByEmail(req.user.email);
-        if(!user){
-            CustomError.createError({
-                name: 'Error en el Usuario',
-                cause: `${req.user.email}No se encuentra en la base de datos`,
-                message: 'Usuario no encontrado',
-                code: ErrorEnum.BODY_ERROR,
-            })
-        }
         let cart;
         if(user.cart){
             cart = await this.#service.addProductToCart(user.cart,quantity,req.params.pid);
