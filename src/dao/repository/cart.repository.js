@@ -1,3 +1,5 @@
+import CustomError from "../../errors/custom.error.js";
+import ErrorEnum from "../../errors/error.enum.js";
 import { emailService } from "../../external-service/email.service.js";
 import { messageService } from "../../external-service/phone.service.js";
 import TicketDTO from "../DTO/ticketDto.js";
@@ -61,7 +63,12 @@ export default class CartRepository {
             const prodResponse= await this.#prodService.getProductsById(prodId);
             const stock = prodResponse.stock - cartProd.quantity;
             if(stock<0){
-                console.log(`No hay stock suficiente de ${prodResponse.title}`);
+                CustomError.createError({
+                    name:'Error en Stock',
+                    cause:`El pedido supera al stock`,
+                    message:`El stock es del libro ${prodResponse.title} es de ${cartProd.quantity}, no puede hacer un pedido mayor`,
+                    code: ErrorEnum.INSUFICIENT_AMMOUNT
+                })
             }else{
                 await this.#prodService.update(prodId,{stock: stock});
                 amount+= Number(cartProd.product.price)*Number(cartProd.quantity);

@@ -1,3 +1,5 @@
+import CustomError from "../../errors/custom.error.js";
+import ErrorEnum from "../../errors/error.enum.js";
 
 export default class ProdsRepository {
     #dao;
@@ -32,21 +34,36 @@ export default class ProdsRepository {
                 
             }
         }
+        const keyWithEmptyValue = Object.entries(product).find(([key, value]) => value === "");
+        if(keyWithEmptyValue){
+            CustomError.createError({
+                name: 'Error en formulario',
+                cause:`El campo ${keyWithEmptyValue[0]} está vacío`,
+                message:'Rellene todos los campos porfavor',
+                code: ErrorEnum.BODY_ERROR
+            })
+        }
         const status = product.status;
         if(!status){
             product.status = 'true';
         }
         const total = await this.#dao.getAll();
-        if (!total.includes(product)) {
+        const includes= total.find((e)=> e.title===product.title)
+        if (!includes) {
             await this.#dao.create({...product, thumbnail: filenames});
         }else{
-            res.status(405).send('Error, producto ya agregado');
+            CustomError.createError({
+                name: 'Error en formulario',
+                cause:`El libro ${product.title} ya se encuentra en la colección`,
+                message:'Intente con otro producto',
+                code: ErrorEnum.BODY_ERROR
+            })
         }
     }
     async deleteProd(req){
         const params = req.params;
         const pid = params.pid;
-        const eliminado = await this.#dao.deleteById(pid);
+        const eliminado = await this.#dao.delete(pid);
         return eliminado
     } 
     async update(req){

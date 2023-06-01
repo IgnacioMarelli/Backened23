@@ -12,9 +12,6 @@ const api = {
         if (response.status === 403) {
           throw new Error('Error de acceso: no tienes permisos para agregar productos');
         }
-        if (response) {
-          return await response.json();
-        }
       } catch (error) {
         throw new Error('Error en la solicitud');
       }

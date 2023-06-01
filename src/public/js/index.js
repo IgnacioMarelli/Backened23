@@ -91,11 +91,17 @@ document.addEventListener('submit', async e=>{
                 jsonObject[key] = value;
                 }
                 api.post('/products', jsonObject)
-                .then(() => alert('Producto agregado correctamente'))
+                .then((response) => {
+                    if (!response.ok) {
+                        throw error
+                    }else{
+                        const p = document.getElementById('producto-id');
+                        p.insertAdjacentHTML("afterend", `<p><b>Producto agregado correctamente</b></p>`);
+                    }
+                })
                 .catch(error => {
-                  let message = error.statusText || 'Ocurrió un error';
                   const p = document.getElementById('producto-id');
-                  p.insertAdjacentHTML("afterend", `<p><b>Error: ${message}, intenta más tarde</b></p>`);
+                  p.insertAdjacentHTML("afterend", `<p><b>Error: ${error.statusText}, intenta más tarde</b></p>`);
                 });
             } catch (error) {
               let message = error.statusText || 'Ocurrió un error';

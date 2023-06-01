@@ -13,6 +13,8 @@ import configureHandlebars from './hb/hbs.middleware.js';
 import configureSocket from './Server/configure-socket.js';
 import passport from 'passport';
 import { configPassport } from './config/passport.config.js';
+import errorMiddleware from './utils/middlewares/error.middleware.js';
+import routeMocking from './Routes/mocking.js';
 const {PORT, MONGO_URL, DAO} = config;
 if(DAO==='MONGO'){
 mongoose.connect(MONGO_URL, {
@@ -24,21 +26,15 @@ app.use(express.json());
 app.use(cookieParser(config.cookie_secret));
 app.use(express.static(__dirname+'/public'));
 app.set('views', __dirname+'/views');
-app.use('/api/products', router, express.static(__dirname+'/public'));
-app.use('/api/carts', routerCart, express.static(__dirname+'/public'));
-app.use('/api/session', routerUser, express.static(__dirname+'/public'));
-app.use('/api/chat', routerChat);
-
-app.use((error, res)=>{
-    console.error({error});
-    res.status(500).json({error});
-})
-
-
+app.use('/products', router, express.static(__dirname+'/public'));
+app.use('/carts', routerCart, express.static(__dirname+'/public'));
+app.use('/session', routerUser, express.static(__dirname+'/public'));
+app.use('/chat', routerChat);
+app.use('/mockingproducts', routeMocking)
 app.use(passport.initialize());
-
+app.use(errorMiddleware)
 configPassport()
 configureHandlebars(app)
-process.argv[2]='MONGO';
+
 const httpServer = app.listen(PORT, ()=>console.log(`Servidor escuchando en el puerto ${PORT }`));
 configureSocket(httpServer);

@@ -52,8 +52,7 @@ class cartsController {
             const response = await this.#dao.ticketBuy(req);
             res.status(200).send(response);
         }catch (error) {
-            console.error(error);
-            res.status(405).render('No puede hacer la compra');
+            next(error)
         }
     }
 }

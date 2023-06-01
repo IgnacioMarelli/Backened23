@@ -1,4 +1,6 @@
 import { productModel } from "../dao/models/products.model.js";
+import CustomError from "../errors/custom.error.js";
+import ErrorEnum from "../errors/error.enum.js";
 
 
 class prodService {
@@ -7,8 +9,17 @@ class prodService {
         this.#model= productModel;
     }
     async getAll(){
-        const products = await this.#model.find().lean();
-        return products     
+        try {
+            const products = await this.#model.find().lean();
+            return products  
+        } catch (error) {
+        CustomError.createError({
+            name: 'Error en DB',
+            cause: 'Modelo de productos mal utilizado',
+            message:'Error al buscar productos',
+            code: ErrorEnum.DATABASE_ERROR,
+            })
+        }
     }
     async create(data){
         return this.#model.create(data)
@@ -46,7 +57,7 @@ class prodService {
         return await this.#model.findByIdAndUpdate(id, data, { new: true })
     }
     async delete(id){
-        return this.#model.deleteById(id)
+        return this.#model.findByIdAndDelete(id)
     }
     async updateCartProd(pid, qty){
         const prod= await this.#model.findOne({_id:pid});

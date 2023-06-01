@@ -36,8 +36,7 @@ class ProductController {
             await this.#service.post(req, res)
             res.status(200)
         }catch (error) {
-            console.error(error);
-            res.status(405).render('No ingreso alguna de las características del objeto');
+            next(error)
         }
     
     }
