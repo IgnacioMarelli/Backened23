@@ -14,7 +14,7 @@ import configureSocket from './Server/configure-socket.js';
 import passport from 'passport';
 import { configPassport } from './config/passport.config.js';
 import errorMiddleware from './utils/middlewares/error.middleware.js';
-import routeMocking from './Routes/mocking.js';
+import { addLogger } from './utils/winston.customlevels.js';
 const {PORT, MONGO_URL, DAO} = config;
 if(DAO==='MONGO'){
 mongoose.connect(MONGO_URL, {
@@ -25,14 +25,27 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 app.use(cookieParser(config.cookie_secret));
 app.use(express.static(__dirname+'/public'));
+app.use(addLogger)
 app.set('views', __dirname+'/views');
 app.use('/products', router, express.static(__dirname+'/public'));
 app.use('/carts', routerCart, express.static(__dirname+'/public'));
 app.use('/session', routerUser, express.static(__dirname+'/public'));
 app.use('/chat', routerChat);
-app.use('/mockingproducts', routeMocking)
+app.get('/loggerTest', (req, res) => {
+  const logger = getLogger();
+
+  logger.debug('Mensaje de debug');
+  logger.http('Mensaje HTTP');
+  logger.info('Mensaje de información');
+  logger.warning('Mensaje de advertencia');
+  logger.error('Mensaje de error');
+  logger.fatal('Mensaje de error fatal');
+
+  res.send('Logs generados');
+});
 app.use(passport.initialize());
 app.use(errorMiddleware)
+
 configPassport()
 configureHandlebars(app)
 
