@@ -32,7 +32,7 @@ app.use('/carts', routerCart, express.static(__dirname+'/public'));
 app.use('/session', routerUser, express.static(__dirname+'/public'));
 app.use('/chat', routerChat);
 app.get('/loggerTest', (req, res) => {
-  const logger = getLogger();
+  const logger = req.logger;
 
   logger.debug('Mensaje de debug');
   logger.http('Mensaje HTTP');

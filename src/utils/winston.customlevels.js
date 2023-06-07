@@ -34,7 +34,7 @@ const devLogger = winston.createLogger({
         new winston.transports.Console({
             level: "debug",
             format: winston.format.combine(
-                winston.format.colorize(),
+                winston.format.colorize({colors: customLevelsOptions.colors}),
                 winston.format.simple()
             )
         })
@@ -63,7 +63,7 @@ const prodLogger = winston.createLogger({
     ],
 });
 export const addLogger = (req, res, next) => {
-    if(config.ENVIRONMENT == 'DEV'){
+    if(config.ENVIROMENT == 'DEV'){
         req.logger = devLogger;
         req.logger.http(`${req.method} in ${req.url}`);
     }else{
