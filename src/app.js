@@ -44,7 +44,7 @@ app.get('/loggerTest', (req, res) => {
   res.send('Logs generados');
 });
 app.use(passport.initialize());
-app.use(errorMiddleware)
+//app.use(errorMiddleware)
 
 configPassport()
 configureHandlebars(app)

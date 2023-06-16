@@ -11,7 +11,7 @@ const customLevelsOptions ={
     },
     colors:{
         fatal:'red',
-        error:'orange',
+        error:'red',
         warning:'yellow',
         info:'blue',
         http:'white',
