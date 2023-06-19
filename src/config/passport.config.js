@@ -6,14 +6,17 @@ const JWTStrategy = jwt.Strategy;
 function cookieExtractor(req) {
     return req.cookies['AUTH'];
 }
-
+function cookiePassExtractor(req) {
+    return req.cookies['PASS'];
+}
 
 
 export function configPassport() {
     passport.use('jwt',
         new JWTStrategy({
             jwtFromRequest: jwt.ExtractJwt.fromExtractors([
-                cookieExtractor
+                cookieExtractor,
+                cookiePassExtractor
             ]),
             secretOrKey: 'CODER_SECRET',
         }, (payload, done) => {

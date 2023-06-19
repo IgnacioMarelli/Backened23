@@ -1,6 +1,5 @@
 import userService from "../services/user.service.js";
 import UserRepository from "../dao/repository/user.repository.js";
-import UserDTO from "../dao/DTO/userDto.js";
 
 class UsersController {
     #service 
@@ -92,6 +91,39 @@ class UsersController {
             next(error)
         }
     }
+    async getNewPass(req, res, next){
+        try {
+            res.render('newPass', {
+                userEmail: req.user
+            });          
+        } catch (error) {
+            next(error)
+        }
+    }
+    async postRestorePass (req, res, next){
+        try {
+           const user = await this.#service.postRestorePass(req, res);
+           res.send(user); 
+        } catch (error) {
+            next(error)
+        }
+    }
+    async getRestorePass(req, res, next){
+        try {
+            res.render('restorePassword'); 
+        } catch (error) {
+            next(error)
+        }
+    }
+    async newPass(req, res, next){
+        try {
+            const newPass= await this.#service.newPass(req);
+            res.send(newPass);
+        } catch (error) {
+            next(error)
+        }
+    }
+
 }
 const userController = new UsersController(new UserRepository(new userService()));
 export default userController

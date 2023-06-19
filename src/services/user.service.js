@@ -9,6 +9,9 @@ class userService {
     async findByEmail(userEmail){
         return  this.#model.findOne({ email: userEmail }).lean();
     }
+    async findById(id){
+        return  this.#model.findOne({ _id: id }).lean();
+    }
     async create(user, hashedPassword){
         return this.#model.create({...user, password: hashedPassword});
     }

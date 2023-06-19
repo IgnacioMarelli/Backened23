@@ -7,7 +7,12 @@ async function createHash(password) {
 }
 
 async function isValidPassword(password, hashedPassword) {
-    return await bcrypt.compare(password, hashedPassword);
-}
+    try {
+      const match = await bcrypt.compare(password, hashedPassword);
+      return match;
+    } catch (error) {
+      next(error);
+    }
+  }
 
 export {createHash, isValidPassword}

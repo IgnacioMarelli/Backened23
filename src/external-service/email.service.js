@@ -22,6 +22,14 @@ class EmailService{
             text:`Has completado la compra de libros. Muchas gracias por confiar. Ticket ${finalTicket}`
         });
     }
+    async restorPassByEmail(email, token){
+        await this.#transporter.sendMail({
+            from: `"code"<${config.mail.auth.user}>`,
+            to:email,
+            subject:'Restablecimiento de contraseña',
+            html:`<h1>Has solicitado un cambio de contraseña. Has click en el siguiente boton para recuperarla: <a href="http://localhost:8080/session/newPass/${token}">Click aquí</a> </h1>`
+        });
+    }
 }
 
 export const emailService = new EmailService();

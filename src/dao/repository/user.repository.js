@@ -3,6 +3,11 @@ import { createHash, isValidPassword } from "../../utils/crypto.js";
 import { generateToken } from '../../utils/jwt.middlewar.js';
 import { emailService } from "../../external-service/email.service.js";
 import { messageService } from "../../external-service/phone.service.js";
+import CustomError from "../../errors/custom.error.js";
+import ErrorEnum from "../../errors/error.enum.js";
+import jwt  from "jsonwebtoken";
+import config from "../../../data.js";
+const SECRET = config.SECRET;
 export default class UserRepository {
   #dao;
   constructor(dao) {
@@ -41,24 +46,57 @@ async postLogin (req, res){
     });
     return userDTO
 }
-async updateUser (req, res){
+async updateUser (req){
     const idUser = req.params.idUser;
-    const usuario = await this.#dao.findById( idUser );
+    const usuario = await this.#dao.findById( {idUser} );
     if (!usuario) {
-        res
-        .status(404)
-        .send({ error: `Usuario con id ${idUser} no encontrado` });
-        return;
+        throw CustomError.createError({
+            name: 'Error en Id',
+            cause:`El usuario con id: ${idUser}, no se encuentra en la base de datos`,
+            message:'Debe seleccionar un usuario existente',
+            code: ErrorEnum.DATABASE_ERROR,
+        })
     }
     const nuevosDatos = req.body;
-    await this.#dao.updateUser(
-        { _id: idUser },
-        { ...usuario, ...nuevosDatos }
-    );
+    await this.#dao.updateUser( idUser,usuario,nuevosDatos);
 }
 async deleteUser (req){
     const idUsuario = req.params.idUsuario;
     await this.#dao.deleteUser({ _id: idUsuario });
+}
+async postRestorePass (req, res){
+    const {email} = req.body;
+    const user= await this.#dao.findByEmail(email);
+    if (user) {
+        const token = jwt.sign({ email}, SECRET, { expiresIn: '1h' });
+        emailService.restorPassByEmail(email, token);
+        const userDto = new UserDTO(user);
+        return userDto
+    }else{
+        throw  CustomError.createError({
+        name:'Error en Mail',
+        cause:`Mail no registrado`,
+        message:`El  ${email}  no se encuentra registrado`,
+        code: ErrorEnum.BODY_ERROR
+        });    
+    }
+}
+async newPass (req){
+    const email = req.body.email;
+    const user = await this.#dao.findByEmail(email);
+    const newPass= req.body.newPass;
+    if (isValidPassword(newPass, user.password)) {
+        throw CustomError.createError({
+            name:'Error en la nueva contraseña',
+            cause:'Utiliza la misma contraseña que antes',
+            message:'Debe insertar una contraseña diferente a la anterior',
+            code: ErrorEnum.BODY_ERROR
+        })
+        }
+        const hashedPass= createHash(newPass);
+        await this.#dao.updatePass(user._id, hashedPass);
+    const userDto = new UserDTO(user);
+    return userDto
 }
 
 }

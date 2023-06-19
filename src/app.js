@@ -23,7 +23,7 @@ mongoose.connect(MONGO_URL, {
 });}
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
-app.use(cookieParser(config.cookie_secret));
+app.use(cookieParser(config.SECRET));
 app.use(express.static(__dirname+'/public'));
 app.use(addLogger)
 app.set('views', __dirname+'/views');
