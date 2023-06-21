@@ -10,7 +10,12 @@ const passportCall = (strategy) => {
     passport.authenticate(strategy, {session : false}, (error, user, info) => {
       if (error) return next(error);
       if (!user) {
-        return res.status(401).send({error: "Usuario no logueado"});
+        throw CustomError.createError({
+          name:'Usuario no logueado',
+          cause:'No se logueó correctamente el usuario',
+          message:'Debe iniciar sesión nuevamente',
+          code:ErrorEnum.BODY_ERROR
+      })
       }
       req.user = user.user;
       next();
@@ -20,17 +25,17 @@ const passportCall = (strategy) => {
 const newPass = () => {
   return async (req, res, next) => {
     try {
-      const decoded = jwt.verify(req.params.token, secret);
+      const token = req.params.token;
+      const decoded = jwt.verify(token, secret);
       if (decoded) {
         req.user = decoded.email;
+        res.cookie('AUTH',token,{
+          maxAge:60*60*1000,
+          httpOnly:true
+        });
         next();
       } else {
-        throw new CustomError.createError({
-          name: 'Not Authorized',
-          cause: 'No está autorizado para cambiar la contraseña o los parámetros son incorrectos',
-          message: 'Vuelva a utilizar la opción de cambiar contraseña',
-          code: ErrorEnum.BODY_ERROR
-        });
+        res.redirect('/session/login');
       }
     } catch (error) {
       next(error);
@@ -43,4 +48,11 @@ const authorization = (rol)=>{
     next();
   }
 }
-export {authorization, passportCall, newPass}
+const authorizationPremium = (rol)=>{
+  return async (req, res, next)=>{
+    if(req.user.role !== rol&& req.user.role !=='premium') return res.status(403).send({error: ` Usuario sin rol de ${rol}`});
+    next();
+  }
+}
+
+export {authorization, passportCall, newPass, authorizationPremium}

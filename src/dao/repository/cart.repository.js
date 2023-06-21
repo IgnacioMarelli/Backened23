@@ -28,6 +28,17 @@ export default class CartRepository {
         const {quantity}=req.body;
         const user = await this.#userService.findByEmail(req.user.email);
         let cart;
+        if(req.user.role==='premium'){
+            const product = await this.#prodService.getProductsById(req.params.pid);
+            if (product.owner===req.user.role) {
+                throw CustomError.createError({
+                    name:'Error al agregar productos',
+                    cause:'No puede agregar productos propios al carrito',
+                    message:'No puede agregar productos propios al carrito',
+                    code: ErrorEnum.BODY_ERROR
+                })
+            }
+        }
         if(user.cart){
             cart = await this.#service.addProductToCart(user.cart,quantity,req.params.pid);
         }else{

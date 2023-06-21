@@ -14,10 +14,19 @@ export default class UserRepository {
     this.#dao = dao;
   }
 async getUser(req){
-    const userEmail = req.user.email;
-    const userFind = await this.#dao.findByEmail(userEmail);
-    const user= new UserDTO(userFind);
-    return user
+    if (req.user) {
+        const userEmail = req.user.email;
+        const userFind = await this.#dao.findByEmail(userEmail);
+        const user= new UserDTO(userFind);
+        return user
+    }
+    throw CustomError.createError({
+        name:'Usuario no logueado',
+        cause:'No se logueó correctamente el usuario',
+        message:'Debe iniciar sesión nuevamente',
+        code:ErrorEnum.BODY_ERROR
+    })
+
 }
 async postRegister (req){
     const usuario = req.body;
@@ -33,10 +42,14 @@ async postRegister (req){
 async postLogin (req, res){
     const { email, password } = req.body;
     const user = await this.#dao.findByEmail(email);
-    if (!user || !isValidPassword(password, user.password)) {
-        return res.status(401).send({
-            error: 'email o contraseña incorrectos',
-    }); 
+    const valid = await isValidPassword(password, user.password)
+    if (!user || !valid) {
+        throw CustomError.createError({
+            name:'Error en Login',
+            cause:'Mail o Contraseña Incorrectos',
+            message:'Revise haber puesto el mail y la contraseña correctamente',
+            code: ErrorEnum.BODY_ERROR
+        })
     }
     const userDTO = new UserDTO(user);
     const token = generateToken(userDTO);
@@ -85,7 +98,8 @@ async newPass (req){
     const email = req.body.email;
     const user = await this.#dao.findByEmail(email);
     const newPass= req.body.newPass;
-    if (isValidPassword(newPass, user.password)) {
+    const valid = await isValidPassword(newPass, user.password)
+    if (valid) {
         throw CustomError.createError({
             name:'Error en la nueva contraseña',
             cause:'Utiliza la misma contraseña que antes',
@@ -93,10 +107,21 @@ async newPass (req){
             code: ErrorEnum.BODY_ERROR
         })
         }
-        const hashedPass= createHash(newPass);
+        const hashedPass= await createHash(newPass);
         await this.#dao.updatePass(user._id, hashedPass);
     const userDto = new UserDTO(user);
     return userDto
 }
-
+async newRole(req){
+    try {
+        const user = await this.findById(req.params.uid);
+        if(req.body==='premium'){
+            await this.#dao.updateUser(req.params.uid, user, {role:'user'});
+            return
+        }
+        await this.#dao.updateUser(req.params.uid, user, {role:'premium'});
+    } catch (error) {
+        next(error)
+    }
+}
 }

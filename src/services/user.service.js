@@ -24,8 +24,8 @@ class userService {
     async deleteUser(idUsuario){
         return this.#model.findOneAndDelete({_id:idUsuario})
     }
-    async updatePass(email, hashedPassword){
-        return  this.#model.updateOne({email}, {$set:{password:hashedPassword}});
+    async updatePass(id, hashedPassword){
+        return  this.#model.updateOne({_id:id}, {$set:{password:hashedPassword}});
     }
 }
 export default userService

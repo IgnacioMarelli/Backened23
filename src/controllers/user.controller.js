@@ -26,7 +26,7 @@ class UsersController {
     }
     async getLogin (req, res, next){
         try {
-        if (req.cookies['AUTH']) {
+        if (req.user) {
             res.redirect('/session/current')
             }
             res.render('login');
@@ -122,6 +122,27 @@ class UsersController {
         } catch (error) {
             next(error)
         }
+    }
+    async getPremium(req, res, next){
+        try {
+            const user= await this.#service.getUser(req);
+            res.render('premium',{
+                role:user.role,
+                userId: user
+            })
+        } catch (error) {
+            next(error)
+        }
+
+    }
+    async postPremium(req, res, next){
+        try {
+            await this.#service.newRole(req);
+            res.status(200).send('Ok')
+        } catch (error) {
+            next(error)
+        }
+
     }
 
 }

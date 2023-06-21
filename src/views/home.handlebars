@@ -5,19 +5,19 @@
             <article>
                 <h2 class="title">Agregar producto</h2>
                 <form action="" class="crud-form" id="crud-form" >
-                <input type="text" name="name" id="name" placeholder="Nombre"> 
+                <input type="text" name="title" class="title" placeholder="Nombre"> 
                 <br>
-                <input type="text" name="description" id="description" placeholder="Descripción"> 
+                <input type="text" name="description" class="description" placeholder="Descripción"> 
                 <br>
-                <input type="number" name="price" id="price" placeholder="Precio"> 
+                <input type="number" name="price" class="price" placeholder="Precio"> 
                 <br>
-                <input type="number" name="stock" id="stock" placeholder="Stock"> 
+                <input type="number" name="stock" class="stock" placeholder="Stock"> 
                 <br>
-                <input type="text" name="category" id="category" placeholder="Categoria"> 
+                <input type="text" name="category" class="category" placeholder="Categoria"> 
                 <br>
-                <input type="text" name="code" id="code" placeholder="Código"> 
+                <input type="text" name="code" class="code" placeholder="Código"> 
                 <br>
-                <input id="form-file" type="file" name="file" placeholder="Imagen"/>
+                <input id="form-file" type="file" name="file" class='file' placeholder="Imagen"/>
                 <br>
                 <input type="submit" value="Agregar Producto">
             </form>
@@ -89,4 +89,4 @@
 </main>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="js/index.js" ></script>
+  <script src="/js/index.js" ></script>

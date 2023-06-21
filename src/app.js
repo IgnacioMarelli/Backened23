@@ -27,9 +27,9 @@ app.use(cookieParser(config.SECRET));
 app.use(express.static(__dirname+'/public'));
 app.use(addLogger)
 app.set('views', __dirname+'/views');
-app.use('/products', router, express.static(__dirname+'/public'));
-app.use('/carts', routerCart, express.static(__dirname+'/public'));
-app.use('/session', routerUser, express.static(__dirname+'/public'));
+app.use('/products', router);
+app.use('/carts', routerCart);
+app.use('/session', routerUser);
 app.use('/chat', routerChat);
 app.get('/loggerTest', (req, res) => {
   const logger = req.logger;
@@ -44,7 +44,7 @@ app.get('/loggerTest', (req, res) => {
   res.send('Logs generados');
 });
 app.use(passport.initialize());
-//app.use(errorMiddleware)
+app.use(errorMiddleware)
 
 configPassport()
 configureHandlebars(app)
