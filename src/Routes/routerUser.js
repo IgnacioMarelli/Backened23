@@ -20,5 +20,5 @@ routerUser.get('/restorePassword',userController.getRestorePass.bind(userControl
 routerUser.post('/restorePassword',userController.postRestorePass.bind(userController));
 routerUser.get('/newPass/:token', newPass() ,userController.getNewPass.bind(userController) );
 routerUser.get('/premium/',passportCall('jwt'),userController.getPremium.bind(userController));
-routerUser.get('/premium/:uid',passportCall('jwt'),userController.postPremium.bind(userController));
+routerUser.post('/premium/:uid',passportCall('jwt'),userController.postPremium.bind(userController));
 export  { routerUser};

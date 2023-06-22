@@ -6,9 +6,9 @@
     </h1>
     <span class="email">{{role}}</span>
         {{#if (eq role 'user')}}
-        <button onclick="premium("{{user.id}}", '{{role}}')">Cambiar a premium</button>
+        <button onclick="premium('{{userId}}', '{{role}}')">Cambiar a premium</button>
         {{else}}
-        <button onclick="premium("{{user.id}}", '{{role}}')">Cambiar a user</button>
+        <button onclick="premium('{{userId}}', '{{role}}')">Cambiar a user</button>
         {{/if}}
   </div>
 </div>

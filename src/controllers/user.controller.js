@@ -128,7 +128,7 @@ class UsersController {
             const user= await this.#service.getUser(req);
             res.render('premium',{
                 role:user.role,
-                userId: user
+                userId: user.id.toString()
             })
         } catch (error) {
             next(error)
@@ -140,6 +140,7 @@ class UsersController {
             await this.#service.newRole(req);
             res.status(200).send('Ok')
         } catch (error) {
+            console.error(error);
             next(error)
         }
 
