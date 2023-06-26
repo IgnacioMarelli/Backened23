@@ -1,5 +1,5 @@
 import { Server } from 'socket.io';
-import { chatFunctions } from '../dao/repository/chat.repository.js';
+import { chatFunctions } from '../Service/chat.service.js';
 
 export default async function configureSocket(httpServer){
     const io = new Server(httpServer)

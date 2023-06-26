@@ -1,8 +1,8 @@
 import passport from "passport";
 import jwt  from "jsonwebtoken";
-import CustomError from "../errors/custom.error.js";
-import ErrorEnum from "../errors/error.enum.js";
-import config from "../../data.js";
+import CustomError from "../../errors/custom.error.js";
+import ErrorEnum from "../../errors/error.enum.js";
+import config from "../../../data.js";
 const secret = config.SECRET;
 
 const passportCall = (strategy) => {

@@ -1,5 +1,5 @@
-import chatService from '../services/chat.service.js';
-import { chatRepository } from '../dao/repository/chat.repository.js';
+import chatService from '../dao/Repository/chat.repository.js';
+import { chatRepository } from '../Service/chat.service.js';
 class ChatController {
     #service;
     constructor(service){

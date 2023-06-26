@@ -1,5 +1,5 @@
-import CustomError from "../../errors/custom.error.js";
-import ErrorEnum from "../../errors/error.enum.js";
+import CustomError from "../errors/custom.error.js";
+import ErrorEnum from "../errors/error.enum.js";
 
 export default class ProdsRepository {
     #dao;

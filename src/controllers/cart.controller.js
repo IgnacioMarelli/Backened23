@@ -1,8 +1,8 @@
-import CartRepository from "../dao/repository/cart.repository.js";
-import cartsService from "../services/cart.service.js";
-import userService from "../services/user.service.js";
-import prodService from "../services/prod.service.js";
-import ticketService from "../services/ticket.service.js";
+import CartRepository from "../Service/cart.service.js";
+import cartsService from "../dao/Repository/cart.repository.js";
+import userService from "../dao/Repository/user.repository.js";
+import prodService from "../dao/Repository/prod.repository.js";
+import ticketService from "../dao/Repository/ticket.repository.js";
 import CustomError from "../errors/custom.error.js";
 import ErrorEnum from "../errors/error.enum.js";
 class cartsController {

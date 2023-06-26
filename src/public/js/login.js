@@ -23,7 +23,7 @@ async function login(event) {
                 confirmButtonText: 'Si, soy yo'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    location.href = 'http://localhost:8080/products';
+                    location.href = 'http://localhost:8080/api/products';
                 } else {
                     api.post("/api/session/auth/logout");
                 }

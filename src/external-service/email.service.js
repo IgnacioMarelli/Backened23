@@ -27,7 +27,7 @@ class EmailService{
             from: `"code"<${config.mail.auth.user}>`,
             to:email,
             subject:'Restablecimiento de contraseña',
-            html:`<h1>Has solicitado un cambio de contraseña. Has click en el siguiente boton para recuperarla: <a href="http://localhost:8080/session/newPass/${token}">Click aquí</a> </h1>`
+            html:`<h1>Has solicitado un cambio de contraseña. Has click en el siguiente boton para recuperarla: <a href="http://localhost:8080/api/session/newPass/${token}">Click aquí</a> </h1>`
         });
     }
 }

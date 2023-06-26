@@ -1,5 +1,5 @@
 import multer from "multer";
-import fileDirName from "./fileDirName.js";
+import fileDirName from "../fileDirName.js";
 import * as path from 'path';
 const { __dirname } = fileDirName(import.meta);
 

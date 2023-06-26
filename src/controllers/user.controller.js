@@ -1,5 +1,5 @@
-import userService from "../services/user.service.js";
-import UserRepository from "../dao/repository/user.repository.js";
+import userService from "../dao/Repository/user.repository.js";
+import UserRepository from "../Service/user.serivce.js";
 
 class UsersController {
     #service 

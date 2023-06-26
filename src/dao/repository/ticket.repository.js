@@ -1,4 +1,4 @@
-import { ticket } from "../dao/models/ticket.model.js";
+import { ticket } from "../models/ticket.model.js";
 
 export default class ticketService {
     #ticketModel

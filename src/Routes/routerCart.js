@@ -1,7 +1,7 @@
 import express from 'express';
 import { Router } from 'express';
 import cartController from '../controllers/cart.controller.js';
-import { passportCall } from '../utils/authentication.js';
+import { passportCall } from '../utils/middlewares/authentication.js';
 const routerCart = Router();
 routerCart.use(express.json());
 routerCart.use(express.urlencoded({extended:true}));

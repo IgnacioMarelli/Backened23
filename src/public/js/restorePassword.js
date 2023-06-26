@@ -13,7 +13,7 @@ async function restore(event) {
                 text: `Se ha enviado un mensaje para restablecerla a tu correo`,
                 icon: 'success'
             }).then(() => {
-                    location.href = 'http://localhost:8080//apisession/login';
+                    location.href = 'http://localhost:8080/api/session/login';
             });
         })
         .catch((error) => {

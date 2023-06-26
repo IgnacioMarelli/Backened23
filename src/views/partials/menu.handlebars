@@ -9,19 +9,19 @@
         <a class="nav-link" href="/">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/products">Productos</a>
+        <a class="nav-link" href="/api/products">Productos</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/chat">Chat</a>
+        <a class="nav-link" href="/api/chat">Chat</a>
       </li>
       <span>
       {{#if user}}
               Bienvenido {{user.first_name}} {{user.last_name}}. Su rol es: {{user.role}}
-              <li><a class="nav-link" href="/session/current">Perfil</a></li>
+              <li><a class="nav-link" href="/api/session/current">Perfil</a></li>
       {{else}}
       </span>
-            <li><a class="nav-link" href="/session/register">Registrate</a> </li>
-            <li><a class="nav-link" href="/session/login">Inicia Sesión</a></li>
+            <li><a class="nav-link" href="/api/session/register">Registrate</a> </li>
+            <li><a class="nav-link" href="/api/session/login">Inicia Sesión</a></li>
       {{/if}}
     </ul>
   </div>

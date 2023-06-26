@@ -10,8 +10,8 @@ import { routerChat } from './Routes/routerChat.js';
 import { routerCart } from './Routes/routerCart.js';
 import { routerUser } from './Routes/routerUser.js';
 import { router } from './Routes/routerProds.js'
-import configureHandlebars from './hb/hbs.middleware.js';
-import configureSocket from './Server/configure-socket.js';
+import configureHandlebars from './config/hbs.config.js';
+import configureSocket from './config/configure-socket.js';
 import passport from 'passport';
 import { configPassport } from './config/passport.config.js';
 import errorMiddleware from './utils/middlewares/error.middleware.js';

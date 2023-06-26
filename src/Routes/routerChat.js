@@ -1,6 +1,6 @@
 import express from 'express';
 import { Router } from 'express';
-import { passportCall } from '../utils/authentication.js';
+import { passportCall } from '../utils/middlewares/authentication.js';
 import chatController from '../controllers/chat.controller.js';
 const routerChat = Router();
 

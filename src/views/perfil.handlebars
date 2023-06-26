@@ -56,9 +56,9 @@
                     <td data-label="Categoria">{{this.product.category}}</td>
                     <td data-label="Code">{{this.product.code}}</td>
                     <td data-label="Descripcion">{{this.product.description}}</td>
-                    <td ><img style="    width: 33%;" src="../img/{{this.product.thumbnail}}" alt=""></td>
+                    <td ><img style="width: 33%;" src="../img/{{this.product.thumbnail}}" alt=""></td>
                     <td>
-                    <button> <a href="/products/{{this.product._id}}">Detalles</a></button>
+                    <button> <a href="/api/products/{{this.product._id}}">Detalles</a></button>
                     <button onclick="removeFromCart('{{this.cid}}','{{this.product._id}}')">Eliminar</button>
                     </td>
                 </tr>
@@ -68,6 +68,6 @@
     {{/if}}
   </div>
   <script>
-    function logout() { api.post("/session/auth/logout"); }
+    function logout() { api.post("/api/session/auth/logout"); }
   </script>
 </div>

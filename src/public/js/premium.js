@@ -11,7 +11,7 @@ function premium(userID, role) {
           title: `Ya cambió su rol de usuario.`,
           icon: 'success'
         }).then(() => {
-          location.href = 'http://localhost:8080//api/products';
+          location.href = 'http://localhost:8080/api/products';
         });
       })
       .catch(error => {

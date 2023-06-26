@@ -83,7 +83,7 @@ document.addEventListener('click', async e =>{
 
         if(isDelete){
             try {
-                const response = await fetch(`/products/${id}`, {
+                const response = await fetch(`/api/products/${id}`, {
                     method: 'DELETE',
                     headers: {},
                 })

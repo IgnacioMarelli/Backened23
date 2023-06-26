@@ -1,17 +1,14 @@
-import chatService from "../../services/chat.service.js";
-export class chatRepository {
-    #dao;
-    constructor(dao) {
-      this.#dao = dao;
+import { messageModel } from "../models/messages.model.js";
+export default class chatService {
+    #model
+    constructor(){
+        this.#model= messageModel;
     }
-  
     async getAll(){
-        const response = await this.#dao.getAll();
-        return response
+        const response = await this.#model.find().lean();
+        return response     
     }
     async create(data){
-        const response = await this.#dao.create(data);
-        return response
+        return this.#model.create(data)
     }
 }
-export const chatFunctions = new chatRepository(new chatService());

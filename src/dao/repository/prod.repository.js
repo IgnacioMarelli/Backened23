@@ -1,6 +1,6 @@
-import { productModel } from "../dao/models/products.model.js";
-import CustomError from "../errors/custom.error.js";
-import ErrorEnum from "../errors/error.enum.js";
+import { productModel } from "../models/products.model.js";
+import CustomError from "../../errors/custom.error.js";
+import ErrorEnum from "../../errors/error.enum.js";
 
 
 class prodService {

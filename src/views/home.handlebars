@@ -28,13 +28,13 @@
               <b><span class="titles">Categoria</span></b>
               <li>
                 <li></li>
-                  <a href="/products?category=TERROR"><li>TERROR</li></a>
-                  <a href="/products?category=CIENCIA FICCIÓN"><li>CIENCIA FICCIÓN</li></a>
-                  <a href="/products?category=ROMÁNTICO"><li>ROMÁNTICO</li></a>
-                  <a href="/products?category=SUSPENSO"><li>SUSPENSO</li></a>
+                  <a href="/api/products?category=TERROR"><li>TERROR</li></a>
+                  <a href="/api/products?category=CIENCIA FICCIÓN"><li>CIENCIA FICCIÓN</li></a>
+                  <a href="/api/products?category=ROMÁNTICO"><li>ROMÁNTICO</li></a>
+                  <a href="/api/products?category=SUSPENSO"><li>SUSPENSO</li></a>
                 <b><span class="titles">Disponibilidad</span></b>
-                  <a href="/products?status=true"><li>Disponibles</li></a>
-                  <a href="/products?status=false"><li>No disponibles</li></a>
+                  <a href="/api/products?status=true"><li>Disponibles</li></a>
+                  <a href="/api/products?status=false"><li>No disponibles</li></a>
               </li>
             </ul>
             <button class="but" onclick="sortMayor()">Ordenar de mayor a menor Precio</button>
@@ -67,7 +67,7 @@
               <td data-label="Descripcion">{{this.description}}</td>
               <td ><img style="    width: 33%;" src="../img/{{this.thumbnail}}" alt=""></td>
               <td>
-                <button> <a href="/products/{{this._id}}">Detalles</a></button>
+                <button> <a href="/api/products/{{this._id}}">Detalles</a></button>
                 <button class="delete">Eliminar</button>
               </td>
               <td class="counterDiv">
