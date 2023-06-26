@@ -14,8 +14,7 @@ class cartsService {
             const newCart= await this.#model.create({ products: { product: prod, quantity: quantity }});
             return newCart
         } catch (error) {
-            console.error(error);
-            throw new Error('NO se pudo crear carrito')
+            next(error)
         }
         
     }

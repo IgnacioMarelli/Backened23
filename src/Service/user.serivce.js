@@ -122,9 +122,8 @@ async newPass (req){
 }
 async newRole(req){
     try {
-        console.log('xd');
         const user = await this.#dao.findById(req.params.uid);
-        if(req.body==='premium'){
+        if(user.role==='premium'){
             await this.#dao.updateUser(req.params.uid, user, {role:'user'});
             return
         }
