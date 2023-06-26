@@ -9,7 +9,7 @@ class UsersController {
     async getRegister (req, res, next){
         try {
         if (req.user) {
-            res.redirect('/session/current')
+            res.redirect('/api/session/current')
             }
             res.render('register');
         } catch (error) {
@@ -19,7 +19,7 @@ class UsersController {
     async postRegister (req, res, next){
         try {
             await this.#service.postRegister(req);
-            res.status(201).redirect('/session/login');
+            res.status(201).redirect('/api/session/login');
         } catch (error) {
             next(error)
         }
@@ -62,7 +62,7 @@ class UsersController {
     async logout (req, res, next){
         try {
             res.clearCookie('AUTH')
-            res.redirect('/session/login');
+            res.redirect('/api/session/login');
         } catch (error) {
             next(error)
         }
@@ -86,7 +86,7 @@ class UsersController {
 
     async github (req, res, next){
         try{
-            res.redirect('/session/current');
+            res.redirect('/api/session/current');
         }catch(error){
             next(error)
         }

@@ -7,19 +7,23 @@ const secret = config.SECRET;
 
 const passportCall = (strategy) => {
   return async (req, res, next) => {
-    passport.authenticate(strategy, {session : false}, (error, user, info) => {
-      if (error) return next(error);
-      if (!user) {
-        throw CustomError.createError({
-          name:'Usuario no logueado',
-          cause:'No se logueó correctamente el usuario',
-          message:'Debe iniciar sesión nuevamente',
-          code:ErrorEnum.BODY_ERROR
-      })
-      }
-      req.user = user.user;
-      next();
-    })(req, res, next); 
+    try {
+      passport.authenticate(strategy, { session: false }, (error, user, info) => {
+        if (error) return next(error);
+        if (!user) {
+          throw CustomError.createError({
+            name: 'Usuario no logueado',
+            cause: 'No se logueó correctamente el usuario',
+            message: 'Debe iniciar sesión nuevamente',
+            code: ErrorEnum.BODY_ERROR
+          });
+        }
+        req.user = user.user;
+        next();
+      })(req, res, next);
+    } catch (error) {
+      next(error);
+    }
   };
 };
 const newPass = () => {
@@ -44,14 +48,24 @@ const newPass = () => {
 };
 const authorization = (rol)=>{
   return async (req, res, next)=>{
-    if(req.user.role !== rol) return res.status(403).send({error: ` Usuario sin rol de ${rol}`});
-    next();
+    try {
+      if(req.user.role !== rol) return res.status(403).send({error: ` Usuario sin rol de ${rol}`});
+      next();
+    } catch (error) {
+      next(error) 
+    }
+
   }
 }
 const authorizationPremium = (rol)=>{
   return async (req, res, next)=>{
-    if(req.user.role !== rol&& req.user.role !=='premium') return res.status(403).send({error: ` Usuario sin rol de ${rol}`});
-    next();
+    try {
+      if(req.user.role !== rol&& req.user.role !=='premium') return res.status(403).send({error: ` Usuario sin rol de ${rol}`});
+      next();
+    } catch (error) {
+      next(error)
+    }
+
   }
 }
 

@@ -51,7 +51,7 @@ class ProductController {
     async update(req, res, next){
         try {
             const response = await this.#service.update(req);
-            res.status(200).render(response);
+            res.status(200).send(response);
 
         } catch (error) {
             next(error)

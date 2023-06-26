@@ -47,16 +47,6 @@ export default class CartRepository {
         await this.#userService.updateCart(req.user.email,cart._id);
         return cart
     }
-    async putCart(req){
-        const {quantity}=req.body; 
-        const user = this.#userService.findByEmail(req.user.email);
-        if(user.cart){
-            const cart = await this.#service.addProductToCart(req.params.cid,quantity,req.params.pid);
-            return cart
-        }
-        const cartUser= this.#service.create(req.params.pid, quantity);
-        return cartUser
-    }
     async deleteProd(req){
         await this.#service.deleteProduct(req.params.cid,req.params.pid);
         const response = await this.#service.getAll(); 

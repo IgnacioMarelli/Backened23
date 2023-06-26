@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import config from '../data.js';
 import cookieParser from 'cookie-parser';
+import swaggerUiExpress from 'swagger-ui-express'
 const app = express();
 import fileDirName from './utils/fileDirName.js';
 const { __dirname } = fileDirName(import.meta);
@@ -15,6 +16,7 @@ import passport from 'passport';
 import { configPassport } from './config/passport.config.js';
 import errorMiddleware from './utils/middlewares/error.middleware.js';
 import { addLogger } from './utils/winston.customlevels.js';
+import spec from './docs/swagger-options.js';
 const {PORT, MONGO_URL, DAO} = config;
 if(DAO==='MONGO'){
 mongoose.connect(MONGO_URL, {
@@ -27,11 +29,13 @@ app.use(cookieParser(config.SECRET));
 app.use(express.static(__dirname+'/public'));
 app.use(addLogger)
 app.set('views', __dirname+'/views');
-app.use('/products', router);
-app.use('/carts', routerCart);
-app.use('/session', routerUser);
-app.use('/chat', routerChat);
-app.get('/loggerTest', (req, res) => {
+app.use('/api/products', router);
+app.use('/api/carts', routerCart);
+app.use('/api/session', routerUser);
+app.use('/api/chat', routerChat);
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(spec));
+
+app.get('/api/loggerTest', (req, res) => {
   const logger = req.logger;
 
   logger.debug('Mensaje de debug');
@@ -45,7 +49,6 @@ app.get('/loggerTest', (req, res) => {
 });
 app.use(passport.initialize());
 app.use(errorMiddleware)
-
 configPassport()
 configureHandlebars(app)
 

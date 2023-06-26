@@ -41,6 +41,14 @@ async postRegister (req){
 
 async postLogin (req, res){
     const { email, password } = req.body;
+    if (!email || !password) {
+        throw CustomError.createError({
+            name:'Error en Login',
+            cause:'Mail o Contraseña Incorrectos',
+            message:'Revise haber puesto el mail y la contraseña correctamente',
+            code: ErrorEnum.BODY_ERROR
+        })
+    }
     const user = await this.#dao.findByEmail(email);
     const valid = await isValidPassword(password, user.password)
     if (!user || !valid) {

@@ -2,7 +2,7 @@ const query = new URLSearchParams(window.location.search);
 
 
 function premium(userID, role) {
-    api.post(`/session/premium/${userID}`, role)
+    api.post(`/api/session/premium/${userID}`, role)
       .then(response => {
         if (!response.ok) {
           throw new Error('Error en la solicitud');
@@ -11,7 +11,7 @@ function premium(userID, role) {
           title: `Ya cambió su rol de usuario.`,
           icon: 'success'
         }).then(() => {
-          location.href = 'http://localhost:8080/products';
+          location.href = 'http://localhost:8080//api/products';
         });
       })
       .catch(error => {

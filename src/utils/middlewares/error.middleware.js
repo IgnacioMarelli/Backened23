@@ -1,16 +1,16 @@
 export default (error, req, res, next) =>{
-    req.logger.error(error.cause)
+    req.logger.error(error.message)
     switch(Math.floor(error.code / 100)){
         case 1:
             res.status(400).send({
                 status: 'error',
-                error: error.cause,
+                error: error.message,
               });
             break;
         case 2: 
             res.status(400).send({
                 status: 'error',
-                error: error.cause,
+                error: error.message,
             });
             break;
         case 3:

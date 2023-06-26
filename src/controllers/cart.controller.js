@@ -37,14 +37,6 @@ class cartsController {
             next(error);
         }
     }
-    async putCart(req, res,next){
-        try {
-            const cart = await this.#dao.putCart(req);
-            res.status(200).send(cart);    
-        } catch (error) {
-            next(error);
-        }   
-    }
     async deleteProd(req, res, next){
         try {
             const response = await this.#dao.deleteProd(req);

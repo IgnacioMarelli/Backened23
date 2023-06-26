@@ -6,7 +6,7 @@ async function addProd(id) {
     const cid=undefined;
     const quantity = 32;
     try{
-        api.put(`/carts/${cid}/products/${id}`, {
+        api.put(`/api/carts/${cid}/products/${id}`, {
             quantity,
             })
             .then((d) => alert('Agregado al carrito'));
@@ -50,7 +50,7 @@ document.addEventListener('submit', async e => {
         try {
           const formData = new FormData(e.target);
   
-          api.postProd('/products', formData)
+          api.postProd('/api/products', formData)
             .then(response => {
               if (!response.ok) {
                 throw new Error('Error en la solicitud');
@@ -104,7 +104,7 @@ async function removeFromCart(cid, pid){
     let isDelete = confirm(`Estas seguro de eliminar el producto con id: ${pid} del carrito?`)
     if(isDelete){
         try {
-            const response = await fetch(`/carts/${cid}/products/${pid}`, {
+            const response = await fetch(`/api/carts/${cid}/products/${pid}`, {
                 method: 'DELETE',
                 headers: {},
             })

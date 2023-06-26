@@ -14,7 +14,7 @@ async function newPass(event) {
                 text: `Se ha restablecido la contraseña`,
                 icon: 'success'
             }).then(() => {
-                    location.href = 'http://localhost:8080/session/login';
+                    location.href = 'http://localhost:8080/api/session/login';
             });
         })
         .catch((error) => {

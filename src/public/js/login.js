@@ -3,7 +3,7 @@ async function login(event) {
     const email = document.getElementById('form-email').value;
     
     event.preventDefault();
-    api.post('/session/login', {
+    api.post('/api/session/login', {
         email,
         password
         })
@@ -25,12 +25,11 @@ async function login(event) {
                 if (result.isConfirmed) {
                     location.href = 'http://localhost:8080/products';
                 } else {
-                    api.post("/session/auth/logout");
+                    api.post("/api/session/auth/logout");
                 }
             });
         })
         .catch((error) => {
-            // Manejo de errores
             console.log(error);
         });
     }

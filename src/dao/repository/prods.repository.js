@@ -93,12 +93,12 @@ export default class ProdsRepository {
             })
         }
         const eliminado = await this.#dao.delete(pid);
-        return eliminado
+        return 'Se elimino el producto'
     } 
     async update(req){
         const pid = req.params.pid; 
-        const prod = req.body;
-        const response = await this.#dao.updateProduct(pid, prod);
+        const prod = req.body.quantity;
+        const response = await this.#dao.updateCartProd(pid, prod);
         return response
     }   
 }

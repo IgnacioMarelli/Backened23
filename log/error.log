@@ -1,47 +1,17 @@
-{"level":"error","message":"No se logueó correctamente el usuario","timestamp":"2023-06-19T12:34:49.857Z"}
-{"level":"error","timestamp":"2023-06-19T12:34:49.874Z"}
-{"level":"error","message":"No se logueó correctamente el usuario","timestamp":"2023-06-19T12:38:09.409Z"}
-{"level":"error","timestamp":"2023-06-19T12:38:09.439Z"}
-{"level":"error","message":"No se logueó correctamente el usuario","timestamp":"2023-06-19T12:38:18.044Z"}
-{"level":"error","timestamp":"2023-06-19T12:42:35.521Z"}
-{"level":"error","message":"No se logueó correctamente el usuario","timestamp":"2023-06-19T12:44:30.881Z"}
-{"level":"error","timestamp":"2023-06-19T12:44:32.230Z"}
-{"level":"error","message":"No se logueó correctamente el usuario","timestamp":"2023-06-19T12:44:57.047Z"}
-{"level":"error","timestamp":"2023-06-19T12:44:57.065Z"}
-{"level":"error","message":"No se logueó correctamente el usuario","timestamp":"2023-06-19T12:45:19.079Z"}
-{"level":"error","message":"No se logueó correctamente el usuario","timestamp":"2023-06-19T12:45:54.025Z"}
-{"level":"error","timestamp":"2023-06-19T12:47:05.037Z"}
-{"level":"error","timestamp":"2023-06-19T13:22:09.683Z"}
-{"level":"error","timestamp":"2023-06-19T13:23:58.911Z"}
-{"level":"error","message":"Mail o Contraseña Incorrectos","timestamp":"2023-06-19T13:25:51.343Z"}
-{"level":"error","message":"Mail o Contraseña Incorrectos","timestamp":"2023-06-19T13:27:02.949Z"}
-{"level":"error","message":"Mail o Contraseña Incorrectos","timestamp":"2023-06-19T13:27:41.846Z"}
-{"level":"error","message":"Mail o Contraseña Incorrectos","timestamp":"2023-06-19T13:28:55.406Z"}
-{"level":"error","message":"No tiene rol de admin, sino de premium","timestamp":"2023-06-19T17:34:23.102Z"}
-{"level":"error","message":"No tiene rol de admin, sino de premium","timestamp":"2023-06-19T17:37:07.156Z"}
-{"level":"error","timestamp":"2023-06-19T18:23:42.390Z"}
-{"level":"error","timestamp":"2023-06-19T18:25:32.271Z"}
-{"level":"error","timestamp":"2023-06-19T18:33:52.434Z"}
-{"level":"error","timestamp":"2023-06-19T18:34:19.183Z"}
-{"level":"error","timestamp":"2023-06-19T18:37:12.508Z"}
-{"level":"error","timestamp":"2023-06-19T20:01:15.823Z"}
-{"level":"error","timestamp":"2023-06-19T20:07:09.628Z"}
-{"level":"error","timestamp":"2023-06-19T20:17:47.051Z"}
-{"level":"error","timestamp":"2023-06-20T15:02:07.075Z"}
-{"level":"error","timestamp":"2023-06-20T15:03:03.962Z"}
-{"level":"error","timestamp":"2023-06-20T15:04:48.401Z"}
-{"level":"error","timestamp":"2023-06-20T15:09:25.079Z"}
-{"level":"error","timestamp":"2023-06-20T15:37:53.780Z"}
-{"level":"error","timestamp":"2023-06-20T15:39:26.010Z"}
-{"level":"error","timestamp":"2023-06-20T15:46:49.888Z"}
-{"level":"error","timestamp":"2023-06-20T15:52:51.067Z"}
-{"level":"error","timestamp":"2023-06-20T15:54:06.694Z"}
-{"level":"error","timestamp":"2023-06-21T00:24:09.797Z"}
-{"level":"error","timestamp":"2023-06-21T00:24:54.885Z"}
-{"level":"error","timestamp":"2023-06-21T00:25:04.687Z"}
-{"level":"error","timestamp":"2023-06-21T00:26:19.706Z"}
-{"level":"error","timestamp":"2023-06-21T00:26:39.279Z"}
-{"level":"error","timestamp":"2023-06-21T00:27:09.351Z"}
-{"level":"error","timestamp":"2023-06-21T00:28:26.305Z"}
-{"level":"error","timestamp":"2023-06-21T00:30:32.791Z"}
-{"level":"error","timestamp":"2023-06-21T00:34:20.524Z"}
+{"level":"error","message":"No se logueó correctamente el usuario","timestamp":"2023-06-25T19:41:13.005Z"}
+{"level":"error","timestamp":"2023-06-25T20:17:46.159Z"}
+{"level":"error","timestamp":"2023-06-25T20:19:11.573Z"}
+{"level":"error","timestamp":"2023-06-25T20:19:24.807Z"}
+{"level":"error","timestamp":"2023-06-25T20:19:32.842Z"}
+{"level":"error","timestamp":"2023-06-25T20:20:29.399Z"}
+{"level":"error","timestamp":"2023-06-25T20:21:32.822Z"}
+{"level":"error","timestamp":"2023-06-25T20:21:49.008Z"}
+{"level":"error","timestamp":"2023-06-25T20:22:01.688Z"}
+{"level":"error","timestamp":"2023-06-25T20:22:02.997Z"}
+{"level":"error","timestamp":"2023-06-25T20:22:11.810Z"}
+{"level":"error","timestamp":"2023-06-25T20:22:27.764Z"}
+{"level":"error","timestamp":"2023-06-25T20:23:01.445Z"}
+{"level":"error","message":"The \"path\" argument must be of type string. Received an instance of Object","timestamp":"2023-06-25T20:24:25.525Z"}
+{"level":"error","message":"The \"path\" argument must be of type string. Received an instance of Object","timestamp":"2023-06-25T20:25:36.652Z"}
+{"level":"error","message":"The \"path\" argument must be of type string. Received an instance of Object","timestamp":"2023-06-25T20:27:22.555Z"}
+{"level":"error","message":"The \"path\" argument must be of type string. Received an instance of Object","timestamp":"2023-06-25T20:28:01.542Z"}
