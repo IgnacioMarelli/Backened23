@@ -1,0 +1,273 @@
+paths:
+  /api/products/:
+    get:
+      summary: Obtiene una página renderizada con todos los productos
+      tags:
+        - Products
+      responses:
+        '200':
+          description: Los productos fueron obtenidos satisfactoriamente de la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    value: success
+                    example: success
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Products'
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+  /api/products/{id}:
+    get:
+      summary: Obtiene un producto
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          description: El id del producto
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El producto fue obtenido satisfactoriamente de la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    value: success
+                    example: success
+                  payload:
+                    $ref: '#/components/schemas/Products'
+        '400':
+          description: Error provocado por el cliente. Usualmente generado por una no estar logueado.
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+    post:
+      summary: Crea un producto
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/createProduct'
+      responses:
+        '200':
+          description: El producto fue creado satisfactoriamente de la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    value: success
+                    example: success
+                  payload:
+                    $ref: '#/components/schemas/Products'
+        '400':
+          description: Error provocado por el cliente. Usualmente generado por una no estar logueado.
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+
+    put:
+      summary: Actualiza un producto
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          description: El id del producto
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/updateProduct'
+            responses:
+        '200':
+          description: El producto fue obtenido satisfactoriamente de la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    value: success
+                    example: success
+                  payload:
+                    $ref: '#/components/schemas/Products'
+        '400':
+          description: Error provocado por el cliente. Usualmente generado por no estar logueado.
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+    delete:
+      summary: Elimina un producto
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          description: El id del producto
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El producto fue obtenido satisfactoriamente de la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: success
+                  payload:
+                    type: string
+                    example: El producto se ha eliminado
+        '400':
+          description: Error provocado por el cliente. Usualmente generado por no estar logueado.
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+components:
+  schemas:
+    Products:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: El id del producto
+          example: '9385092jtr934'
+        title:
+          type: string
+          description: El nombre del libro
+          example: El sabueso de los Baskerville
+        thumbnail:
+          type: array
+          description: Imagen del producto
+          example: '["amor en los tiempos.jpg"]'
+        price:
+          type: number
+          description: Precio del producto
+          example: 3000
+        stock:
+          type: number
+          description: Stock del producto
+          example: 49
+        status:
+          type: boolean
+          description: Estado del producto
+          example: true
+        category:
+          type: string
+          description: Categoría del producto
+          example: TERROR
+        code:
+          type: string
+          description: Código del producto
+          example: '834u'
+        description:
+          type: string
+          description: Descripción del producto
+          example: Libro Completo
+        owner:
+          type: string
+          description: Email de quien subió el producto
+          example: pepe@hotmail.com
+      example:
+        _id: 9374293jri2349
+        title: El sabueso de los Baskerville
+        thumbnail: '["El sabueso de los Baskerville.jpg"]'
+        price: 3000
+        stock: 49
+        status: true
+        category: Libro Completo
+        owner: pepe@hotmail.com
+  requestBodies:
+    updateProduct:
+      type: object
+      required:
+        -quantity
+      properties:
+        quantity:
+          type: number
+          description: La cantidad de la compra
+      example: '5'
+    createProduct:
+      type: object
+      required:
+        -Title
+        -Category
+        -Code
+        -Stock
+        -Description
+        -Thumbnail
+        -Price
+      properties:
+        title:
+          type: string
+          description: El nombre del libro
+          example: El sabueso de los Baskerville
+        thumbnail:
+          type: array
+          description: Imagen del producto
+          example: '["amor en los tiempos.jpg"]'
+        price:
+          type: number
+          description: Precio del producto
+          example: 3000
+        stock:
+          type: number
+          description: Stock del producto
+          example: 49
+        status:
+          type: boolean
+          description: Estado del producto
+          example: true
+        category:
+          type: string
+          description: Categoría del producto
+          example: TERROR
+        code:
+          type: string
+          description: Código del producto
+          example: '834u'
+        description:
+          type: string
+          description: Descripción del producto
+          example: Libro Completo
+        owner:
+          type: string
+          description: Email de quien subió el producto
+          example: pepe@hotmail.com
+      example:
+        title: El sabueso de los Baskerville
+        thumbnail: '["El sabueso de los Baskerville.jpg"]'
+        price: 3000
+        stock: 49
+        status: true
+        category: Libro Completo
+        owner: pepe@hotmail.com
+      
+

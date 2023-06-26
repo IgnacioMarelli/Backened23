@@ -1,0 +1,92 @@
+{{>menu}}
+<main class="container p-3">
+    <div class="container">
+        <section class="sectionProds">
+            <article>
+                <h2 class="title">Agregar producto</h2>
+                <form action="" class="crud-form" id="crud-form" >
+                <input type="text" name="title" class="title" placeholder="Nombre"> 
+                <br>
+                <input type="text" name="description" class="description" placeholder="Descripción"> 
+                <br>
+                <input type="number" name="price" class="price" placeholder="Precio"> 
+                <br>
+                <input type="number" name="stock" class="stock" placeholder="Stock"> 
+                <br>
+                <input type="text" name="category" class="category" placeholder="Categoria"> 
+                <br>
+                <input type="text" name="code" class="code" placeholder="Código"> 
+                <br>
+                <input id="form-file" type="file" name="file" class='file' placeholder="Imagen"/>
+                <br>
+                <input type="submit" value="Agregar Producto">
+            </form>
+                <p id="producto-id"></p>
+            </article>
+            <ul>
+              <span>Buscar por:</span>
+              <b><span class="titles">Categoria</span></b>
+              <li>
+                <li></li>
+                  <a href="/products?category=TERROR"><li>TERROR</li></a>
+                  <a href="/products?category=CIENCIA FICCIÓN"><li>CIENCIA FICCIÓN</li></a>
+                  <a href="/products?category=ROMÁNTICO"><li>ROMÁNTICO</li></a>
+                  <a href="/products?category=SUSPENSO"><li>SUSPENSO</li></a>
+                <b><span class="titles">Disponibilidad</span></b>
+                  <a href="/products?status=true"><li>Disponibles</li></a>
+                  <a href="/products?status=false"><li>No disponibles</li></a>
+              </li>
+            </ul>
+            <button class="but" onclick="sortMayor()">Ordenar de mayor a menor Precio</button>
+            <button class="but" onclick="sortMenor()">Ordenar de menor a mayor Precio</button>
+            <a href="/"></a>
+        </section>
+  <section class="row justify-content-around">
+    <table class="table table-dark" >
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre del producto</th>
+            <th scope="col">Precio del producto</th>
+            <th scope="col">Stock</th>
+            <th scope="col">Categoría</th>
+            <th scope="col">Código</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Imagen</th>
+          </tr>
+        </thead>
+        <tbody>
+            {{#each products.docs}}
+            <tr>
+              <td class="id">{{this._id}}</td>
+              <td data-label="Producto">{{this.title}}</td>
+              <td data-label="Precio">${{this.price}}</td>
+              <td data-label="Stock" class="stock">{{this.stock}}</td>
+              <td data-label="Categoria">{{this.category}}</td>
+              <td data-label="Code">{{this.code}}</td>
+              <td data-label="Descripcion">{{this.description}}</td>
+              <td ><img style="    width: 33%;" src="../img/{{this.thumbnail}}" alt=""></td>
+              <td>
+                <button> <a href="/products/{{this._id}}">Detalles</a></button>
+                <button class="delete">Eliminar</button>
+              </td>
+              <td class="counterDiv">
+                <button onclick="addProd('{{this._id}}')" >Agregar al carrito</button>
+              </td>
+            </tr>
+            {{/each}}
+        </tbody>
+      </table>
+      <td><b>{{page}}</b></td>
+      {{#if hasPrevPages}}
+        <button onclick="setPrev()">Anterior</button>
+      {{/if}}
+        
+      {{#if hasNextPage}}
+        <button onclick="setNext()">Siguiente</button>
+      {{/if}}
+  </section>
+</main>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/index.js" ></script>

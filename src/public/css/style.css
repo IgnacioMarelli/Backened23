@@ -1,0 +1,35 @@
+body{
+    background-color: #8B8073;
+    font-family: emoji;
+    font-size: 1.5rem;
+}
+.s{
+    border: solid;
+    background-color: #DED0B8;
+}
+.cada{
+    border: solid;
+}
+.sectionProds{
+    box-shadow: 1rem 2rem 5rem;
+    display: flex;
+}
+.but{
+    height: 3rem;
+    align-self: center;
+}
+a {
+    text-decoration: none;
+    color: white; }
+  
+li {
+color: white;}
+li:hover{
+    color: crimson;
+}
+ul{
+    list-style: none;   
+}
+.titles{
+    background-color: whitesmoke;
+}

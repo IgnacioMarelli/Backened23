@@ -1,0 +1,205 @@
+paths:
+  /api/carts/{cid}:
+    get:
+      summary: Obtiene un carrito
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          description: El id del carrito
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El carrito fue obtenido satisfactoriamente de la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    value: success
+                    example: success
+                  payload:
+                    $ref: '#/components/schemas/carts'
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+    delete:
+      summary: Elimina un carrito
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          description: El id del carrito
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El carrito fue borrado satisfactoriamente de la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    value: success
+                    example: success
+                  payload:
+                    $ref: '#/components/schemas/carts'
+        '400':
+          description: Error provocado por el cliente. Usualmente generado por una no estar logueado o no estar autorizado.
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Crea un ticket de compra y lo envía por mail
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          description: El id del carrito
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El producto fue agregado o actualizado satisfactoriamente en el carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    value: success
+                    example: success
+                  payload:
+                    $ref: '#/components/schemas/carts'
+        '400':
+          description: Error provocado por el cliente. Usualmente generado por una no estar logueado o no estar autorizado.
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+    delete:
+      summary: Elimina un producto del carrito
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          description: El id del carrito
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: El id del producto
+          required: true
+          schema:
+            type: string      
+      responses:
+        '200':
+          description: El producto eliminado satisfactoriamente del carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    value: success
+                    example: success
+                  payload:
+                    $ref: '#/components/schemas/carts'
+        '400':
+          description: Error provocado por el cliente. Usualmente generado por una no estar logueado o no estar autorizado.
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+  /api/carts/{cid}/purchaser:
+    post:
+      summary: Obtiene un carrito, resta el stock del producto, genera un ticket y envía un mail de confirmación de compra. Devuelve el carrito con los productos que no tienen suficiente stock
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          description: El id del carrito
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El ticket fue generado satisfactoriamente y almacenado en la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    value: success
+                    example: success
+                  payload:
+                    $ref: '#/components/schemas/ticket'
+        '400':
+          description: Error provocado por el cliente. Usualmente generado por una no estar logueado o no estar autorizado.
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+components:
+  schemas:
+    carts:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+                description: 'Referencia al producto. Debe ser un ObjectId y hacer referencia a la colección "products".'
+              quantity:
+                type: number
+                description: 'Cantidad del producto en el carrito.'
+          default: []
+    ticket: 
+      type: object
+      properties:
+        code:
+          type: string
+          description: código único de compra
+          unique: true
+          example: 93u4r2rjf
+        purchase_datetime:
+          type: string
+          description: Fecha y hora de la compra
+          example: 2023-06-25T20:17:46.159Z
+        amount:
+          type: number
+          description: Monto total de la compra
+          example: 90000
+        purchaser:
+          type: string
+          description: Mail del comprador
+          example: pepe@hotmail.com
+  requestBodies:
+    updatecart:
+      type: object
+      required:
+        - quantity
+      properties:
+        quantity:
+          type: number
+          description: La cantidad de la compra
+          example: '5'
