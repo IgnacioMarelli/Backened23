@@ -120,14 +120,26 @@ async newPass (req){
     const userDto = new UserDTO(user);
     return userDto
 }
-async newRole(req){
+async newRole(req, res){
     try {
         const user = await this.#dao.findById(req.params.uid);
         if(user.role==='premium'){
             await this.#dao.updateUser(req.params.uid, user, {role:'user'});
+            const userDto = new UserDTO(await this.#dao.findById(req.params.uid));
+            const token = generateToken(userDto);
+            res.cookie('AUTH',token,{
+            maxAge:60*60*1000*24,
+            httpOnly:true
+            });
             return
         }
         await this.#dao.updateUser(req.params.uid, user, {role:'premium'});
+        const userDto = new UserDTO(await this.#dao.findById(req.params.uid));
+        const token = generateToken(userDto);
+        res.cookie('AUTH',token,{
+        maxAge:60*60*1000*24,
+        httpOnly:true
+        });
     } catch (error) {
         console.error(error);
         next(error)

@@ -137,7 +137,7 @@ class UsersController {
     }
     async postPremium(req, res, next){
         try {
-            await this.#service.newRole(req);
+            await this.#service.newRole(req, res);
             res.status(200).send('Ok')
         } catch (error) {
             console.error(error);
