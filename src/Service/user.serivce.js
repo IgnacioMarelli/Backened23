@@ -125,15 +125,9 @@ async newRole(req, res){
         const user = await this.#dao.findById(req.params.uid);
         if(user.role==='premium'){
             await this.#dao.updateUser(req.params.uid, user, {role:'user'});
-            const userDto = new UserDTO(await this.#dao.findById(req.params.uid));
-            const token = generateToken(userDto);
-            res.cookie('AUTH',token,{
-            maxAge:60*60*1000*24,
-            httpOnly:true
-            });
-            return
+        }else{
+            await this.#dao.updateUser(req.params.uid, user, {role:'premium'});
         }
-        await this.#dao.updateUser(req.params.uid, user, {role:'premium'});
         const userDto = new UserDTO(await this.#dao.findById(req.params.uid));
         const token = generateToken(userDto);
         res.cookie('AUTH',token,{
