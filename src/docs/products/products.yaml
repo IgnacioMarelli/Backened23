@@ -269,5 +269,10 @@ components:
         status: true
         category: Libro Completo
         owner: pepe@hotmail.com
-      
-
+  securitySchemes:      
+     bearerAuth: 
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+  security:
+  - bearerAuth: []

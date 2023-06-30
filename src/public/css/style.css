@@ -33,3 +33,12 @@ ul{
 .titles{
     background-color: whitesmoke;
 }
+.text{
+    font-weight: bold;
+    border: solid;
+    margin-left: 48rem;
+}
+.navbar-brand{
+    margin-left: 3%;
+    margin-right: 6%;
+}

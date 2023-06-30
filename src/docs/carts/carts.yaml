@@ -203,3 +203,10 @@ components:
           type: number
           description: La cantidad de la compra
           example: '5'
+  securitySchemes:      
+     bearerAuth: 
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+  security:
+  - bearerAuth: []
