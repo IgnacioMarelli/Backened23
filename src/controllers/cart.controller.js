@@ -19,12 +19,8 @@ class cartsController {
                     message:'Debe iniciar sesión nuevamente',
                     code:ErrorEnum.BODY_ERROR})
             }
-            const user = req.user;
             const response = await this.#dao.getOneCart(req);
-            res.status(200).render('cartId',{
-                response:response.products,
-                user:user
-            });
+            res.status(200).send(response);
         } catch (error) {
             next(error)
         }
@@ -46,7 +42,8 @@ class cartsController {
         }     
     }
     async deleteCart(req,res, next){
-        await this.#dao.deleteCart(req);
+        const response =await this.#dao.deleteCart(req);
+        res.status(200).send(response);
     }
     async ticketBuy(req,res,next){
         try {

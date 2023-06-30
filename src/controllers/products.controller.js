@@ -8,33 +8,23 @@ class ProductController {
     async getAllProds(req,res,next){
         try {
             const response = await this.#service.getAllProds(req);
-            const user = req.user;
-            res.render('home',{
-                products:response,
-                pages: response.totalPages,
-                page: response.page,
-                prev: response.prevPage,
-                next: response.nextPage,
-                hasPrevPages: response.hasPrevPage,
-                hasNextPage: response.hasNextPage,
-                user:user,
-            });
+            res.status(200).send(response);
         } catch (error) {
             next(error)
         }
     }
     async getOneProd(req,res,next){
         try {
-            const product = await this.#service.getOneProd(req);
-            res.render('prod',{products: product});
+            const response = await this.#service.getOneProd(req);
+            res.status(200).send(response);
         } catch (error) {
             next(error)
         }
     }
     async post(req,res,next){
         try {
-            await this.#service.post(req, res)
-            res.status(200)
+            const response = await this.#service.post(req, res)
+            res.status(200).send(response);
         }catch (error) {
             next(error)
         }
