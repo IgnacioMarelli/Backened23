@@ -18,7 +18,8 @@ export default class CartRepository {
     }
     async getOneCart(req){
         const cid = req.params.cid;
-        const response = await this.#service.getCartsById(cid);
+        let response = await this.#service.getCartsById(cid);
+        if(!response) response= await this.#service.create()
         response.products.forEach(element => {
             element.cid= cid;
         });
@@ -39,7 +40,7 @@ export default class CartRepository {
                 })
             }
         }
-        if(user.cart){
+        if(user.cart.length>0){
             cart = await this.#service.addProductToCart(user.cart,quantity,req.params.pid);
         }else{
             cart = await this.#service.create(req.params.pid, quantity);

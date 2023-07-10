@@ -33,8 +33,8 @@ class ProductController {
     }
     async post(req,res,next){
         try {
-            await this.#service.post(req, res)
-            res.status(200)
+            const prod = await this.#service.post(req, res)
+            res.status(200).send(prod)
         }catch (error) {
             next(error)
         }

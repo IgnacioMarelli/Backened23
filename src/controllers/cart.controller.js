@@ -45,8 +45,14 @@ class cartsController {
             next(error);
         }     
     }
-    async deleteCart(req,res, next){
-        await this.#dao.deleteCart(req);
+    async deleteCart(req, res, next){
+        try {
+            await this.#dao.deleteCart(req);
+            res.status(200).send('Carrito eliminado')
+        } catch (error) {
+            next(error)
+        }
+
     }
     async ticketBuy(req,res,next){
         try {

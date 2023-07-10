@@ -19,7 +19,8 @@ class UsersController {
     async postRegister (req, res, next){
         try {
             await this.#service.postRegister(req);
-            res.status(201).redirect('/api/session/login');
+            res.status(201).send('Creado');
+            
         } catch (error) {
             next(error)
         }
@@ -27,7 +28,7 @@ class UsersController {
     async getLogin (req, res, next){
         try {
         if (req.user) {
-            res.redirect('/session/current')
+            res.redirect('/api/session/current')
             }
             res.render('login');
         } catch (error) {
@@ -54,7 +55,7 @@ class UsersController {
     async postLogin (req, res, next){
         try {
             const user = await this.#service.postLogin(req,res);
-            res.send(user); 
+            res.status(200).send(user); 
         } catch (error) {
             next(error)
         }
@@ -78,7 +79,7 @@ class UsersController {
     async deleteUser (req, res, next){
         try{
             await this.#service.deleteUser(req)
-            res.send({ ok: true });
+            res.status(200).send('Eliminado');
         }catch(error){
             next(error)
         }

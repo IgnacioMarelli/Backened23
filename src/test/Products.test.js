@@ -1,141 +1,86 @@
 import supertest from 'supertest';
 import {expect} from 'chai';
 import mongoose from 'mongoose';
-
+import config from '../../data.js';
 describe('ProductController', () => {
-    const requester = supertest('http://localhost:8080/api')
+    const requester = supertest('http://localhost:8080/api');
+    let cookie;
+    let id;
     describe('Test de endpoints de productos', ()=>{
-        beforeEach(async function () {
-            const connection = await mongoose.connect('mongodb://localhost:27017/test');
+        before(async function () {
+            await mongoose.connect(config.MONGO_URL_TEST,{
+              useNewUrlParser: true,
+              useUnifiedTopology: true
+            });
             await mongoose.connection.db.collection('products').deleteMany({});
-        })
-        it('Debe devolver todos los productos', async () => {
-            const res = await requester.get('/products');
+          });
+        it('Debe renderizar todos los productos', async () => {
+            const resLog= await requester
+            .post("/session/login")
+            .send({ email:'hio@hohtml.cpm', password: 'testpass' });
+            const cookieresult = resLog.headers["set-cookie"][0];
+            cookie = {
+              name: cookieresult.split("=")[0],
+              value: cookieresult.split("=")[1].split(";")[0],
+            };
+            const res = await requester
+            .get('/products')
+            .set('Cookie', [`${cookie.name}=${cookie.value}`])
             expect(res.status).to.equal(200);
-            expect(res.body).to.be.an('array');
-        });
-        it('Debe devolver un solo producto', async () => {
-            const res = await requester.get('/products/1');
-            expect(res.status).to.equal(200);
-            expect(res.body).to.be.an('object');
+            expect(res.ok).to.be.true;
         });
         it('Debe crear un producto', async () => {
+            const newProduct= {
+                title: 'Product 1',
+                price: 10.99,
+                description: 'This is product 1',
+                thumbnail:[],
+                code:'34r5',
+                stock:958,
+                category:'TERROR'
+            } 
             const res = await requester
-                .post('/products')
-                .send({
-                    title: 'Product 1',
-                    price: 10.99,
-                    description: 'This is product 1',
-                    thumbnail:[],
-                    code:'34r5',
-                    stock:958,
-                    category:'TERROR'
-                });
+            .post('/products')
+            .set('Cookie', [`${cookie.name}=${cookie.value}`])
+            .field('title', newProduct.title)
+            .field('price', newProduct.price)
+            .field('description', newProduct.description)
+            .field('code', newProduct.code)
+            .field('stock', newProduct.stock)
+            .field('category', newProduct.category)
+            .attach('file', './src/test/sfdsdfss.jpg')
+            expect(res.body.title).to.deep.equal('Product 1')
+            expect(res.body.price).to.deep.equal('10.99')
+            expect(res.body.description).to.deep.equal('This is product 1')
+            expect(res.body.thumbnail).to.deep.equal([ 'sfdsdfss.jpg' ])
+            expect(res.status).to.equal(200);
+            id = res.body._id
+        });
+        it('Debe renderizar un solo producto', async () => {
+            const res = await requester
+            .get(`/products/${id}`)
+            .set('Cookie', [`${cookie.name}=${cookie.value}`])
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
-            expect(res.body.name).to.equal('Product 1');
         });
-        it('should delete a product', async () => {
-            const res = await requester.delete('/products/1');
-            expect(res.status).to.equal(200);
-            expect(res.body).to.be.an('object');
-        });
-        it('should update a product', async () => {
+        it('debe actualizar a un producto', async () => {
             const res = await requester
-                .put('/products/1')
+                .put(`/products/${id}`)
+                .set('Cookie', [`${cookie.name}=${cookie.value}`])
                 .send({
                     title: 'Product 2',
-                    price: 10.99,
-                    description: 'This is product 1',
-                    thumbnail:[],
-                    code:'34r5',
-                    stock:958,
-                    category:'TERROR'
                 });
             expect(res.status).to.equal(200);
             expect(res.body).to.be.an('object');
-            expect(res.body.name).to.equal('Product 2');
+            expect(res.body.title).to.equal('Product 2');
+        });
+        it('debe borrra un producto', async () => {
+            const res = await requester
+            .delete(`/products/${id}`)
+            .set('Cookie', [`${cookie.name}=${cookie.value}`])
+            expect(res.status).to.equal(200);
+            expect(res.body).to.be.an('object');
         });
 
     })
-});
-describe('Test de uploads', ()=>{
-    it('Debe poder subir una imagen', async ()=>{
-        const prod = {
-            title: 'Product 1',
-            price: 10.99,
-            description: 'This is product 1',
-            thumbnail:[],
-            code:'34r5',
-            stock:958,
-            category:'TERROR'
-        };
-        const {ok, _body} = await requester
-        
-        .post('/api/products')
-            .field('title', prod.title)
-            .field('title', prod.title)
-            .field('title', prod.title)
-            .field('title', prod.title)
-            .field('title', prod.title)
-            .field('title', prod.title)
-            .attach('image','./test/test.jpg')
-        expect(ok).to.be.true;
-        expect(_body).to.have.property('payload');
-        expect(_body.payload).to.have.property('image');
-        expect(_body.payload).to.have.property('_id');
-    })
-})
-
-
-
-describe('ProductController with views', () => {
-    describe('GET /home', () => {
-        it('should return all products and render the home page', async () => {
-            const res = await request(app).get('/home');
-            expect(res.status).to.equal(200);
-            expect(res.text).to.include('<h1>Home Page</h1>');
-        });
-    });
-
-    describe('GET /prod/:id', () => {
-        it('should return a single product and render the prod page', async () => {
-            const res = await request(app).get('/prod/1');
-            expect(res.status).to.equal(200);
-            expect(res.text).to.include('<h1>Product Page</h1>');
-        });
-    });
-
-    describe('POST /products', () => {
-        it('should create a new product and redirect to the home page', async () => {
-            const res = await request(app)
-                .post('/products')
-                .send({
-                    name: 'Product 3',
-                    price: 30.99,
-                    description: 'This is product 3'
-                });
-            expect(res.status).to.equal(302);
-        });
-    });
-
-    describe('DELETE /products/:id', () => {
-        it('should delete a product and redirect to the home page', async () => {
-            const res = await request(app).delete('/products/1');
-            expect(res.status).to.equal(302);
-        });
-    });
-
-    describe('PUT /products/:id', () => {
-        it('should update a product and redirect to the home page', async () => {
-            const res = await request(app)
-                .put('/products/1')
-                .send({
-                    name: 'Product 4',
-                    price: 40.99,
-                    description: 'This is product 4'
-                });
-            expect(res.status).to.equal(302);
-        });
-    });
 });

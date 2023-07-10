@@ -36,7 +36,16 @@ async postRegister (req){
     } 
     if(usuario.phone){messageService.sendWelcomeMessage(usuario.phone)}
     emailService.sendWelcomeEmail(usuario.email, usuario.first_name)
-    await this.#dao.create(usuario, hashedPassword);
+    try {
+        await this.#dao.create(usuario, hashedPassword);
+    } catch (error) {
+        throw CustomError.createError({
+            name:'Usuario ya registrado',
+            cause:'El usuario con ese mail, ya se encuentra registrado',
+            message:'El usuario con ese mail, ya se encuentra registrado',
+            code:ErrorEnum.BODY_ERROR
+        })
+    }    
 }
 
 async postLogin (req, res){

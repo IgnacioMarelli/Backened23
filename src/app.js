@@ -17,9 +17,9 @@ import { configPassport } from './config/passport.config.js';
 import errorMiddleware from './utils/middlewares/error.middleware.js';
 import { addLogger } from './utils/winston.customlevels.js';
 import spec from './docs/swagger-options.js';
-const {PORT, MONGO_URL, DAO} = config;
+const {PORT, MONGO_URL, MONGO_URL_TEST, DAO} = config;
 if(DAO==='MONGO'){
-mongoose.connect(MONGO_URL, {
+mongoose.connect(MONGO_URL_TEST, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });}

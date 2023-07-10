@@ -22,7 +22,7 @@ class prodService {
         }
     }
     async create(data){
-        await this.#model.create(data)
+        return await this.#model.create(data);
     }
     async paginate({limit=10, page=1, sort, category, status}){
         const sortValidValues = [-1, 1, '-1', '1'];

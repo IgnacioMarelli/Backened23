@@ -39,7 +39,7 @@ class cartsService {
     }
 
     async deleteAllProducts(cid){
-        return await this.#model.findOneAndReplace({_id: cid}, {products: []});
+        return await this.#model.findOneAndDelete(cid);
     }
     async getCartsById(cid){
         const prodPorId= await this.#model.findOne({_id:cid}).lean();

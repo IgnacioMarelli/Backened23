@@ -59,7 +59,9 @@ export default class ProdsRepository {
             const total = await this.#dao.getAll();
             const includes= total.find((e)=> e.title===product.title)
             if (!includes) {
-                await this.#dao.create({...product, thumbnail: filenames});
+                const prod = await this.#dao.create({...product, thumbnail: filenames});
+                console.log(prod);
+                return prod
             }else{
                 CustomError.createError({
                     name: 'Error en formulario',
@@ -97,8 +99,8 @@ export default class ProdsRepository {
     } 
     async update(req){
         const pid = req.params.pid; 
-        const prod = req.body.quantity;
-        const response = await this.#dao.updateCartProd(pid, prod);
+        const data = req.body;
+        const response = await this.#dao.update(pid, data);
         return response
     }   
 }
