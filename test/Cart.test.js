@@ -1,7 +1,7 @@
 import supertest from 'supertest';
 import {expect} from 'chai';
 import mongoose from 'mongoose';
-import config from '../../data.js';
+import config from '../data.js';
 describe('CartController', () => {
     const requester = supertest('http://localhost:8080/api');
     let cookie;

@@ -1,7 +1,7 @@
 import supertest from 'supertest';
 import {expect} from 'chai';
 import mongoose from 'mongoose';
-import config from '../../data.js';
+import config from '../data.js';
 describe('ProductController', () => {
     const requester = supertest('http://localhost:8080/api');
     let cookie;
@@ -48,7 +48,7 @@ describe('ProductController', () => {
             .field('code', newProduct.code)
             .field('stock', newProduct.stock)
             .field('category', newProduct.category)
-            .attach('file', './src/test/sfdsdfss.jpg')
+            .attach('file', './test/sfdsdfss.jpg')
             expect(res.body.title).to.deep.equal('Product 1')
             expect(res.body.price).to.deep.equal('10.99')
             expect(res.body.description).to.deep.equal('This is product 1')

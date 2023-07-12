@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import supertest from 'supertest';
 import mongoose from 'mongoose';
-import config from '../../data.js';
+import config from '../data.js';
 describe('Router users', () => {
   const requester = supertest('http://localhost:8080/')
   let cookie;

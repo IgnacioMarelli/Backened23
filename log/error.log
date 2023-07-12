@@ -103,3 +103,4 @@
 {"level":"error","message":"Cannot read properties of null (reading 'password')","timestamp":"2023-07-10T21:34:12.395Z"}
 {"level":"error","message":"El usuario con ese mail, ya se encuentra registrado","timestamp":"2023-07-10T21:34:12.482Z"}
 {"level":"error","message":"El usuario con ese mail, ya se encuentra registrado","timestamp":"2023-07-10T21:34:15.901Z"}
+{"level":"error","message":"El usuario con ese mail, ya se encuentra registrado","timestamp":"2023-07-10T22:20:50.598Z"}
