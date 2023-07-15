@@ -5,7 +5,15 @@ const { __dirname } = fileDirName(import.meta);
 
 const storage = multer.diskStorage({
     destination:function(req,file,cb){
-        cb(null,path.join(__dirname, '..','..','/public/img'))
+        if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+            if (file.fieldname==='fileProd') {
+                cb(null,path.join(__dirname, '..','..','/public/docs/img/products'))
+            }else{
+                cb(null,path.join(__dirname, '..','..','/public/docs/img/profile'))
+            }
+        }else{
+            cb(null, '..','..','/public/img/documents');
+        }
     },
     filename:function(req, file, cb){
         cb(null,file.originalname)

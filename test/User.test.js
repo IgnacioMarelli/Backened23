@@ -16,7 +16,7 @@ describe('Router users', () => {
     it('deberia llamar al register', async function() {
       const newUser = { first_name: 'test', last_name:'users',email:'hio@hohtml.cpm',age:98,role:'admin', password: 'testpass' };
       const res = await requester
-        .post('api/session/register')
+        .post('api/users/register')
         .send(newUser)
         expect(res.status).to.equal(201);
         expect(res.text).to.deep.equal('Creado');      
@@ -24,7 +24,7 @@ describe('Router users', () => {
     it('deberia loguear al usuario', async function() {
       const newUser = { email:'hio@hohtml.cpm', password: 'testpass' };
       const res= await requester
-        .post("api/session/login")
+        .post("api/users/login")
         .send(newUser);
       expect(res.ok).to.be.true;
       const cookieresult = res.headers["set-cookie"][0];
@@ -38,7 +38,7 @@ describe('Router users', () => {
     it('deberia dar un error al llamar al register', async function() {
       const newUser = { first_name: 'test', last_name:'users',email:'hio@hohtml.cpm',age:98,role:'admin', password: 'testpass' };
       const res = await requester
-        .post('api/session/register')
+        .post('api/users/register')
         .send(newUser)
         expect(res.status).to.equal(400);
         expect(res._body.error).to.deep.equal('El usuario con ese mail, ya se encuentra registrado');      

@@ -10,7 +10,16 @@ const userSchema = new mongoose.Schema({
   age: { type: Number, required: true },
   password: { type: String, required: true },
   cart: [{ type: mongoose.Schema.Types.ObjectId, ref: 'carts' }],
-  role: {type: String, required: true, default: 'user'}
+  role: {type: String, required: true, default: 'user'},
+  documents:{
+    type:[
+      {
+      name:{type:String},
+      reference:{type:String}
+      }
+    ], default:[]
+  },
+  last_connection:{type:Date}
 });
 
 userSchema.pre('findOne', function() {

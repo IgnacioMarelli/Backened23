@@ -2,7 +2,7 @@ const query = new URLSearchParams(window.location.search);
 
 
 function premium(userID, role) {
-    api.postProd(`/api/session/premium/${userID}`, role)
+    api.postProd(`/api/users/premium/${userID}`, role)
       .then(response => {
         if (!response.ok) {
           throw new Error('Error en la solicitud');

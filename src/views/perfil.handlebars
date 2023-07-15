@@ -30,6 +30,12 @@
       {{phone}}
     </p>
     {{/if}}
+      <form onsubmit="docs(event,'{{userId}}')" class="crud-form" id="crud-form" >
+          <input id="form-file" type="file" name="file" class='file' placeholder="Imagen"/>
+          <br>
+          <input type="submit"value="Agregar Archivo o Imagen de Perfil">
+      </form>
+      <p id="doc-id"></p>
     {{#if response}}
     <h1>CARRITO DEL USUARIO:</h1>
         <table class="table table-dark" >
@@ -63,11 +69,14 @@
                     </td>
                 </tr>
             {{/each}}
+            <form action="" class="crud-form" id="crud-form" >
+            <input id="form-file" type="file" name="file" class='file' placeholder="Imagen"/>
+            <input type="text">
+            <input type="submit" value="Agregar Documento">
+            </form>
         </tbody>
     </table>
     {{/if}}
   </div>
-  <script>
-    function logout() { api.post("/api/session/auth/logout"); }
-  </script>
+  <script src="/js/userDoc.js" ></script>
 </div>

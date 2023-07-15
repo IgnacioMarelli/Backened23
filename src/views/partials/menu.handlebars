@@ -12,11 +12,11 @@
         <a class="nav-link" href="/api/chat">Chat</a>
       </li>
       {{#if user}}
-              <li class="nav-item"><a class="nav-link" href="/api/session/current">Perfil</a></li>
+              <li class="nav-item"><a class="nav-link" href="/api/users/current">Perfil</a></li>
               <li class="nav-link text">Bienvenido {{user.first_name}} {{user.last_name}}. Su rol es: {{user.role}}</li>
       {{else}}
-            <li class="nav-item"><a class="nav-link" href="/api/session/register">Registrate</a> </li>
-            <li class="nav-item"><a class="nav-link" href="/api/session/login">Inicia Sesión</a></li>
+            <li class="nav-item"><a class="nav-link" href="/api/users/register">Registrate</a> </li>
+            <li class="nav-item"><a class="nav-link" href="/api/users/login">Inicia Sesión</a></li>
       {{/if}}
     </ul>
   </div>

@@ -77,8 +77,8 @@ async postLogin (req, res){
     return userDTO
 }
 async updateUser (req){
-    const idUser = req.params.idUser;
-    const usuario = await this.#dao.findById( {idUser} );
+    const idUser = req.params.idUser? req.params.idUser : req.user.id;
+    const usuario = await this.#dao.findById( idUser );
     if (!usuario) {
         throw CustomError.createError({
             name: 'Error en Id',
@@ -87,7 +87,7 @@ async updateUser (req){
             code: ErrorEnum.DATABASE_ERROR,
         })
     }
-    const nuevosDatos = req.body;
+    const nuevosDatos = req.body==={}?req.body:{last_connection: new Date().toString()};
     await this.#dao.updateUser( idUser,usuario,nuevosDatos);
 }
 async deleteUser (req){
@@ -129,23 +129,57 @@ async newPass (req){
     const userDto = new UserDTO(user);
     return userDto
 }
-async newRole(req, res){
+async newRole(req, res, next){
     try {
-        const user = await this.#dao.findById(req.params.uid);
-        if(user.role==='premium'){
-            await this.#dao.updateUser(req.params.uid, user, {role:'user'});
-        }else{
-            await this.#dao.updateUser(req.params.uid, user, {role:'premium'});
+            const user = await this.#dao.findById(req.params.uid);        
+            if(user.role==='premium'){
+                await this.#dao.updateUser(req.params.uid, user, {role:'user'});
+            }else{
+                const identificacion = user.documents.find(e=>e.name === 'Identificacion');
+                const domicilio = user.documents.find(e=>e.name === 'Comprobante de domicilio');
+                const cuenta = user.documents.find(e=>e.name === 'Comprobante de estado de cuenta');
+                if (identificacion && domicilio && cuenta) {
+                await this.#dao.updateUser(req.params.uid, user, {role:'premium'});
+                }else{
+                throw CustomError.createError({
+                    name:'Error al cambiar a premium',
+                    cause:'No cuenta con Identificación, Comprobante de domicilio, Comprobante de estado de cuenta',
+                    message:'Debe subir Identificación, Comprobante de domicilio, Comprobante de estado de cuenta',
+                    code: ErrorEnum.BODY_ERROR
+                })}
+            }
+            const userDto = new UserDTO(await this.#dao.findById(req.params.uid));
+            const token = generateToken(userDto);
+            res.cookie('AUTH',token,{
+            maxAge:60*60*1000*24,
+            httpOnly:true
+            });
+
+
+        } catch (error) {
+            next(error)
         }
-        const userDto = new UserDTO(await this.#dao.findById(req.params.uid));
-        const token = generateToken(userDto);
-        res.cookie('AUTH',token,{
-        maxAge:60*60*1000*24,
-        httpOnly:true
-        });
-    } catch (error) {
-        console.error(error);
-        next(error)
     }
-}
+    async postDocs(req){
+        const user= this.#dao.findById(req.params.uid);
+        const img = req.files;
+        const filenames = [];
+        const filePath= img[0].path;
+        let filename= img[0].filename;
+        for(const key in img){
+            if(img.hasOwnProperty(key)){
+                const files = img[key];
+                
+                if(Array.isArray(files)){
+                    files.forEach(file =>{
+                        filenames.push(file.filename)
+                    })
+                }else{
+                    filenames.push(files.filename)
+                }
+                
+            }
+        }
+        await this.#dao.addDoc(req.params.uid, filename, filePath);
+    }
 }

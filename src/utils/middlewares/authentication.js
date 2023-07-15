@@ -8,7 +8,7 @@ const secret = config.SECRET;
 const passportCall = (strategy) => {
   return async (req, res, next) => {
     try {
-      passport.authenticate(strategy, { session: false }, (error, user, info) => {
+      passport.authenticate(strategy, { users: false }, (error, user, info) => {
         if (error) return next(error);
         if (!user) {
           throw CustomError.createError({
@@ -39,7 +39,7 @@ const newPass = () => {
         });
         next();
       } else {
-        res.redirect('/session/login');
+        res.redirect('/users/login');
       }
     } catch (error) {
       next(error);

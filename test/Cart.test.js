@@ -17,7 +17,7 @@ describe('CartController', () => {
           });
           it('El endpoint PUT /api/carts/:cid/products/:pid debe traer un único carrito', async ()=>{
             const resLog= await requester
-            .post("/session/login")
+            .post("/users/login")
             .send({ email:'hio@hohtml.cpm', password: 'testpass' });
             const cookieresult = resLog.headers["set-cookie"][0];
             cookie = {

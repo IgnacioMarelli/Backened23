@@ -2,7 +2,7 @@ async function newPass(event) {
     event.preventDefault();
     const email = document.querySelector('.email').textContent;
     const newPass = document.getElementById('form-pass').value;
-    api.put('/api/session/newPass', {email, newPass})
+    api.put('/api/users/newPass', {email, newPass})
         .then((data) => {
             if (!data) {
                 alert('Error.');
@@ -14,7 +14,7 @@ async function newPass(event) {
                 text: `Se ha restablecido la contraseña`,
                 icon: 'success'
             }).then(() => {
-                    location.href = 'http://localhost:8080/api/session/login';
+                    location.href = 'http://localhost:8080/api/users/login';
             });
         })
         .catch((error) => {

@@ -19,7 +19,7 @@ import { addLogger } from './utils/winston.customlevels.js';
 import spec from './docs/swagger-options.js';
 const {PORT, MONGO_URL, MONGO_URL_TEST, DAO} = config;
 if(DAO==='MONGO'){
-mongoose.connect(MONGO_URL_TEST, {
+mongoose.connect(MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });}
@@ -31,7 +31,7 @@ app.use(addLogger)
 app.set('views', __dirname+'/views');
 app.use('/api/products', router);
 app.use('/api/carts', routerCart);
-app.use('/api/session', routerUser);
+app.use('/api/users', routerUser);
 app.use('/api/chat', routerChat);
 app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(spec));
 

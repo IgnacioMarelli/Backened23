@@ -9,7 +9,7 @@ class UsersController {
     async getRegister (req, res, next){
         try {
         if (req.user) {
-            res.redirect('/api/session/current')
+            res.redirect('/api/users/current')
             }
             res.render('register');
         } catch (error) {
@@ -28,7 +28,7 @@ class UsersController {
     async getLogin (req, res, next){
         try {
         if (req.user) {
-            res.redirect('/api/session/current')
+            res.redirect('/api/users/current')
             }
             res.render('login');
         } catch (error) {
@@ -46,7 +46,8 @@ class UsersController {
             email: user.email,
             user:user,
             phone:user.phone,
-            response: user.cart
+            response: user.cart,
+            userId:user.id.toString()
         });
         } catch (error) {
             next(error)
@@ -62,15 +63,16 @@ class UsersController {
     }
     async logout (req, res, next){
         try {
+            await this.#service.updateUser(req)
             res.clearCookie('AUTH')
-            res.redirect('/api/session/login');
+            res.redirect('/api/users/login');
         } catch (error) {
             next(error)
         }
     }
     async updateUser (req, res, next){
         try {
-            await this.#service.updateUser(req, res)
+            await this.#service.updateUser(req)
             res.send({ ok: true });
         } catch (error) {
             next(error)
@@ -87,7 +89,7 @@ class UsersController {
 
     async github (req, res, next){
         try{
-            res.redirect('/api/session/current');
+            res.redirect('/api/users/current');
         }catch(error){
             next(error)
         }
@@ -138,13 +140,21 @@ class UsersController {
     }
     async postPremium(req, res, next){
         try {
-            await this.#service.newRole(req, res);
+            await this.#service.newRole(req, res, next);
             res.status(200).send('Ok')
         } catch (error) {
             console.error(error);
             next(error)
         }
 
+    }
+    async postDocs(req, res, next){
+        try {
+            const doc = await this.#service.postDocs(req)
+            res.status(200).send(doc)
+        } catch (error) {
+            next(error)
+        }
     }
 
 }

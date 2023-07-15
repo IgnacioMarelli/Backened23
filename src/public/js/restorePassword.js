@@ -1,7 +1,7 @@
 async function restore(event) {
     event.preventDefault();
     const email = document.getElementById('form-email').value;
-    api.post('/api/session/restorePassword', {email})
+    api.post('/api/users/restorePassword', {email})
         .then((data) => {
             if (!data) {
                 alert('No existe el usuario.');
@@ -13,7 +13,7 @@ async function restore(event) {
                 text: `Se ha enviado un mensaje para restablecerla a tu correo`,
                 icon: 'success'
             }).then(() => {
-                    location.href = 'http://localhost:8080/api/session/login';
+                    location.href = 'http://localhost:8080/api/users/login';
             });
         })
         .catch((error) => {
