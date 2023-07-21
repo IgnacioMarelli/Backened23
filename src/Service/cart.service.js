@@ -3,6 +3,9 @@ import ErrorEnum from "../errors/error.enum.js";
 import { emailService } from "../external-service/email.service.js";
 import { messageService } from "../external-service/phone.service.js";
 import TicketDTO from "../dao/DTO/ticketDto.js";
+import UserDTO from "../dao/DTO/userDto.js";
+import { generateToken } from "../utils/middlewares/jwt.middleware.js";
+
 
 
 export default class CartRepository {
@@ -25,8 +28,8 @@ export default class CartRepository {
         });
         return response
     }
-    async putProdOfCart(req){
-        const {quantity}=req.body;
+    async putProdOfCart(req, res){
+        const quantity=req.body.quantity;
         const user = await this.#userService.findByEmail(req.user.email);
         let cart;
         if(req.user.role==='premium'){
@@ -36,7 +39,7 @@ export default class CartRepository {
                     name:'Error al agregar productos',
                     cause:'No puede agregar productos propios al carrito',
                     message:'No puede agregar productos propios al carrito',
-                    code: ErrorEnum.BODY_ERROR
+                    code: ErrorEnum.NO_AUTHORIZATION
                 })
             }
         }
@@ -46,17 +49,31 @@ export default class CartRepository {
             cart = await this.#service.create(req.params.pid, quantity);
         }
         await this.#userService.updateCart(req.user.email,cart._id);
+        const userUpdated = await this.#userService.findByEmail(req.user.email);
+        const userDTO = new UserDTO(userUpdated);
+        const token = generateToken(userDTO);
+        res.cookie('AUTH',token,{
+        maxAge:60*60*1000*24,
+        httpOnly:true
+        });
         return cart
     }
-    async deleteProd(req){
+    async deleteProd(req ,res){
         await this.#service.deleteProduct(req.params.cid,req.params.pid);
+        const userUpdated = await this.#userService.findByEmail(req.user.email);
+        const userDTO = new UserDTO(userUpdated);
+        const token = generateToken(userDTO);
+        res.cookie('AUTH',token,{
+        maxAge:60*60*1000*24,
+        httpOnly:true
+        });
         const response = await this.#service.getAll(); 
         return response
     }
     async deleteCart(req){
         await this.#service.deleteAllProducts(req.params.cid);
     }
-    async ticketBuy(req){
+    async ticketBuy(req, res){
         const cartResponse = await this.#service.getCartsById(req.params.cid);
         let amount= 0;
         for (let index = 0; index < cartResponse.products.length; index++) {
@@ -71,18 +88,26 @@ export default class CartRepository {
                     message:`El stock es del libro ${prodResponse.title} es de ${cartProd.quantity}, no puede hacer un pedido mayor`,
                     code: ErrorEnum.INSUFICIENT_AMMOUNT
                 })
-            }else{
-                await this.#prodService.update(prodId,{stock: stock});
-                amount+= Number(cartProd.product.price)*Number(cartProd.quantity);
-                await this.#service.deleteProduct(req.params.cid,prodId)
-            }                       
+            }
+            if(stock===0){
+                await this.#prodService.update(prodId,{status: false});
+            }
+            await this.#prodService.update(prodId,{stock: stock});
+            amount+= Number(cartProd.product.price)*Number(cartProd.quantity);
+            await this.#service.deleteProduct(req.params.cid,prodId)                     
         } 
-        const userEmail= req.user.email;
+        const user = await this.#userService.findByEmail(req.user.email);
         const date = new Date().toLocaleString();
-        const finalTicket= new TicketDTO(amount, userEmail,date)
+        const finalTicket= new TicketDTO(amount, user.email,date)
         await this.#ticketService.ticketBuy(finalTicket)
-        emailService.sendTicketEmail(userEmail, finalTicket);
-        if(req.user.phone)messageService.sendTicketMessage(usuario.phone);
+        emailService.sendTicketEmail(user.email, finalTicket);
+        if(user.phone){messageService.sendTicketMessage(user.phone)};
+        const userDTO = new UserDTO(user);
+        const token = generateToken(userDTO);
+        res.cookie('AUTH',token,{
+        maxAge:60*60*1000*24,
+        httpOnly:true
+        });
         return await this.#service.getCartsById(req.params.cid);
     }
 }

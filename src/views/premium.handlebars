@@ -4,13 +4,13 @@
     <h1>
       Ingresar
     </h1>
-    <span class="email">{{role}}</span>
+    <span id="role">{{role}}</span>
         {{#if (eq role 'user')}}
-        <button onclick="premium('{{userId}}', '{{role}}')">Cambiar a premium</button>
+        <button onclick="changeRole('{{userId}}', 'premium')">Cambiar a premium</button>
         {{else}}
-        <button onclick="premium('{{userId}}', '{{role}}')">Cambiar a user</button>
+        <button onclick="changeRole('{{userId}}', 'user')">Cambiar a user</button>
         {{/if}}
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src='/js/premium.js'></script>
+<script src='/js/changeRole.js'></script>

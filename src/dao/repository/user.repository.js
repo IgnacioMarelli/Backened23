@@ -6,6 +6,9 @@ class userService {
     constructor(){
         this.#model= userModel;
     }
+    async getAll(){
+        return await this.#model.find().lean();
+    }
     async findByEmail(userEmail){
         return  this.#model.findOne({ email: userEmail }).lean();
     }
@@ -29,6 +32,9 @@ class userService {
     }
     async addDoc(id, filename, filePath ){
         return await this.#model.findOneAndUpdate({_id: id}, {$push: {documents: {name:filename, reference:filePath}}})
+    }
+    async deleteUsers(twoDaysAgo){
+        return await this.#model.deleteMany({last_connection: {$lt: twoDaysAgo}})
     }
 }
 export default userService

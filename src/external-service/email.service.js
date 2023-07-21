@@ -11,7 +11,15 @@ class EmailService{
             from: `"code"<${config.mail.auth.user}>`,
             to: email,
             subject:'Bienvenido',
-            text:`Bienvenido a nuestra comunidad ${user.name}`,
+            text:`Bienvenido a nuestra comunidad ${user.first_name}`,
+        });
+    }
+    async sendDeleteEmail(email, user, prod){
+        await this.#transporter.sendMail({
+            from: `"code"<${config.mail.auth.user}>`,
+            to: email,
+            subject:'Se ha eliminado un producto suyo',
+            text:`Hola, se ha eliminado el producto "${prod}"`,
         });
     }
     async sendTicketEmail(email,finalTicket){

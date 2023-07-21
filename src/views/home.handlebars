@@ -21,7 +21,6 @@
                 <br>
                 <input type="submit" value="Agregar Producto">
             </form>
-                <p id="producto-id"></p>
             </article>
             <ul>
               <span>Buscar por:</span>
@@ -65,13 +64,13 @@
               <td data-label="Categoria">{{this.category}}</td>
               <td data-label="Code">{{this.code}}</td>
               <td data-label="Descripcion">{{this.description}}</td>
-              <td ><img style="    width: 33%;" src="../img/{{this.thumbnail}}" alt=""></td>
+              <td ><img style="    width: 33%;" src="../img/products/{{this.thumbnail}}" alt=""></td>
               <td>
                 <button> <a href="/api/products/{{this._id}}">Detalles</a></button>
                 <button class="delete">Eliminar</button>
               </td>
               <td class="counterDiv">
-                <button onclick="addProd('{{this._id}}')" >Agregar al carrito</button>
+                <button class="buttonAdd" onclick="addProd('{{this._id}}')" >Agregar al carrito</button>
               </td>
             </tr>
             {{/each}}

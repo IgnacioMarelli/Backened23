@@ -1,6 +1,6 @@
 import CustomError from "../errors/custom.error.js";
 import ErrorEnum from "../errors/error.enum.js";
-
+import { emailService } from "../external-service/email.service.js";
 export default class ProdsRepository {
     #dao;
     constructor(dao) {
@@ -60,7 +60,6 @@ export default class ProdsRepository {
             const includes= total.find((e)=> e.title===product.title)
             if (!includes) {
                 const prod = await this.#dao.create({...product, thumbnail: filenames});
-                console.log(prod);
                 return prod
             }else{
                 CustomError.createError({
@@ -81,21 +80,23 @@ export default class ProdsRepository {
     }
     async deleteProd(req){
         const pid = req.params.pid;
-        if(req.user.role=== 'premium'){
-            const prod = await this.#dao.getProductsById(pid);
-            if (prod.owner===req.user.email) {
-                await this.#dao.delete(pid);
-                return 'Se elimino el producto'
-            }
-            throw CustomError.createError({
-                name:'No esta autorizado a eliminar producto',
-                cause:'No tiene rol de admin, sino de premium',
-                message:'Solo puede eliminar productos subidos por si mismo',
-                code: ErrorEnum.BODY_ERROR
-            })
+        const prod = await this.#dao.getProductsById(pid);
+        if(req.user.role=== 'premium' && prod.owner===req.user.email){
+            emailService.sendDeleteEmail(req.user.email, req.user, prod.title)
+            await this.#dao.delete(pid);
+            return 'Se elimino el producto'
         }
-        const eliminado = await this.#dao.delete(pid);
-        return 'Se elimino el producto'
+        if(req.user.role==='admin'){
+            emailService.sendDeleteEmail(prod.owner, req.user, prod.title)
+            await this.#dao.delete(pid);
+            return 'Se elimino el producto'
+        }
+        throw CustomError.createError({
+            name:'No esta autorizado a eliminar producto',
+            cause:'No tiene rol de admin, sino de premium',
+            message:'Solo puede eliminar productos subidos por si mismo',
+            code: ErrorEnum.NO_AUTHORIZATION
+        })
     } 
     async update(req){
         const pid = req.params.pid; 

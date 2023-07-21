@@ -1,4 +1,6 @@
 import userService from "../dao/Repository/user.repository.js";
+import CustomError from "../errors/custom.error.js";
+import ErrorEnum from "../errors/error.enum.js";
 import UserRepository from "../Service/user.serivce.js";
 
 class UsersController {
@@ -18,8 +20,8 @@ class UsersController {
     }
     async postRegister (req, res, next){
         try {
-            await this.#service.postRegister(req);
-            res.status(201).send('Creado');
+            const response = await this.#service.postRegister(req);
+            res.status(201).send(response);
             
         } catch (error) {
             next(error)
@@ -38,6 +40,7 @@ class UsersController {
     async getProfile (req, res, next){
         try {
         const user = await this.#service.getUser(req);
+        const cart = req.user.cart[0]._id;
         res.render('perfil', {
             nombre: user.first_name,
             apellido: user.last_name,
@@ -45,8 +48,8 @@ class UsersController {
             carrito: user.cart,
             email: user.email,
             user:user,
+            cart: cart,
             phone:user.phone,
-            response: user.cart,
             userId:user.id.toString()
         });
         } catch (error) {
@@ -129,9 +132,12 @@ class UsersController {
     async getPremium(req, res, next){
         try {
             const user= await this.#service.getUser(req);
+            const cart = req.user.cart[0]._id;
             res.render('premium',{
                 role:user.role,
-                userId: user.id.toString()
+                userId: user.id.toString(),
+                user:user,
+                cart: cart
             })
         } catch (error) {
             next(error)
@@ -143,7 +149,6 @@ class UsersController {
             await this.#service.newRole(req, res, next);
             res.status(200).send('Ok')
         } catch (error) {
-            console.error(error);
             next(error)
         }
 
@@ -152,6 +157,51 @@ class UsersController {
         try {
             const doc = await this.#service.postDocs(req)
             res.status(200).send(doc)
+        } catch (error) {
+            next(error)
+        }
+    }
+    async getUsers(req,res, next){
+        try {
+            const response = await this.#service.getAllUsers();
+            res.status(200).send(response)
+        } catch (error) {
+            next(error)
+        }
+
+    }
+    async deleteUsers(req, res, next){
+        try {
+            await this.#service.deleteUsers();
+            res.status(204).send('Eliminados')
+        } catch (error) {
+            next(error)
+        }
+    }
+    async getAdmin(req, res,next){
+        try {
+            const user= req.user;
+            const users = await this.#service.getAllUsers();
+            const cart = req.user.cart[0]._id;
+            res.render('admin',{
+                userId: user.id.toString(),
+                response: users,
+                user:user,
+                cart:cart
+            })
+        } catch (error) {
+            throw CustomError.createError({
+                name:'Error al renderizar',
+                cause:'El error ocurrió al renderizar admin en handlebars',
+                message:'Verifique que este bien la view de handlebars',
+                code: ErrorEnum.ROUTING_ERROR
+            })
+        }
+    }
+    async postAdmin(){
+        try {
+            await this.#service.newRole(req, res, next);
+            res.status(200).send('Ok')
         } catch (error) {
             next(error)
         }

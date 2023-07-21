@@ -7,12 +7,12 @@ const storage = multer.diskStorage({
     destination:function(req,file,cb){
         if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
             if (file.fieldname==='fileProd') {
-                cb(null,path.join(__dirname, '..','..','/public/docs/img/products'))
+                cb(null,path.join(__dirname, '..','..','/public/img/products'))
             }else{
-                cb(null,path.join(__dirname, '..','..','/public/docs/img/profile'))
+                cb(null,path.join(__dirname, '..','..','/public/img/profile'))
             }
         }else{
-            cb(null, '..','..','/public/img/documents');
+           cb(null, path.join(__dirname, '..','..','/public/documents'));
         }
     },
     filename:function(req, file, cb){

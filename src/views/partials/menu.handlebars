@@ -13,6 +13,9 @@
       </li>
       {{#if user}}
               <li class="nav-item"><a class="nav-link" href="/api/users/current">Perfil</a></li>
+              {{#if cart}}
+                <li class="nav-item nav-cart"><a href="/api/carts/{{cart}}"class="nav-link">Finalizar compra<img class="cart" src="../img/carrito.png" alt=""></a></li>
+              {{/if}}
               <li class="nav-link text">Bienvenido {{user.first_name}} {{user.last_name}}. Su rol es: {{user.role}}</li>
       {{else}}
             <li class="nav-item"><a class="nav-link" href="/api/users/register">Registrate</a> </li>

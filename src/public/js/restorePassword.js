@@ -17,6 +17,9 @@ async function restore(event) {
             });
         })
         .catch((error) => {
-            console.error(error);
+            Swal.fire({
+                title: `Error al restablecer contraseña`,
+                icon: 'error'
+            })    
         });
     }

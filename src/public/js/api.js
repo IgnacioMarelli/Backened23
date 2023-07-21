@@ -10,10 +10,8 @@ const api = {
         if (response.redirected) {
           window.location.replace(response.url);
         }
-        if (response.status === 403) {
-          throw new Error('Error de acceso: no tienes permisos para agregar productos');
-        }
         return response
+        
       } catch (error) {
         throw new Error('Error en la solicitud');
       }
@@ -27,9 +25,6 @@ const api = {
         });
         if (response.redirected) {
           window.location.replace(response.url);
-        }
-        if (response.status === 403) {
-          throw new Error('Error de acceso: no tienes permisos para agregar productos');
         }
         return response
       } catch (error) {
@@ -46,7 +41,6 @@ const api = {
         },
       });
       if (response.redirected) {
-        console.log(response);
         window.location.replace(response.url);
       }
       if (response.ok) {

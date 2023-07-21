@@ -9,7 +9,7 @@
             <th scope="col">Stock</th>
             <th scope="col">Categoría</th>
             <th scope="col">Código</th>
-            <th scope="col">Descripción</th>
+            <th scope="col">Cantidad</th>
             <th scope="col">Imagen</th>
             </tr>
         </thead>
@@ -23,8 +23,8 @@
                     <td data-label="Stock">{{this.product.stock}}</td>
                     <td data-label="Categoria">{{this.product.category}}</td>
                     <td data-label="Code">{{this.product.code}}</td>
-                    <td data-label="Descripcion">{{this.product.description}}</td>
-                    <td ><img style="    width: 33%;" src="../img/{{this.product.thumbnail}}" alt=""></td>
+                    <td data-label="Descripcion">{{quantity}}</td>
+                    <td ><img style="    width: 33%;" src="../../img/products/{{this.product.thumbnail}}" alt=""></td>
                     <td>
                     <button> <a href="/api/products/{{this.product._id}}">Detalles</a></button>
                     <button onclick="removeFromCart('{{this.cid}}','{{this.product._id}}')">Eliminar</button>
@@ -33,6 +33,7 @@
             {{/each}}
         </tbody>
     </table>
+    <button onclick="buy('{{cart}}')">Finalizar compra</button>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/socket.io/socket.io.js"></script>

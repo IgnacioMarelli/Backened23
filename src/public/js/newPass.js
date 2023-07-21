@@ -18,6 +18,10 @@ async function newPass(event) {
             });
         })
         .catch((error) => {
-            console.error(error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Se produjo un error en la solicitud.',
+                icon: 'error'
+              });
         });
     }

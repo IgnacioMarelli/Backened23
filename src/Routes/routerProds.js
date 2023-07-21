@@ -2,7 +2,7 @@ import express from 'express';
 import { Router } from 'express';
 import prodController from '../controllers/products.controller.js';
 import { uploader } from '../utils/middlewares/multer.js';
-import { passportCall, authorization, authorizationPremium } from '../utils/middlewares/authentication.js';
+import { passportCall, authorizationPremium } from '../utils/middlewares/authentication.js';
 const router = Router();
 router.use(express.json());
 router.use(express.urlencoded({extended:true}));

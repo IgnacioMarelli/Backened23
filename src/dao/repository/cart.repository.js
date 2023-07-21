@@ -19,14 +19,11 @@ class cartsService {
         
     }
     async addProductToCart(cart, quantity, prod){
-        if (quantity=== undefined) {
-            quantity=1;
-        }
-        const isInCart = await this.#model.findOne({_id: cart,"products.product": prod});
+        const isInCart = await this.#model.findOne({_id: cart,"products.product": prod}).lean();
         if(!isInCart){
             await this.#model.findOneAndUpdate({_id: cart}, {$push: {products: {product: prod, quantity:  quantity }}});
         }else{
-            await this.#model.findOneAndUpdate({_id: cart, "products.product": prod}, {"products.$.quantity": quantity});
+            await this.#model.findOneAndUpdate({_id: cart, "products.product": prod}, {$inc:{"products.$.quantity": quantity}});
         }
         return await this.#model.findOne({_id: cart}).lean();
     }

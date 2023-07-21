@@ -59,12 +59,6 @@ class prodService {
     async delete(id){
         return this.#model.findByIdAndDelete(id)
     }
-    async updateCartProd(pid, qty){
-        const prod= await this.#model.findOne({_id:pid}).lean();
-        const finalStock = prod.stock-qty;
-        await this.#model.updateOne({ _id: pid }, { $set: { stock: finalStock } });
-        return await this.#model.findOne({_id:pid}).lean();
-    }
 }
 
 export default prodService

@@ -1,8 +1,66 @@
-{"level":"error","message":"Cast to embedded failed for value \"{ name: {}, reference: '' }\" (type Object) at path \"documents\" because of \"CastError\"","timestamp":"2023-07-15T15:36:15.332Z"}
-{"level":"error","message":"Cannot read properties of undefined (reading '0')","timestamp":"2023-07-15T16:16:07.765Z"}
-{"level":"error","message":"Cast to embedded failed for value \"{\n  name: [ 'CalibÃ¡n.png' ],\n  reference: 'C:\\\\Users\\\\USUARIO\\\\Desktop\\\\Backened\\\\src\\\\public\\\\docs\\\\img\\\\profile\\\\CalibÃ¡n.png'\n}\" (type Object) at path \"documents\" because of \"CastError\"","timestamp":"2023-07-15T16:49:24.523Z"}
-{"level":"error","message":"next is not defined","timestamp":"2023-07-15T17:12:16.429Z"}
-{"level":"error","message":"Debe subir Identificación, Comprobante de domicilio, Comprobante de estado de cuenta","timestamp":"2023-07-15T17:12:42.732Z"}
-{"level":"error","message":"Revise haber puesto el mail y la contraseña correctamente","timestamp":"2023-07-15T17:31:20.992Z"}
-{"level":"error","message":"Debe subir Identificación, Comprobante de domicilio, Comprobante de estado de cuenta","timestamp":"2023-07-15T17:34:08.134Z"}
-{"level":"error","message":"Debe subir Identificación, Comprobante de domicilio, Comprobante de estado de cuenta","timestamp":"2023-07-15T17:34:59.089Z"}
+{"level":"error","message":"Debe subir Identificación, Comprobante de domicilio, Comprobante de estado de cuenta","timestamp":"2023-07-20T14:33:17.081Z"}
+{"level":"error","message":"Debe subir Identificación, Comprobante de domicilio, Comprobante de estado de cuenta","timestamp":"2023-07-20T14:33:56.853Z"}
+{"level":"error","message":"Debe subir Identificación, Comprobante de domicilio, Comprobante de estado de cuenta","timestamp":"2023-07-20T14:36:47.088Z"}
+{"level":"error","message":"Debe subir Identificación, Comprobante de domicilio, Comprobante de estado de cuenta","timestamp":"2023-07-20T14:36:58.687Z"}
+{"level":"error","message":"Debe subir Identificación, Comprobante de domicilio, Comprobante de estado de cuenta","timestamp":"2023-07-20T14:37:45.575Z"}
+{"level":"error","message":"Debe subir Identificación, Comprobante de domicilio, Comprobante de estado de cuenta","timestamp":"2023-07-20T14:37:56.708Z"}
+{"level":"error","message":"Debe subir Identificación, Comprobante de domicilio, Comprobante de estado de cuenta","timestamp":"2023-07-20T14:39:07.810Z"}
+{"level":"error","message":"Revise haber puesto el mail y la contraseña correctamente","timestamp":"2023-07-20T16:07:16.686Z"}
+{"level":"error","message":"Debe iniciar sesión nuevamente","timestamp":"2023-07-20T16:07:18.174Z"}
+{"level":"error","message":"Debe iniciar sesión nuevamente","timestamp":"2023-07-20T16:07:20.426Z"}
+{"level":"error","message":"Revise haber puesto el mail y la contraseña correctamente","timestamp":"2023-07-20T16:07:36.216Z"}
+{"level":"error","message":"Debe iniciar sesión nuevamente","timestamp":"2023-07-20T16:07:37.412Z"}
+{"level":"error","message":"Debe iniciar sesión nuevamente","timestamp":"2023-07-20T16:07:40.993Z"}
+{"level":"error","message":"sendDeleteEmail is not defined","timestamp":"2023-07-20T16:08:18.213Z"}
+{"level":"error","message":"Operation `products.countDocuments()` buffering timed out after 10000ms","timestamp":"2023-07-20T19:10:47.335Z"}
+{"level":"error","message":"Operation `usuarios.findOne()` buffering timed out after 10000ms","timestamp":"2023-07-20T19:10:50.439Z"}
+{"level":"error","message":"Operation `products.countDocuments()` buffering timed out after 10000ms","timestamp":"2023-07-20T19:11:31.856Z"}
+{"level":"error","message":"Operation `products.countDocuments()` buffering timed out after 10000ms","timestamp":"2023-07-20T19:11:36.584Z"}
+{"level":"error","message":"Revise haber puesto el mail y la contraseña correctamente","timestamp":"2023-07-21T12:22:13.831Z"}
+{"level":"error","message":"Debe iniciar sesión nuevamente","timestamp":"2023-07-21T12:22:15.533Z"}
+{"level":"error","message":"Revise haber puesto el mail y la contraseña correctamente","timestamp":"2023-07-21T12:22:24.034Z"}
+{"level":"error","message":"Debe iniciar sesión nuevamente","timestamp":"2023-07-21T12:22:26.708Z"}
+{"level":"error","message":"Revise haber puesto el mail y la contraseña correctamente","timestamp":"2023-07-21T12:25:22.735Z"}
+{"level":"error","message":"Debe iniciar sesión nuevamente","timestamp":"2023-07-21T12:25:35.520Z"}
+{"level":"error","message":"Revise haber puesto el mail y la contraseña correctamente","timestamp":"2023-07-21T12:25:37.456Z"}
+{"level":"error","message":"Debe iniciar sesión nuevamente","timestamp":"2023-07-21T12:25:48.964Z"}
+{"level":"error","message":"Revise haber puesto el mail y la contraseña correctamente","timestamp":"2023-07-21T12:25:50.019Z"}
+{"level":"error","message":"Revise haber puesto el mail y la contraseña correctamente","timestamp":"2023-07-21T12:39:51.264Z"}
+{"level":"error","message":"Revise haber puesto el mail y la contraseña correctamente","timestamp":"2023-07-21T12:40:12.336Z"}
+{"level":"error","message":"Revise haber puesto el mail y la contraseña correctamente","timestamp":"2023-07-21T12:41:11.244Z"}
+{"level":"error","message":"Unknown authentication strategy \"github\"","timestamp":"2023-07-21T12:41:17.369Z"}
+{"level":"error","message":"Debe iniciar sesión nuevamente","timestamp":"2023-07-21T12:48:20.519Z"}
+{"level":"error","message":"Debe iniciar sesión nuevamente","timestamp":"2023-07-21T12:53:06.034Z"}
+{"level":"error","message":"Debe iniciar sesión nuevamente","timestamp":"2023-07-21T12:53:09.908Z"}
+{"level":"error","message":"Parse error on line 17:\n...=\"/api/carts/{{user.cart[0]._id}}\"><img \n-----------------------^\nExpecting 'ID', got 'INVALID'","timestamp":"2023-07-21T13:42:15.018Z"}
+{"level":"error","message":"Parse error on line 17:\n...=\"/api/carts/{{user.cart[0]._id}}\"><img \n-----------------------^\nExpecting 'ID', got 'INVALID'","timestamp":"2023-07-21T13:42:19.866Z"}
+{"level":"error","message":"Parse error on line 17:\n...=\"/api/carts/{{user.cart[0]._id}}\"><img \n-----------------------^\nExpecting 'ID', got 'INVALID'","timestamp":"2023-07-21T13:42:49.371Z"}
+{"level":"error","message":"Parse error on line 17:\n...=\"/api/carts/{{user.cart[0]._id}}\"><img \n-----------------------^\nExpecting 'ID', got 'INVALID'","timestamp":"2023-07-21T14:01:59.401Z"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')","timestamp":"2023-07-21T14:42:25.494Z"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')","timestamp":"2023-07-21T14:45:22.175Z"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')","timestamp":"2023-07-21T14:46:12.533Z"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'products')","timestamp":"2023-07-21T14:46:43.501Z"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')","timestamp":"2023-07-21T14:48:11.333Z"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'products')","timestamp":"2023-07-21T14:48:30.469Z"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')","timestamp":"2023-07-21T14:48:46.204Z"}
+{"level":"error","message":"generateToken is not defined","timestamp":"2023-07-21T14:52:05.924Z"}
+{"level":"error","message":"res is not defined","timestamp":"2023-07-21T14:52:49.521Z"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'email')","timestamp":"2023-07-21T14:57:24.472Z"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'email')","timestamp":"2023-07-21T15:02:07.053Z"}
+{"level":"error","message":"res is not defined","timestamp":"2023-07-21T15:07:38.673Z"}
+{"level":"error","message":"res is not defined","timestamp":"2023-07-21T15:07:38.741Z"}
+{"level":"error","message":"Ticket validation failed: purchaser: Path `purchaser` is required.","timestamp":"2023-07-21T15:09:08.574Z"}
+{"level":"error","message":"Ticket validation failed: purchaser: Path `purchaser` is required.","timestamp":"2023-07-21T15:09:24.633Z"}
+{"level":"error","message":"res is not defined","timestamp":"2023-07-21T15:12:29.673Z"}
+{"level":"error","message":"El stock es del libro Crimen y Castigo es de 1, no puede hacer un pedido mayor","timestamp":"2023-07-21T17:17:28.700Z"}
+{"level":"error","message":"El stock es del libro Crimen y Castigo es de 1, no puede hacer un pedido mayor","timestamp":"2023-07-21T17:17:56.872Z"}
+{"level":"error","message":"El stock es del libro Crimen y Castigo es de 1, no puede hacer un pedido mayor","timestamp":"2023-07-21T17:18:04.544Z"}
+{"level":"error","message":"El stock es del libro Crimen y Castigo es de 1, no puede hacer un pedido mayor","timestamp":"2023-07-21T17:26:58.549Z"}
+{"level":"error","message":"El stock es del libro Crimen y Castigo es de 1, no puede hacer un pedido mayor","timestamp":"2023-07-21T17:27:14.840Z"}
+{"level":"error","message":"El stock es del libro Crimen y Castigo es de 1, no puede hacer un pedido mayor","timestamp":"2023-07-21T17:27:43.637Z"}
+{"level":"error","message":"El stock es del libro Crimen y Castigo es de 1, no puede hacer un pedido mayor","timestamp":"2023-07-21T17:27:45.515Z"}
+{"level":"error","message":"El stock es del libro Crimen y Castigo es de 1, no puede hacer un pedido mayor","timestamp":"2023-07-21T17:28:00.106Z"}
+{"level":"error","message":"El stock es del libro Crimen y Castigo es de 1, no puede hacer un pedido mayor","timestamp":"2023-07-21T17:28:23.914Z"}
+{"level":"error","message":"El stock es del libro Crimen y Castigo es de 1, no puede hacer un pedido mayor","timestamp":"2023-07-21T17:28:52.322Z"}
+{"level":"error","message":"El stock es del libro Crimen y Castigo es de 1, no puede hacer un pedido mayor","timestamp":"2023-07-21T17:29:03.603Z"}
+{"level":"error","message":"Debe seleccionar un archivo para subir","timestamp":"2023-07-21T17:55:10.372Z"}

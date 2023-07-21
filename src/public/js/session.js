@@ -15,9 +15,19 @@ async function send(event) {
         password
     })
     .then((data) => {
-        if(!data._id) {
-            return alert('User already registered or incomplete data.')
+        if(data){
+            Swal.fire({
+                title: `Registrado correctamente`,
+                text: `Se ha enviado un mensaje a tu correo`,
+                icon: 'success'
+            }).then(() => {
+                    location.href = 'http://localhost:8080/api/users/login';
+            });
         }
-        alert(`User registered OK with ID ${data._id}`)
-    })
+    }).catch(error=>
+        Swal.fire({
+            title: `Error al registrarse`,
+            icon: 'error'
+        })    
+    )
 }

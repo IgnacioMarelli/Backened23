@@ -1,0 +1,46 @@
+{{>menu}}
+  <div class='hero-image'>
+    <div class='hero-text'>
+      <h1>
+        Ingresar
+      </h1>
+      <button onclick="changeRole('{{userId}}', 'premium')">Cambiar a premium</button>
+      <button onclick="changeRole('{{userId}}', 'user')">Cambiar a User</button>
+    </div>
+  </div>
+    {{#if response}}
+    <h1>USUARIOS:</h1>
+        <table class="table table-dark" >
+        <thead>
+            <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Role</th>
+            <th scope="col">Email</th>
+            <th scope="col">Última conexión</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each response}}
+            
+                <tr>
+                    <td class="id">{{this._id}}</td>
+                    <td data-label="nombre">{{this.first_name}}</td>
+                    <td data-label="apellido">{{this.last_name}}</td>
+                    <td data-label="role">{{this.role}}</td>
+                    <td data-label="email">{{this.email}}</td>
+                    <td data-label="conexion">{{this.last_connection}}</td>
+                    <td>
+                    <button onclick="removeUser('{{this._id}}')">Eliminar</button>
+                    </td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    <button onclick="removeUsers()">Eliminar todos los usuarios con última conexión anterior a 2 días</button>
+    {{/if}}
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src='/js/changeRole.js'></script>

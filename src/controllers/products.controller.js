@@ -9,6 +9,7 @@ class ProductController {
         try {
             const response = await this.#service.getAllProds(req);
             const user = req.user;
+            const cart = req.user.cart[0]?.products?.length === 0 ? null : req.user.cart[0]?._id ?? null;
             res.render('home',{
                 products:response,
                 pages: response.totalPages,
@@ -18,6 +19,7 @@ class ProductController {
                 hasPrevPages: response.hasPrevPage,
                 hasNextPage: response.hasNextPage,
                 user:user,
+                cart:cart
             });
         } catch (error) {
             next(error)
@@ -26,7 +28,9 @@ class ProductController {
     async getOneProd(req,res,next){
         try {
             const product = await this.#service.getOneProd(req);
-            res.render('prod',{products: product});
+            const user = req.user;
+            const cart = req.user.cart[0]._id;
+            res.render('prod',{products: product, user:user, cart:cart});
         } catch (error) {
             next(error)
         }

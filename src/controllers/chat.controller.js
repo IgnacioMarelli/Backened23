@@ -8,8 +8,10 @@ class ChatController {
     async getAll(req,res,next){
         try {
             const user= req.user;
+            const cart = req.user.cart[0]._id;
             res.render('chat',{
                 user: user,
+                cart:cart
             });
         } catch (error) {
             next(error)

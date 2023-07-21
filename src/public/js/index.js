@@ -2,14 +2,55 @@ const socket = io();
 const form = document.getElementById('crud-form');
 const query = new URLSearchParams(window.location.search);
 
+async function buy(cid){
+    try{
+        const response = await api.post(`/api/carts/${cid}/purchase`);
+        if (response.ok) {
+            Swal.fire({
+                title: 'Compra confirmada',
+                text: 'En segundos le llegará un mail con el ticket de compra',
+                icon: 'succes'
+            });
+            setTimeout(function() {
+                location.href = 'http://localhost:8080/api/products';
+            }, 3000);
+        }else{
+            if(response.status===500){
+                Swal.fire({
+                    title: 'Error al comprar',
+                    text: 'Es probable que no haya suficiente stock, elimine el producto y vuelva a elegir por favor',
+                    icon: 'error'
+                  });   
+            }else{
+                throw new Error
+            }
+            
+        }
+    }catch(error){
+        Swal.fire({
+            title: 'Error',
+            text: 'Hubo un error en la solicitud',
+            icon: 'error'
+          });   
+    }
+}
+
 async function addProd(id) {
     const cid=undefined;
-    const quantity = 32;
+    let quantity=1
     try{
-        api.put(`/api/carts/${cid}/products/${id}`, {
+        await api.put(`/api/carts/${cid}/products/${id}`, {
             quantity,
             })
-            .then((d) => alert('Agregado al carrito'));
+        
+        Swal.fire({
+            title: 'Agregado al carrito',
+            text: 'Libro Agregado',
+            icon: 'succes'
+        });
+        setTimeout(function() {
+            location.href = 'http://localhost:8080/api/products';
+        }, 1500);
     }catch(e){
         let message = error.statusText || 'Ocurrio un error';
         const p = document.getElementById('producto-id');
@@ -50,23 +91,30 @@ document.addEventListener('submit', async e => {
         try {
           const formData = new FormData(e.target);
   
-          api.postProd('/api/products', formData)
-            .then(response => {
-              if (!response.ok) {
+          const response = await api.postProd('/api/products', formData);
+            if (!response.ok) {
+            if (response.status===403) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Usted no se encuentra autorizado por su rol para subir productos',
+                    icon: 'error'
+                    }); 
+            }else{
                 throw new Error('Error en la solicitud');
-              } else {
-                const p = document.getElementById('producto-id');
-                p.insertAdjacentHTML("afterend", `<p><b>Producto agregado correctamente</b></p>`);
-              }
-            })
-            .catch(error => {
-              const p = document.getElementById('producto-id');
-              p.insertAdjacentHTML("afterend", `<p><b>Error: ${error.message}, intenta más tarde</b></p>`);
-            });
+            }
+            } else {
+            Swal.fire({
+                title: 'Producto subido',
+                text: 'Se ha agregado el producto correspondietne',
+                icon: 'success'
+                }); 
+            }
         } catch (error) {
-          let message = error.message || 'Ocurrió un error';
-          const p = document.getElementById('producto-id');
-          p.insertAdjacentHTML("afterend", `<p><b>Error: ${message}, intenta más tarde</b></p>`);
+            Swal.fire({
+                title: 'Error en la solicitud',
+                text: 'Ocurrió un error. Intentelo nuevamente mas tarde',
+                icon: 'error'
+              }); 
         }
       }
     }
@@ -87,44 +135,67 @@ document.addEventListener('click', async e =>{
                     method: 'DELETE',
                     headers: {},
                 })
-
+                if(response.status===403){
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No esta autorizado para eliminar productos',
+                        icon: 'error'
+                      });
+                }
                 if(!response.ok){
                     const p = document.getElementById('producto-id');
                     p.innerText = `Ocurrio un error al eliminar el producto`;
+                }else{
+                    location.reload();
                 }
-                location.reload();
-
+            
             } catch (error) {
-                console.log(error);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Se produjo un error en la solicitud.',
+                    icon: 'error'
+                  });
             }
         }
     }
 })
-async function removeFromCart(cid, pid){
-    let isDelete = confirm(`Estas seguro de eliminar el producto con id: ${pid} del carrito?`)
-    if(isDelete){
-        try {
-            const response = await fetch(`/api/carts/${cid}/products/${pid}`, {
-                method: 'DELETE',
-                headers: {},
-            })
-
-            if(!response.ok){
-                const p = document.getElementById('producto-id');
-                p.innerText = `Ocurrio un error al eliminar el producto`;
-            }
-            location.reload();
-
-        } catch (error) {
-            console.log(error);
+async function removeFromCart(cid, pid) {
+    try {
+      const result = await Swal.fire({
+        title: 'Estás seguro?',
+        text: `Estas seguro de eliminar el producto con id: ${pid} del carrito?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'No, cancelar'
+      });
+  
+      if (result.isConfirmed) {
+        const response = await fetch(`/api/carts/${cid}/products/${pid}`, {
+          method: 'DELETE',
+          headers: {},
+        });
+  
+        if (!response.ok) {
+            throw new Error
+        } else {
+          location.reload();
         }
+      }
+    } catch (error) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Se produjo un error en la solicitud.',
+        icon: 'error'
+      });
     }
-}
+  }
+  
+
 function limpiarHtml(){
     tbody.innerHTML = ``;
 }
 socket.on('messages', function(data) { 
-  console.log(data);
   renderMensagge(data);
 });
 
@@ -151,6 +222,7 @@ function addMessage() {
 
     return false;
 }
+
 socket.on('usuario', data =>{
     Swal.fire({
         text:`Se conecto ${data}`,

@@ -42,3 +42,13 @@ ul{
     margin-left: 3%;
     margin-right: 6%;
 }
+.contador{
+    display: display;
+}
+
+.cart{
+    width: 100%;
+}
+.nav-cart{
+    width: 9rem;
+}
