@@ -35,7 +35,7 @@ class EmailService{
             from: `"code"<${config.mail.auth.user}>`,
             to:email,
             subject:'Restablecimiento de contraseña',
-            html:`<h1>Has solicitado un cambio de contraseña. Has click en el siguiente boton para recuperarla: <a href="http://localhost:8080/api/users/newPass/${token}">Click aquí</a> </h1>`
+            html:`<h1>Has solicitado un cambio de contraseña. Has click en el siguiente boton para recuperarla: <a href="https://backened23-production.up.railway.app/api/users/newPass/${token}">Click aquí</a> </h1>`
         });
     }
 }

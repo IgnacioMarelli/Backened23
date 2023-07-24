@@ -89,14 +89,6 @@ class UsersController {
             next(error)
         }
     }
-
-    async github (req, res, next){
-        try{
-            res.redirect('/api/users/current');
-        }catch(error){
-            next(error)
-        }
-    }
     async getNewPass(req, res, next){
         try {
             res.render('newPass', {

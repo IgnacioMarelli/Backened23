@@ -14,7 +14,7 @@ async function newPass(event) {
                 text: `Se ha restablecido la contraseña`,
                 icon: 'success'
             }).then(() => {
-                    location.href = 'http://localhost:8080/api/users/login';
+                    location.href = 'https://backened23-production.up.railway.app/api/users/login';
             });
         })
         .catch((error) => {

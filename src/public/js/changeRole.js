@@ -13,7 +13,7 @@ function changeRole(userID, role) {
           title: `Ya cambió su rol de usuario.`,
           icon: 'success'
         }).then(() => {
-          location.href = 'http://localhost:8080/api/products';
+          location.href = 'https://backened23-production.up.railway.app/api/products';
         });}else{
           Swal.fire({
             title: 'Error',

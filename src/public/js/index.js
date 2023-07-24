@@ -12,7 +12,7 @@ async function buy(cid){
                 icon: 'succes'
             });
             setTimeout(function() {
-                location.href = 'http://localhost:8080/api/products';
+                location.href = 'https://backened23-production.up.railway.app/api/products';
             }, 3000);
         }else{
             if(response.status===500){
@@ -49,7 +49,7 @@ async function addProd(id) {
             icon: 'succes'
         });
         setTimeout(function() {
-            location.href = 'http://localhost:8080/api/products';
+            location.href = 'https://backened23-production.up.railway.app/api/products';
         }, 1500);
     }catch(e){
         let message = error.statusText || 'Ocurrio un error';

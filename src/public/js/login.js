@@ -29,7 +29,7 @@ async function login(event) {
             });
     
             if (result.isConfirmed) {
-                location.href = 'http://localhost:8080/api/products';
+                location.href = 'https://backened23-production.up.railway.app/api/products';
             } else {
                 await api.post("/api/users/auth/logout");
             }

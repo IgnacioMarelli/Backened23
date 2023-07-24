@@ -13,7 +13,7 @@ async function restore(event) {
                 text: `Se ha enviado un mensaje para restablecerla a tu correo`,
                 icon: 'success'
             }).then(() => {
-                    location.href = 'http://localhost:8080/api/users/login';
+                    location.href = 'https://backened23-production.up.railway.app/api/users/login';
             });
         })
         .catch((error) => {
