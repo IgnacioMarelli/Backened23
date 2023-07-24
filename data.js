@@ -9,7 +9,7 @@ export const config = {
     DAO: env.DAO,
     SECRET: env.cookie_secret,
     twilio : {
-        accountSid:env.TWILIO_ACOUNT_SID,
+        accountSid:env.TWILIO_ACCOUNT_SID,
         authToken: env.TWILIO_AUTH_TOKEN,
         phoneNumber: env.TWILIO_PHONE
     },
