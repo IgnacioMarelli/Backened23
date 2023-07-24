@@ -11,7 +11,7 @@ class MessageService{
         try {
             this.#client.messages.create({
                 from: config.twilio.phoneNumber,
-                to: +542216078683,
+                to: phoneNumber,
                 body:'Bienvenido'
             })
         } catch (error) {
@@ -23,7 +23,7 @@ class MessageService{
         try {
             this.#client.messages.create({
                 from: config.twilio.phoneNumber,
-                to: +542216078683,
+                to: phoneNumber,
                 body:'Compra Realizada'
             }) 
         } catch (error) {
