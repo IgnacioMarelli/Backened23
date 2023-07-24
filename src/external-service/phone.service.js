@@ -11,7 +11,7 @@ class MessageService{
         try {
             this.#client.messages.create({
                 from: config.twilio.phoneNumber,
-                to: +5492216078683,
+                to: +542216078683,
                 body:'Bienvenido'
             })
         } catch (error) {
