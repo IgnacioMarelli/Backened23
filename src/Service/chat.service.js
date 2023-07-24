@@ -1,4 +1,4 @@
-import chatService from "../dao/Repository/chat.repository.js";
+import chatService from "../dao/repository/chat.repository.js";
 export class chatRepository {
     #dao;
     constructor(dao) {

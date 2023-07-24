@@ -1,4 +1,4 @@
-import prodService from '../dao/Repository/prod.repository.js';
+import prodService from '../dao/repository/prod.repository.js';
 import ProdsRepository from '../Service/prods.service.js';
 class ProductController {
     #service;

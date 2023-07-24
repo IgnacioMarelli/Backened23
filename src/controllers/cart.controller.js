@@ -1,8 +1,8 @@
 import CartRepository from "../Service/cart.service.js";
-import cartsService from "../dao/Repository/cart.repository.js";
-import userService from "../dao/Repository/user.repository.js";
-import prodService from "../dao/Repository/prod.repository.js";
-import ticketService from "../dao/Repository/ticket.repository.js";
+import cartsService from "../dao/repository/cart.repository.js";
+import userService from "../dao/repository/user.repository.js";
+import prodService from "../dao/repository/prod.repository.js";
+import ticketService from "../dao/repository/ticket.repository.js";
 
 class cartsController {
     #dao;
