@@ -5,7 +5,8 @@ import ErrorEnum from "../../errors/error.enum.js";
 import config from "../../../data.js";
 const secret = config.SECRET;
 
-const passportCall = (strategy) => {
+const passportCall = 
+(strategy) => {
   return async (req, res, next) => {
     try {
       passport.authenticate(strategy, { users: false }, (error, user, info) => {

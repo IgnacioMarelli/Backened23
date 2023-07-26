@@ -1,6 +1,8 @@
 paths:
   /api/products/:
     get:
+      security:
+        - cookieAuth: []
       summary: Obtiene una página renderizada con todos los productos
       tags:
         - Products
@@ -269,10 +271,10 @@ components:
         status: true
         category: Libro Completo
         owner: pepe@hotmail.com
-  securitySchemes:      
-     bearerAuth: 
-      type: http
-      scheme: bearer
-      bearerFormat: JWT 
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: 'AUTH'
   security:
-  - bearerAuth: []
+    - cookieAuth: []  

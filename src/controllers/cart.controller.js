@@ -13,9 +13,8 @@ class cartsController {
         try {
             const user = req.user;
             const response = await this.#dao.getOneCart(req);
-            const cart = req.user.cart[0]._id;
             res.status(200).render('cartId',{
-                cart:cart,
+                cart:response._id,
                 response:response.products,
                 user:user
             });

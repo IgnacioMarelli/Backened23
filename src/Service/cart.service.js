@@ -22,6 +22,7 @@ export default class CartRepository {
     async getOneCart(req){
         const cid = req.params.cid;
         let response = await this.#service.getCartsById(cid);
+        console.log(response);
         if(!response) response= await this.#service.create()
         response.products.forEach(element => {
             element.cid= cid;
