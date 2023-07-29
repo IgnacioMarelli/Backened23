@@ -21,14 +21,11 @@ class userService {
     async updateUser(idUser, usuario, nuevosDatos){
         return this.#model.updateOne({ _id: idUser },{ ...usuario, ...nuevosDatos });
     }
-    async updateCart(email, cid){
-        return this.#model.updateOne({email},{$set:{cart:cid}});
+    async updateCart(email, data){
+        return this.#model.updateOne({email},{$set:data});
     }
-    async deleteUser(idUsuario){
-        return this.#model.findOneAndDelete({_id:idUsuario})
-    }
-    async updatePass(id, hashedPassword){
-        return  this.#model.updateOne({_id:id}, {$set:{password:hashedPassword}});
+    async deleteUser(idUser){
+        return this.#model.findOneAndDelete({_id:idUser})
     }
     async addDoc(id, filename, filePath ){
         return await this.#model.findOneAndUpdate({_id: id}, {$push: {documents: {name:filename, reference:filePath}}})

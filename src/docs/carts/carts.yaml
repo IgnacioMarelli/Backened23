@@ -5,7 +5,7 @@ paths:
         - cookieAuth: []
       summary: Obtiene un carrito
       tags:
-        - carts
+        - Carts
       parameters:
         - name: cid
           in: path
@@ -37,10 +37,21 @@ paths:
                     example: "Debe iniciar sesión nuevamente"
         '500':
           description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
     delete:
       summary: Elimina un carrito
       tags:
-        - carts
+        - Carts
       parameters:
         - name: cid
           in: path
@@ -57,14 +68,36 @@ paths:
                 type: string
                 example: Carrito eliminado
         '400':
-          description: Error provocado por el cliente. Usualmente generado por una no estar logueado o no estar autorizado.
+          description: Error por parte del cliente. Probablemente por no estar logueado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
         '500':
           description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
   /api/carts/{cid}/purchase:
     post:
-      summary: Crea un ticket de compra y lo envía por mail
+      summary: Crea un ticket de compra y lo envía por mail. Devuelve carrito vacío.
       tags:
-        - carts
+        - Carts
       parameters:
         - name: cid
           in: path
@@ -74,28 +107,44 @@ paths:
             type: string
       responses:
         '200':
-          description: El producto fue agregado o actualizado satisfactoriamente en el carrito
+          description: El producto fue comprado satisfactoriamente en el carrito
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/emptyCart'
+        '400':
+          description: Error por parte del cliente. Probablemente por no estar logueado.
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   status:
-                    type: array
+                    type: string
                     description: El estado de la respuesta
-                    value: success
-                    example: success
-                  payload:
-                    $ref: '#/components/schemas/prodOfCart'
-        '400':
-          description: Error provocado por el cliente. Usualmente generado por una no estar logueado o no estar autorizado.
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
         '500':
           description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
-  /api/:cid/products/:pid:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
+  /api/carts/{cid}/products/{pid}:
     delete:
-      summary: Elimina un producto del carrito
+      summary: Elimina un producto del carrito y devuelve el carrito sin ese producto
       tags:
-        - carts
+        - Carts
       parameters:
         - name: cid
           in: path
@@ -115,23 +164,39 @@ paths:
           content:
             application/json:
               schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cart'
+        '400':
+          description: Error por parte del cliente. Probablemente por no estar logueado.
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
                   status:
                     type: string
                     description: El estado de la respuesta
-                    value: success
-                    example: success
-                  payload:
-                    $ref: '#/components/schemas/carts'
-        '400':
-          description: Error provocado por el cliente. Usualmente generado por una no estar logueado o no estar autorizado.
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
         '500':
           description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
-    post:
-      summary: Obtiene un carrito, resta el stock del producto, genera un ticket y envía un mail de confirmación de compra. Devuelve el carrito vacío.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
+    put:
+      summary: Modifica un carrito, agregando un id de producto con una cantidad.
       tags:
-        - carts
+        - Carts
       parameters:
         - name: cid
           in: path
@@ -139,9 +204,15 @@ paths:
           required: true
           schema:
             type: string
+        - name: pid
+          in: path
+          description: El id del producto
+          required: true
+          schema:
+            type: string    
       responses:
         '200':
-          description: El ticket fue generado satisfactoriamente y almacenado en la base de datos
+          description: El producto fue agregado satisfactoriamente.
           content:
             application/json:
               schema:
@@ -153,13 +224,54 @@ paths:
                     value: success
                     example: success
                   payload:
-                    $ref: '#/components/schemas/ticket'
+                    $ref: '#/components/schemas/Cart'
         '400':
-          description: Error provocado por el cliente. Usualmente generado por una no estar logueado o no estar autorizado.
+          description: Error por parte del cliente. Probablemente por no estar logueado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
         '500':
-          description: Error interno del servidor. Por no tener suficiente stock, por una query defectuosa o una falla con la conexión con la base de datos
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
 components:
   schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: string
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                $ref: '#/components/schemas/prodOfCart'
+              quantity:
+                type: integer
+              _id:
+                type: string
+        __v:
+          type: integer
+          format: int32
     prodOfCart:
       type: object
       properties:
@@ -179,7 +291,7 @@ components:
           type: integer
         image:
           type: string
-    carts:
+    emptyCart:
       type: object
       properties:
         _id:

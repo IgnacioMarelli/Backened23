@@ -43,7 +43,7 @@ const newPass = () => {
         res.redirect('/users/login');
       }
     } catch (error) {
-      next(error);
+      next(error)
     }
   };
 };

@@ -8,7 +8,52 @@ paths:
         - Products
       responses:
         '200':
-          description: Los productos fueron obtenidos satisfactoriamente de la base de datos
+          description: Los productos fueron obtenidos satisfactoriamente de la base de datos. Se devuelve una página renderizada con los valores del ejemplo.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Products'
+        '400':
+          description: Error por parte del cliente. Probablemente por no estar logueado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
+    post:
+      summary: Crea un producto
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/createProduct'
+      responses:
+        '200':
+          description: El producto fue creado satisfactoriamente en la base de datos
           content:
             application/json:
               schema:
@@ -20,11 +65,33 @@ paths:
                     value: success
                     example: success
                   payload:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Products'
+                    $ref: '#/components/schemas/Products'
+        '400':
+          description: Error por parte del cliente. Probablemente por no estar logueado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
         '500':
           description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhanddled error"
   /api/products/{id}:
     get:
       summary: Obtiene un producto
@@ -39,7 +106,15 @@ paths:
             type: string
       responses:
         '200':
-          description: El producto fue obtenido satisfactoriamente de la base de datos
+          description: El producto fue obtenido satisfactoriamente de la base de datos se devuelve pagina renderizada con los valores del example.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Products'
+        '400':
+          description: Error por parte del cliente. Probablemente por no estar logueado.
           content:
             application/json:
               schema:
@@ -48,27 +123,11 @@ paths:
                   status:
                     type: string
                     description: El estado de la respuesta
-                    value: success
-                    example: success
-                  payload:
-                    $ref: '#/components/schemas/Products'
-        '400':
-          description: Error provocado por el cliente. Usualmente generado por una no estar logueado.
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
         '500':
           description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
-    post:
-      summary: Crea un producto
-      tags:
-        - Products
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/requestBodies/createProduct'
-      responses:
-        '200':
-          description: El producto fue creado satisfactoriamente de la base de datos
           content:
             application/json:
               schema:
@@ -77,15 +136,9 @@ paths:
                   status:
                     type: string
                     description: El estado de la respuesta
-                    value: success
-                    example: success
-                  payload:
-                    $ref: '#/components/schemas/Products'
-        '400':
-          description: Error provocado por el cliente. Usualmente generado por una no estar logueado.
-        '500':
-          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
-
+                    example: error
+                  error:
+                    example: "Unhandled error"
     put:
       summary: Actualiza un producto
       tags:
@@ -103,9 +156,19 @@ paths:
           application/json:
             schema:
               $ref: '#/components/requestBodies/updateProduct'
-            responses:
+            example:
+              status: "false"
+      responses:
         '200':
-          description: El producto fue obtenido satisfactoriamente de la base de datos
+          description: El producto fue actualizado satisfactoriamente de la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Products'
+        '400':
+          description: Error por parte del cliente. Probablemente por no estar logueado.
           content:
             application/json:
               schema:
@@ -114,14 +177,22 @@ paths:
                   status:
                     type: string
                     description: El estado de la respuesta
-                    value: success
-                    example: success
-                  payload:
-                    $ref: '#/components/schemas/Products'
-        '400':
-          description: Error provocado por el cliente. Usualmente generado por no estar logueado.
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
         '500':
           description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
     delete:
       summary: Elimina un producto
       tags:
@@ -135,7 +206,14 @@ paths:
             type: string
       responses:
         '200':
-          description: El producto fue obtenido satisfactoriamente de la base de datos
+          description: El producto fue eliminado satisfactoriamente de la base de datos
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Se elimino el producto
+        '400':
+          description: Error por parte del cliente. Probablemente por no estar logueado.
           content:
             application/json:
               schema:
@@ -144,14 +222,22 @@ paths:
                   status:
                     type: string
                     description: El estado de la respuesta
-                    example: success
-                  payload:
-                    type: string
-                    example: El producto se ha eliminado
-        '400':
-          description: Error provocado por el cliente. Usualmente generado por no estar logueado.
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
         '500':
           description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
 components:
   schemas:
     Products:
@@ -209,13 +295,10 @@ components:
   requestBodies:
     updateProduct:
       type: object
-      required:
-        -quantity
+      required: true
       properties:
-        quantity:
-          type: number
-          description: La cantidad de la compra
-      example: '5'
+        example:
+          status: false
     createProduct:
       type: object
       required:
@@ -275,6 +358,6 @@ components:
     cookieAuth:
       type: apiKey
       in: cookie
-      name: 'AUTH'
+      name: ['AUTH']
   security:
     - cookieAuth: []  

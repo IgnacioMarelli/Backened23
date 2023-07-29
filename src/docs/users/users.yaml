@@ -1,0 +1,831 @@
+paths:
+  /api/users/:
+    get:
+      summary: Devuelve todos los usuarios
+      security:
+        - cookieAuth: []
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Los usuarios fueron obtenidos satisfactoriamente de la base de datos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
+
+    delete:
+      summary: Elimina usuarios con conexión anterior a 2 días.
+      security:
+        - cookieAuth: []
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '200':
+          description: Usuarios eliminados satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Error por parte del cliente. Probablemente por no estar logueado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
+  /api/users/register:
+    get:
+      summary: Renderiza la página para llenar los datos de registro
+      security:
+        - cookieAuth: []
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Se renderizó correctamente
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
+
+    post:
+      summary: Se registran los datos y se crea un usuario.
+      security:
+        - cookieAuth: []
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInputRegister'
+      responses:
+        '201':
+          description: Usuarios registrado satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Error por parte del cliente. Probablemente porque ya esta registrado o falta rellenar datos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "El usuario con ese mail, ya se encuentra registrado o no completo los datos"
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
+  /api/users/login:
+    get:
+      summary: Renderiza la página para llenar los datos de inicio de sesión.
+      security:
+        - cookieAuth: []
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Se renderizó correctamente
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
+
+    post:
+      summary: Se registran los datos y se crea un usuario.
+      security:
+        - cookieAuth: []
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInputLogin'
+      responses:
+        '201':
+          description: Usuarios registrado satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Error por parte del cliente. Probablemente porque ya esta registrado o falta rellenar datos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "El usuario con ese mail, ya se encuentra registrado o no completo los datos"
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
+  /api/users/current:
+    get:
+      summary: Renderiza la página del perfil del usuario
+      security:
+        - cookieAuth: []
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Se renderizó correctamente
+        '400':
+          description: Error por parte del cliente. Probablemente por no estar logueado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
+  /api/users/auth/logout:       
+    post:
+      summary: Se cierra la sesión iniciada y se renderiza login
+      security:
+        - cookieAuth: []
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Se cerró la sesión satisfactoriamente.
+        '400':
+          description: Error por parte del cliente. Probablemente porque ya esta registrado o falta rellenar datos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "El usuario con ese mail, ya se encuentra registrado o no completo los datos"
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
+  /api/users/restorePassword:
+    get:
+      summary: Renderiza la página para poner el email al que se enviará el link con token para reestablecer la contraseña.
+      security:
+        - cookieAuth: []
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Se renderizó correctamente
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
+    post:
+      summary: Enviará el link con token para reestablecer la contraseña
+      security:
+        - cookieAuth: []
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string  
+            example: 'john@example.com'
+      responses:
+        '200':
+          description: Mail enviado satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                type: string
+              example: 'Mail enviado con éxito'
+        '400':
+          description: Error por parte del cliente. Probablemente por no estar logueado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
+  /api/users/premium:
+    get:
+      summary: Renderiza la página para cambiar de role.
+      security:
+        - cookieAuth: []
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Se renderizó correctamente
+        '400':
+          description: Error por parte del cliente. Probablemente por no estar logueado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
+  /api/users/premium/{uid}:
+    post:
+      summary: Toma el Id del usuario del parametro y cambia de role. Si es de role "user"a "premium", lanzara un error en caso de que no haya presentado cierta documentación.
+      security:
+        - cookieAuth: []
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          description: El id del usuario
+          required: true
+          schema:
+            type: string        
+      responses:
+        '200':
+          description: Se modifico correctamente
+          content:
+            application/json:
+              schema:
+                type: string
+              example: "Role modificado"
+        '400':
+          description: Error por parte del cliente. Probablemente por no haber subido los documentos correspondientes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Debe subir Identificación, Comprobante de domicilio, Comprobante de estado de cuenta"
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
+  /api/users/admin:  
+    get:
+      summary: Renderiza la página para cambiar de role.
+      security:
+        - cookieAuth: []
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Se renderizó correctamente
+        '400':
+          description: Error por parte del cliente. Probablemente por no estar logueado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
+        '403':
+          description: Error por parte del cliente. Por no tener rol de admin.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    example: "Usuario sin rol de admin"
+        '500':
+          description: Error interno
+  /api/users/admin/{uid}:
+    post:
+      summary: Toma el Id del usuario del parametro y cambia de role.
+      security:
+        - cookieAuth: []
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          description: El id del usuario
+          required: true
+          schema:
+            type: string        
+      responses:
+        '200':
+          description: Se renderizó correctamente
+          content:
+            application/json:
+              schema:
+                type: string
+              example: "Role modificado"
+        '400':
+          description: Error por parte del cliente. Probablemente por no estar logueado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
+        '403':
+          description: Error por parte del cliente. Por no tener rol de admin.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    example: "Usuario sin rol de admin"
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"    
+  /api/users/{idUser}:
+    put:
+      summary: Actualiza un usuario. Si no pone en el body el cambio, solo se cambiara la última conexión del usuario.
+      tags:
+        - Users
+      parameters:
+        - name: idUser
+          in: path
+          description: El id del usuario
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              age: 39
+      responses:
+        '200':
+          description: El usuario fue actualizado satisfactoriamente de la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  acknowledged:
+                    type: boolean
+                    description: Indica si la operación fue exitosa
+                    example: true
+                  modifiedCount:
+                    type: integer
+                    description: Cantidad de documentos modificados
+                    example: 1
+                  upsertedId:
+                    type: null
+                    description: ID del documento insertado en caso de operación upsert
+                    example: null
+                  upsertedCount:
+                    type: integer
+                    description: Cantidad de documentos insertados en caso de operación upsert
+                    example: 0
+                  matchedCount:
+                    type: integer
+                    description: Cantidad de documentos coincidentes
+                    example: 1
+        '400':
+          description: Error por parte del cliente. Probablemente por no estar logueado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+    delete:
+      summary: Elimina un usuario
+      tags:
+        - Users
+      parameters:
+        - name: idUser
+          in: path
+          description: El id del usuario
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: El usuario fue eliminado satisfactoriamente de la base de datos
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Usuario eliminado
+        '400':
+          description: Error por parte del cliente. Probablemente por no estar logueado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+  /api/users/newPass/{token}:
+    get:
+      summary: Utilizando el token que va en el link que le llega al correo al usuario, se renderiza la página para poner una nueva contraseña.
+      security:
+        - cookieAuth: []
+      tags:
+        - Users
+      parameters:
+        - name: token
+          in: path
+          description: El token que se genera al enviar el mail.
+          required: true
+          schema:
+            type: string        
+      responses:
+        '200':
+          description: Se renderizó correctamente
+        '400':
+          description: Error por parte del cliente.
+        '500':
+          description: Error interno. Probablemente al intentar leer un token incorrecto.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhanddled error"
+  /api/users/newPass:
+    put:
+      summary: Actualiza la contraseña de un usuario
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              email: "email@hotmail.com"
+              newPass: "password"
+      responses:
+        '200':
+          description: El usuario fue actualizado satisfactoriamente en la base de datos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Error por parte del cliente. Probablemente por no estar logueado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhanddled error"
+  /api/users/{uid}/documents:
+    post:
+      summary: Agrega documentos al array del usuario.
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          description: El id del usuario.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: El documento fue agregado satisfactoriamente a la base de datos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Error por parte del cliente. Probablemente por no estar logueado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Debe iniciar sesión nuevamente"
+        '500':
+          description: Error interno del servidor. Usualmente generado por una query defectuosa o una falla con la conexión con la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: El estado de la respuesta
+                    example: error
+                  error:
+                    example: "Unhandled error"
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: User ID
+          example: 1234567890abcdef
+        first_name:
+          type: string
+          description: Nombre del usuario
+          example: john
+        last_name:
+          type: string
+          description: Apellido del usuario
+          example: doe
+        email:
+          type: string
+          description: Email del usuario
+          example: john@example.com
+        role:
+          type: string
+          description: Role del usuario (e.g., "admin", "user")
+          example: user
+        documents:
+          type: array
+          description: documentos subidos por el usuario
+          example: []
+        cart:
+          type: array
+          description: carrito de compras del usuario
+          example: []
+        _v:
+          type: number
+          example: 0
+    UserInputRegister:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: Nombre del usuario
+          example: john
+        last_name:
+          type: string
+          description: Apellido del usuario
+          example: doe
+        email:
+          type: string
+          description: Email del usuario
+          example: john@example.com
+        password:
+          type: string
+          description: Contraseña del usuario
+          example: password123
+        age:
+          type: number
+          description: edad del usuario
+          example: 50
+    UserInputLogin:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email del usuario
+          example: john@example.com
+        password:
+          type: string
+          description: Contraseña del usuario
+          example: password123

@@ -71,7 +71,7 @@ export default class UserRepository {
                 })
             }}        
         try {
-            await this.#dao.create(usuario, hashedPassword);
+            return await this.#dao.create(usuario, hashedPassword);
         } catch (error) {
             throw CustomError.createError({
                 name:'Usuario ya registrado o mal registrado',
@@ -121,12 +121,12 @@ export default class UserRepository {
                 code: ErrorEnum.DATABASE_ERROR,
             })
         }
-        const nuevosDatos = req.body==={}?req.body:{last_connection: new Date()};
-        await this.#dao.updateUser( idUser,usuario,nuevosDatos);
+        const nuevosDatos = Object.keys(req.body).length === 0?{last_connection: new Date()}:req.body;
+        return await this.#dao.updateUser( idUser,usuario,nuevosDatos);
     }
     async deleteUser (req){
-        const idUsuario = req.params.idUsuario;
-        await this.#dao.deleteUser({ _id: idUsuario });
+        const idUser = req.params.idUser;
+        await this.#dao.deleteUser({ _id: idUser });
     }
     async postRestorePass (req, res){
         const {email} = req.body;
@@ -134,8 +134,6 @@ export default class UserRepository {
         if (user) {
             const token = jwt.sign({ email}, SECRET, { expiresIn: '1h' });
             emailService.restorPassByEmail(email, token);
-            const userDto = new UserDTO(user);
-            return userDto
         }else{
             throw  CustomError.createError({
             name:'Error en Mail',
@@ -146,22 +144,27 @@ export default class UserRepository {
         }
     }
     async newPass (req){
-        const email = req.body.email;
-        const user = await this.#dao.findByEmail(email);
-        const newPass= req.body.newPass;
-        const valid = await isValidPassword(newPass, user.password)
-        if (valid) {
-            throw CustomError.createError({
-                name:'Error en la nueva contraseña',
-                cause:'Utiliza la misma contraseña que antes',
-                message:'Debe insertar una contraseña diferente a la anterior',
-                code: ErrorEnum.BODY_ERROR
-            })
-            }
-            const hashedPass= await createHash(newPass);
-            await this.#dao.updatePass(user._id, hashedPass);
-        const userDto = new UserDTO(user);
-        return userDto
+        try {
+            const email = req.body.email;
+            const user = await this.#dao.findByEmail(email);
+            const newPass= req.body.newPass;
+            const valid = await isValidPassword(newPass, user.password)
+            if (valid) {
+                throw CustomError.createError({
+                    name:'Error en la nueva contraseña',
+                    cause:'Utiliza la misma contraseña que antes',
+                    message:'Debe insertar una contraseña diferente a la anterior',
+                    code: ErrorEnum.BODY_ERROR
+                })
+                }
+                const hashedPass= await createHash(newPass);
+                await this.#dao.updateUser(user._id, user, {password:hashedPass});
+            const userDto = new UserDTO(user);
+            return userDto
+        } catch (error) {
+            next(error)
+        }
+
     }
     async newRole(req, res, next){
         try {
@@ -220,7 +223,7 @@ export default class UserRepository {
                 
             }
         }
-        await this.#dao.addDoc(req.params.uid, filename, filePath);
+        return await this.#dao.addDoc(req.params.uid, filename, filePath);
     }
     async deleteUsers(req, res, next){
         let now = new Date();

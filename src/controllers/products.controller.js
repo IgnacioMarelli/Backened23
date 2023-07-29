@@ -29,7 +29,7 @@ class ProductController {
         try {
             const product = await this.#service.getOneProd(req);
             const user = req.user;
-            const cart = req.user.cart[0]._id;
+            const cart = req.user.cart[0]?.products?.length === 0 ? null : req.user.cart[0]?._id ?? null;
             res.render('prod',{products: product, user:user, cart:cart});
         } catch (error) {
             next(error)
@@ -56,7 +56,6 @@ class ProductController {
         try {
             const response = await this.#service.update(req);
             res.status(200).send(response);
-
         } catch (error) {
             next(error)
         }

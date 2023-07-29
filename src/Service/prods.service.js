@@ -99,9 +99,14 @@ export default class ProdsRepository {
         })
     } 
     async update(req){
-        const pid = req.params.pid; 
-        const data = req.body;
-        const response = await this.#dao.update(pid, data);
-        return response
+        try {
+            const pid = req.params.pid; 
+            const data = req.body;
+            const response = await this.#dao.update(pid, data);
+            return response
+    
+        } catch (error) {
+            next(error)
+        }
     }   
 }

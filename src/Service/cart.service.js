@@ -49,7 +49,7 @@ export default class CartRepository {
         }else{
             cart = await this.#service.create(req.params.pid, quantity);
         }
-        await this.#userService.updateCart(req.user.email,cart._id);
+        await this.#userService.updateCart(req.user.email,{cart:cart._id});
         const userUpdated = await this.#userService.findByEmail(req.user.email);
         const userDTO = new UserDTO(userUpdated);
         const token = generateToken(userDTO);

@@ -12,16 +12,16 @@ routerUser.get('/login', userController.getLogin.bind(userController));
 routerUser.get('/current', passportCall('jwt'), userController.getProfile.bind(userController));
 routerUser.post('/login', userController.postLogin.bind(userController));
 routerUser.post('/auth/logout',passportCall('jwt'), userController.logout.bind(userController));
+routerUser.get('/newPass/:token', newPass() ,userController.getNewPass.bind(userController) );
 routerUser.put('/newPass',passportCall('jwt'), userController.newPass.bind(userController));
-routerUser.put('/:idUser', userController.updateUser.bind(userController));
-routerUser.delete('/:idUsuario', userController.deleteUser.bind(userController));
+routerUser.put('/:idUser', passportCall('jwt'), userController.updateUser.bind(userController));
+routerUser.delete('/:idUser', passportCall('jwt'), userController.deleteUser.bind(userController));
 routerUser.get('/restorePassword',userController.getRestorePass.bind(userController) );
 routerUser.post('/restorePassword',userController.postRestorePass.bind(userController));
-routerUser.get('/newPass/:token', newPass() ,userController.getNewPass.bind(userController) );
 routerUser.get('/premium/',passportCall('jwt'),userController.getPremium.bind(userController));
-routerUser.post('/premium/:uid',passportCall('jwt'),userController.postPremium.bind(userController));
+routerUser.post('/premium/:uid',passportCall('jwt'),userController.newRole.bind(userController));
 routerUser.get('/admin/',passportCall('jwt'), authorization('admin'), userController.getAdmin.bind(userController));
-routerUser.post('/admin/:uid',passportCall('jwt'), authorization('admin'), userController.postAdmin.bind(userController));
+routerUser.post('/admin/:uid',passportCall('jwt'), authorization('admin'), userController.newRole.bind(userController));
 routerUser.post('/:uid/documents', uploader.array("file", undefined), passportCall('jwt') , userController.postDocs.bind(userController))
 
 export  { routerUser};

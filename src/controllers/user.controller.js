@@ -40,7 +40,7 @@ class UsersController {
     async getProfile (req, res, next){
         try {
         const user = await this.#service.getUser(req);
-        const cart = req.user.cart[0]._id;
+        const cart = req.user.cart[0]?.products?.length === 0 ? null : req.user.cart[0]?._id ?? null;
         res.render('perfil', {
             nombre: user.first_name,
             apellido: user.last_name,
@@ -75,8 +75,8 @@ class UsersController {
     }
     async updateUser (req, res, next){
         try {
-            await this.#service.updateUser(req)
-            res.send({ ok: true });
+            const user = await this.#service.updateUser(req)
+            res.status(200).send(user);
         } catch (error) {
             next(error)
         }
@@ -100,8 +100,8 @@ class UsersController {
     }
     async postRestorePass (req, res, next){
         try {
-           const user = await this.#service.postRestorePass(req, res);
-           res.send(user); 
+           await this.#service.postRestorePass(req, res);
+           res.status(200).send('Mail enviado con éxito'); 
         } catch (error) {
             next(error)
         }
@@ -124,7 +124,7 @@ class UsersController {
     async getPremium(req, res, next){
         try {
             const user= await this.#service.getUser(req);
-            const cart = req.user.cart[0]._id;
+            const cart = req.user.cart[0]?.products?.length === 0 ? null : req.user.cart[0]?._id ?? null;
             res.render('premium',{
                 role:user.role,
                 userId: user.id.toString(),
@@ -136,10 +136,10 @@ class UsersController {
         }
 
     }
-    async postPremium(req, res, next){
+    async newRole(req, res, next){
         try {
             await this.#service.newRole(req, res, next);
-            res.status(200).send('Ok')
+            res.status(200).send('Role modificado')
         } catch (error) {
             next(error)
         }
@@ -165,7 +165,7 @@ class UsersController {
     async deleteUsers(req, res, next){
         try {
             await this.#service.deleteUsers();
-            res.status(204).send('Eliminados')
+            res.status(204).send('Usuario eliminado')
         } catch (error) {
             next(error)
         }
@@ -174,7 +174,7 @@ class UsersController {
         try {
             const user= req.user;
             const users = await this.#service.getAllUsers();
-            const cart = req.user.cart[0]._id;
+            const cart = req.user.cart[0]?.products?.length === 0 ? null : req.user.cart[0]?._id ?? null;
             res.render('admin',{
                 userId: user.id.toString(),
                 response: users,
@@ -188,14 +188,6 @@ class UsersController {
                 message:'Verifique que este bien la view de handlebars',
                 code: ErrorEnum.ROUTING_ERROR
             })
-        }
-    }
-    async postAdmin(){
-        try {
-            await this.#service.newRole(req, res, next);
-            res.status(200).send('Ok')
-        } catch (error) {
-            next(error)
         }
     }
 

@@ -8,7 +8,7 @@ class ChatController {
     async getAll(req,res,next){
         try {
             const user= req.user;
-            const cart = req.user.cart[0]._id;
+            const cart = req.user.cart[0]?.products?.length === 0 ? null : req.user.cart[0]?._id ?? null;
             res.render('chat',{
                 user: user,
                 cart:cart
